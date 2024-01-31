@@ -1,0 +1,3 @@
+[submodule "Walker/vendor/DirectStorage"]
+	path = Walker/vendor/DirectStorage
+	url = https://github.com/microsoft/DirectStorage.git
