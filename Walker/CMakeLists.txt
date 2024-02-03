@@ -1,13 +1,17 @@
 set(header_files
   ./include/Walker.h
+
   ./include/Core/EntryPoint.h
   ./include/Core/Application.h
   )
 
 set(source_files
   ./src/Core/Application.cpp
+
   ./src/Platform/Windows/WindowsWindow.cpp
+
   ./src/Platform/DirectX12/DX12Graphics.cpp
+  ./src/Platform/DirectX12/DX12Adapter.cpp
   )
 
 set(all_files

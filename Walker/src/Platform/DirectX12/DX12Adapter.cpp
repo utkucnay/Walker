@@ -38,6 +38,8 @@ namespace wkr::render
       dadapter->desc = desc;
 
       ret.push_back(dadapter);
+
+      adapterIndex++;
     }
 
     adapter = nullptr;

@@ -15,9 +15,6 @@ namespace wkr::render
   public:
     void* GetNativeHandle() override { return adapter; }
 
-  public:
-    AdapterDesc desc;
-
   private:
     IDXGIAdapter1* adapter;
   };

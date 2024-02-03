@@ -1,3 +1,4 @@
+#include "Platforms/DirectX12/DX12Adapter.h"
 #include "Platforms/DirectX12/DX12Factory.h"
 #include <Platforms/DirectX12/DX12Graphics.h>
 
@@ -16,8 +17,20 @@ namespace wkr
       //TODO(utku): log
     }
 
+    auto adapters = render::DX12Adapter::GetAllAdapters();
+
+    Ref<render::Adapter> adapter;
+    for(size_t i = 0; i < adapters.size(); i++)
+    {
+      //find rtx 30 or later adapter
+      if(adapters[i]->desc.dedicatedVideoMemory > 2048)
+      {
+        adapter = adapters[i];
+      }
+    }
+
     hr = D3D12CreateDevice(
-        NULL,
+        (IDXGIAdapter1*)adapter->GetNativeHandle(),
         D3D_FEATURE_LEVEL_12_2,
         IID_PPV_ARGS(&m_device));
 

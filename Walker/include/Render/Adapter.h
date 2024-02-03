@@ -20,8 +20,13 @@ namespace wkr::render
   class Adapter
   {
   public:
-    static std::vector<Ref<Adapter>> GetAllAdapters();
     virtual void* GetNativeHandle() = 0;
+
+  public:
+    AdapterDesc desc;
+
+  public:
+    static std::vector<Ref<Adapter>> GetAllAdapters();
   };
 
 }
