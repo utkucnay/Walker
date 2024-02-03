@@ -4,7 +4,7 @@ namespace wkr::render
 {
   struct AdapterDesc
   {
-    std::string description;
+    char description[128];
     uint32_t vendorId;
     uint32_t deviceID;
     uint32_t subSysID;
@@ -20,7 +20,8 @@ namespace wkr::render
   class Adapter
   {
   public:
-    virtual std::vector<AdapterDesc> GetAdapterDescs() = 0;
+    static std::vector<Ref<Adapter>> GetAllAdapters();
+    virtual void* GetNativeHandle() = 0;
   };
 
 }

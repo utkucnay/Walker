@@ -1,3 +1,4 @@
+#include "Platforms/DirectX12/DX12Factory.h"
 #include <Platforms/DirectX12/DX12Graphics.h>
 
 namespace wkr
@@ -6,60 +7,19 @@ namespace wkr
   {
     HRESULT hr;
 
-    HWND* hwnd = (HWND*)window->GetNativeHandle();
+    hr = CreateDXGIFactory1(IID_PPV_ARGS(&g_dxgiFactory));
 
-    IDXGIFactory4* dxgiFactory;
-    hr = CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory));
+    HWND* hwnd = (HWND*)window->GetNativeHandle();
 
     if(SUCCEEDED(hr))
     {
       //TODO(utku): log
     }
 
-    IDXGIAdapter1* adapter;
-
-    int adapterIndex = 0;
-    bool bAdapterFound = false;
-
-    while(dxgiFactory->EnumAdapters1(
-          adapterIndex,
-          &adapter) != DXGI_ERROR_NOT_FOUND)
-    {
-      DXGI_ADAPTER_DESC1 desc;
-      adapter->GetDesc1(&desc);
-
-      char des[128];
-      wcstombs(des, desc.Description, 128);
-      std::cout << des << std::endl;
-
-      if(desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-      {
-        adapterIndex++;
-        break;
-      }
-
-      hr = D3D12CreateDevice(
-          adapter,
-          D3D_FEATURE_LEVEL_12_2,
-          IID_PPV_ARGS(&m_device));
-
-      if(SUCCEEDED(hr))
-      {
-        bAdapterFound = true;
-        break;
-      }
-      else
-      {
-
-      }
-
-      adapterIndex++;
-    }
-
-    if(!bAdapterFound)
-    {
-      //TODO(utku): log
-    }
+    hr = D3D12CreateDevice(
+        NULL,
+        D3D_FEATURE_LEVEL_12_2,
+        IID_PPV_ARGS(&m_device));
 
     D3D12_COMMAND_QUEUE_DESC cqDesc = {};
 
@@ -91,7 +51,7 @@ namespace wkr
 
     IDXGISwapChain* tempSwapChain;
 
-    dxgiFactory->CreateSwapChain(
+    g_dxgiFactory->CreateSwapChain(
         m_commandQueue,
         &swapChainDesc,
         &tempSwapChain);
