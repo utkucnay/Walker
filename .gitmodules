@@ -5,3 +5,6 @@
 	path = Walker/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "Walker/vendor/DIContainer"]
+	path = Walker/vendor/DIContainer
+	url = git@github.com:utkucnay/DIContainer.git
