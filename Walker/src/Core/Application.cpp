@@ -1,11 +1,10 @@
 #include <Core/Application.h>
 
 #include <Core/PlatformDetection.h>
-#include <memory>
 
 #if defined (WKR_PLATFORM_WINDOWS)
   #include <Platforms/Windows/WindowsWindow.h>
-  #include <Platforms/DirectX12/DX12Graphics.h>
+  #include <Platforms/DirectX12/DX12Renderer.h>
 #endif
 
 namespace wkr
@@ -13,6 +12,7 @@ namespace wkr
   Application::Application(
       const ApplicationSpecs& applicationSpecs)
   {
+    WKR_CORE_LOG("Application Starting");
     appSpecs = applicationSpecs;
 
     ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
@@ -24,7 +24,7 @@ namespace wkr
 
     #if defined(WKR_PLATFORM_WINDOWS)
       window = CreateScope<WindowsWindow>(wnProps);
-      graphics = CreateScope<DX12Graphics>(window.get());
+      graphics = CreateScope<render::DX12Renderer>(window.get());
     #endif
   }
 
@@ -33,9 +33,10 @@ namespace wkr
     while (window->IsShouldClose())
     {
 
+      window->PoolEvents();
+
       graphics->Render();
       graphics->SwapChain();
-      window->PoolEvents();
     }
   }
 }

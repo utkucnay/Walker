@@ -8,4 +8,5 @@ set(CMAKE_CXX_STANDARD 17)
 project(${ProjectName})
 
 add_subdirectory(Walker)
+
 add_subdirectory(Sandbox)

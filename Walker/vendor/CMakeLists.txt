@@ -1,0 +1,6 @@
+add_subdirectory(./DirectStorage)
+add_subdirectory(./DirectX12/)
+add_subdirectory(./WinPixEventRuntime)
+add_subdirectory(./XAudio/)
+add_subdirectory(./DirectXMath/)
+add_subdirectory(./imgui/)

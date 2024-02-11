@@ -16,7 +16,6 @@ namespace wkr::render
     uint32_t flags;
   };
 
-
   class Adapter
   {
   public:
@@ -27,6 +26,7 @@ namespace wkr::render
 
   public:
     static std::vector<Ref<Adapter>> GetAllAdapters();
+    static Ref<Adapter> Create();
   };
 
 }

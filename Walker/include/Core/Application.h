@@ -1,5 +1,9 @@
 #pragma once
 
+#include <Core/Window.h>
+#include <Render/Renderer.h>
+#include <Render/RendererAPI.h>
+
 int main(int argc, char** argv);
 
 namespace wkr
@@ -14,6 +18,7 @@ namespace wkr
   {
     std::string name;
     bool showCLI;
+    render::RendererAPI::APIType apiType;
     ApplicationCommandLineArgs ApplicationCommandLineArgs;
   };
 
@@ -28,7 +33,7 @@ namespace wkr
   private:
     ApplicationSpecs appSpecs;
     Scope<Window> window;
-    Scope<Graphics> graphics;
+    Scope<render::Renderer> graphics;
 
     friend int ::main(int argc, char** argv);
   };

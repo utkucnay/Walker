@@ -1,7 +1,5 @@
-#include "Core/Base.h"
-#include "Platforms/DirectX12/DX12Factory.h"
-#include "Render/Adapter.h"
 #include <Platforms/DirectX12/DX12Adapter.h>
+#include <Platforms/DirectX12/DX12Factory.h>
 
 namespace wkr::render
 {
@@ -32,7 +30,7 @@ namespace wkr::render
       desc.sharedSystemMemory = tmpDesc.SharedSystemMemory;
       desc.dedicatedVideoMemory = tmpDesc.DedicatedVideoMemory;
       desc.dedicatedSystemMemory = tmpDesc.DedicatedSystemMemory;
-      wcstombs(desc.description, tmpDesc.Description, 128);
+      wcstombs_s(NULL, desc.description, 128, tmpDesc.Description, 127);
 
       Ref<DX12Adapter> dadapter = CreateRef<DX12Adapter>(adapter);
       dadapter->desc = desc;

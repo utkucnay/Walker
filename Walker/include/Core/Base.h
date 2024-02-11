@@ -1,5 +1,11 @@
 #pragma once
 
+#if DEBUG
+  #define WKR_CORE_LOG(...) std::cout << __VA_ARGS__ << std::endl
+#else
+  #define WKR_CORE_LOG(cond, ...)
+#endif
+
 namespace wkr
 {
   template<typename T>
