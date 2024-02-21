@@ -1,7 +1,21 @@
 #pragma once
 
-#include <dxgi.h>
-#include <dxgi1_6.h>
+#include <Platforms/DirectX12/DX12.h>
 
-//IDK its good or bad but its good fit.
-inline IDXGIFactory4* g_dxgiFactory;
+namespace wkr::render
+{
+  class DX12Factory
+  {
+    public:
+      static void Init()
+      {
+        HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&m_dxgiFactory));
+        WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create DXGIFactory");
+      }
+
+      static IDXGIFactory4* GetFactory() { return m_dxgiFactory; }
+
+    private:
+      static IDXGIFactory4* m_dxgiFactory;
+  };
+}

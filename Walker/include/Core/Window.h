@@ -17,6 +17,7 @@ namespace wkr
 
     virtual int GetWidth() = 0;
     virtual int GetHeight() = 0;
+    virtual bool GetWindowed() = 0;
 
     virtual void* GetNativeHandle() = 0;
   };

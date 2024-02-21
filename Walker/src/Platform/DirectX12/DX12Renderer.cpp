@@ -11,23 +11,18 @@ namespace wkr::render
 {
   DX12Renderer::DX12Renderer(Window* window)
   {
-    HRESULT hr;
-
-    hr = CreateDXGIFactory1(IID_PPV_ARGS(&g_dxgiFactory));
-
     HWND* hwnd = (HWND*)window->GetNativeHandle();
 
-    if(SUCCEEDED(hr))
-    {
-      //TODO(utku): log
-    }
+    HRESULT hr;
+
+    DX12Factory::Init();
 
     auto adapters = render::DX12Adapter::GetAllAdapters();
 
     Ref<render::Adapter> adapter;
     for(size_t i = 0; i < adapters.size(); i++)
     {
-      //find rtx 30 or later adapter
+      //TODO(utku): find rtx 30 or later adapter
       if(adapters[i]->desc.dedicatedVideoMemory > 2048)
       {
         adapter = adapters[i];
@@ -36,22 +31,6 @@ namespace wkr::render
 
     //DX12Device device;
     //DX12Device device2(adapter);
-
-    hr = D3D12CreateDevice(
-        (IDXGIAdapter1*)adapter->GetNativeHandle(),
-        D3D_FEATURE_LEVEL_12_2,
-        IID_PPV_ARGS(&m_device));
-
-    D3D12_COMMAND_QUEUE_DESC cqDesc = {};
-
-    hr = m_device->CreateCommandQueue(
-        &cqDesc,
-        IID_PPV_ARGS(&m_commandQueue));
-
-    if(FAILED(hr))
-    {
-      //TODO(utku): log
-    }
 
     DXGI_MODE_DESC backBufferDesc = {};
     backBufferDesc.Width = window->GetWidth();
@@ -109,30 +88,6 @@ namespace wkr::render
       m_device->CreateRenderTargetView(m_renderTargets[i], NULL, rtvHandle);
 
       rtvHandle.ptr += rtvDescriptorSize;
-    }
-
-    for(int i = 0; i < frameBufferCount; i++)
-    {
-      hr = m_device->CreateCommandAllocator(
-          D3D12_COMMAND_LIST_TYPE_DIRECT,
-          IID_PPV_ARGS(&m_commandAllocator[i]));
-
-      if(FAILED(hr))
-      {
-        //TODO(utku): log
-      }
-    }
-
-    hr = m_device->CreateCommandList(
-        NULL,
-        D3D12_COMMAND_LIST_TYPE_DIRECT,
-        m_commandAllocator[0],
-        NULL,
-        IID_PPV_ARGS(&m_commandList));
-
-    if(FAILED(hr))
-    {
-      //TODO(utku): log
     }
 
     for(int i = 0; i < frameBufferCount; i++)

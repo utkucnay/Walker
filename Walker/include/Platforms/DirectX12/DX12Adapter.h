@@ -1,8 +1,8 @@
 #pragma once
 
+#include <Platforms/DirectX12/DX12.h>
+
 #include <Render/Adapter.h>
-#include <dxgi.h>
-#include <dxgi1_6.h>
 
 namespace wkr::render
 {
@@ -10,12 +10,15 @@ namespace wkr::render
   {
   public:
     DX12Adapter(IDXGIAdapter1* adapter) : adapter(adapter) {}
-    ~DX12Adapter();
+    ~DX12Adapter() override;
 
   public:
     void* GetNativeHandle() override { return adapter; }
 
   private:
     IDXGIAdapter1* adapter;
+
+  public:
+    static std::vector<Ref<Adapter>> GetAllAdapters();
   };
 }

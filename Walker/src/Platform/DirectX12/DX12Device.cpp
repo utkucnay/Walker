@@ -1,16 +1,15 @@
 #include <Platforms/DirectX12/DX12Device.h>
-#include <dxgi.h>
 
 namespace wkr::render
 {
-  DX12Device::DX12Device()
+  DX12Device::DX12Device(DX12DeviceSpec spec)
   {
-    CreateDevice(NULL);
+    CreateDevice(NULL, spec);
   }
 
-  DX12Device::DX12Device(Ref<Adapter> adapter)
+  DX12Device::DX12Device(Ref<Adapter> adapter, DX12DeviceSpec spec)
   {
-    CreateDevice(adapter);
+    CreateDevice(adapter, spec);
   }
 
   DX12Device::~DX12Device()
@@ -18,11 +17,9 @@ namespace wkr::render
     device->Release();
   }
 
-
-  Ref<CommandQueue> DX12Device::CreateCommandQueue()
+  Ref<CommandQueue> DX12Device::CreateCommandQueue(CommandQueueDesc& desc)
   {
-    //CommandQueue CommandQueue(this);
-    return NULL;
+    return CommandQueue::Create((Ref<Device>)this, desc);
   }
 
   Ref<CommandAllocator> DX12Device::CreateCommandAllocator()
@@ -56,7 +53,7 @@ namespace wkr::render
     return NULL;
   }
 
-  bool DX12Device::CreateDevice(Ref<Adapter> adapter)
+  void DX12Device::CreateDevice(Ref<Adapter> adapter, DX12DeviceSpec spec)
   {
     HRESULT hr;
 
@@ -75,13 +72,6 @@ namespace wkr::render
         IID_PPV_ARGS(&device));
     }
 
-    if(SUCCEEDED(hr))
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create DX12Device");
   }
 }

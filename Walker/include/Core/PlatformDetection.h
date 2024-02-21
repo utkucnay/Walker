@@ -2,7 +2,7 @@
   #if defined(_WIN64)
     #define WKR_PLATFORM_WINDOWS
   #else
-    #error "Win32 builds are not supported" //You are living in cave ?
+    #error "Win32 builds are not supported"
   #endif
 #elif defined(__APPLE__) || defined(__MACH__)
   #error "Apple builds are not supported"

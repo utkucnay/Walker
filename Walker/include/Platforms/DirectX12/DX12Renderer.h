@@ -1,14 +1,9 @@
 #pragma once
 
-#include <Render/Renderer.h>
+#include <Platforms/DirectX12/DX12.h>
+
 #include <Core/Window.h>
-
-#include <d3d12.h>
-#include <dxgi.h>
-#include <dxgi1_4.h>
-#include <d3dcompiler.h>
-
-#include <combaseapi.h>
+#include <Render/Renderer.h>
 
 namespace wkr::render
 {

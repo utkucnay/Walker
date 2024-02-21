@@ -40,6 +40,13 @@ namespace wkr
       return 0;
     }
 
+    bool GetWindowed() override
+    {
+      LONG wLong =  GetWindowLong(window, 0);
+
+      return (wLong & WS_POPUP) == 0;
+    }
+
     void* GetNativeHandle() override { return &window; }
 
   public:
