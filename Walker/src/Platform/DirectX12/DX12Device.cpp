@@ -4,7 +4,6 @@ namespace wkr::render
 {
   DX12Device::DX12Device(DX12DeviceSpec spec)
   {
-    CreateDevice(NULL, spec);
   }
 
   DX12Device::DX12Device(Ref<Adapter> adapter, DX12DeviceSpec spec)
@@ -19,12 +18,11 @@ namespace wkr::render
 
   Ref<CommandQueue> DX12Device::CreateCommandQueue(CommandQueueDesc& desc)
   {
-    return CommandQueue::Create((Ref<Device>)this, desc);
+    return NULL;
   }
 
   Ref<CommandAllocator> DX12Device::CreateCommandAllocator()
   {
-    //auto ca = CreateRef<CommandAllocator>(this);
     return NULL;
   }
 

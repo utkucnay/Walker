@@ -30,7 +30,8 @@ namespace wkr::render
     }
 
     //DX12Device device;
-    //DX12Device device2(adapter);
+    DX12DeviceSpec spec;
+    Ref<DX12Device> device2 = Ref<DX12Device>::Create(adapter, spec);
 
     DXGI_MODE_DESC backBufferDesc = {};
     backBufferDesc.Width = window->GetWidth();
@@ -51,7 +52,7 @@ namespace wkr::render
 
     IDXGISwapChain* tempSwapChain;
 
-    g_dxgiFactory->CreateSwapChain(
+    DX12Factory::GetFactory()->CreateSwapChain(
         m_commandQueue,
         &swapChainDesc,
         &tempSwapChain);

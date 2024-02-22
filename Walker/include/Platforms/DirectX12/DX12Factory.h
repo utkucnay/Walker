@@ -16,6 +16,6 @@ namespace wkr::render
       static IDXGIFactory4* GetFactory() { return m_dxgiFactory; }
 
     private:
-      static IDXGIFactory4* m_dxgiFactory;
+      static inline IDXGIFactory4* m_dxgiFactory = NULL;
   };
 }

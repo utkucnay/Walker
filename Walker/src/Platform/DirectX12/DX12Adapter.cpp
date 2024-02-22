@@ -33,7 +33,7 @@ namespace wkr::render
       //Note(utku): check buffer count
       wcstombs_s(NULL, desc.description, 128, tmpDesc.Description, 128);
 
-      Ref<DX12Adapter> dadapter = CreateRef<DX12Adapter>(adapter);
+      Ref<DX12Adapter> dadapter = Ref<DX12Adapter>::Create(adapter);
       dadapter->desc = desc;
 
       ret.push_back(dadapter);

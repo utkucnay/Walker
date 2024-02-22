@@ -15,8 +15,12 @@ set(source_files
   ./src/Platform/DirectX12/DX12Renderer.cpp
   ./src/Platform/DirectX12/DX12Adapter.cpp
   ./src/Platform/DirectX12/DX12Device.cpp
+  ./src/Platform/DirectX12/DX12Command.cpp
+  ./src/Platform/DirectX12/DX12Fence.cpp
 
   ./src/Renderer/Renderer.cpp
+  ./src/Renderer/Command.cpp
+  ./src/Renderer/Adapter.cpp
   )
 
 set(all_files

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platforms/DirectX12/DX12.h>
+
 #define BEGIN_RENDERERAPI_CREATE() \
   switch (RendererAPI::GetAPI()) \
   { \
@@ -13,8 +15,12 @@
       break; \
   }
 
-#define ADD_RENDERERAPI_CREATE(APIType, CreationFunc, ...) \
-    case APIType: \
+#if defined(WKR_PLATFORMS_DIRECTX12)
+  #define ADD_RENDERERAPI_DIRECTX12_CREATE(CreationFunc, ...) \
+    case RendererAPI::APIType::Directx12: \
       __VA_ARGS__ \
       return CreationFunc; \
       break;
+#else
+  #define ADD_RENDERERAPI_DIRECTX12_CREATE(CreationFunc, ...)
+#endif

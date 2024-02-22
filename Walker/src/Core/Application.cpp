@@ -23,8 +23,8 @@ namespace wkr
     wnProps.height = 720;
 
     #if defined(WKR_PLATFORM_WINDOWS)
-      window = CreateScope<WindowsWindow>(wnProps);
-      graphics = CreateScope<render::DX12Renderer>(window.get());
+      window =    Scope<WindowsWindow>::Create(wnProps);
+      graphics =  Scope<render::DX12Renderer>::Create(window.Get());
     #endif
   }
 

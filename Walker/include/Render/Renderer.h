@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Factory.h"
 #include <Core/Window.h>
 
 namespace wkr::render
@@ -9,8 +10,12 @@ namespace wkr::render
   public:
     virtual void Render() = 0;
     virtual void SwapChain() = 0;
+  };
 
-  public:
-    static Ref<Renderer> Create(Window* window);
+  class RendererFactory : Factory<Renderer, Window*>
+  {
+    Renderer*        CreateFactoryRaw  (Window* window);
+    Ref<Renderer>    CreateFactoryRef  (Window* window);
+    Scope<Renderer>  CreateFactoryScope(Window* window);
   };
 }

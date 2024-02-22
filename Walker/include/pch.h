@@ -15,9 +15,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <Core/Base.h>
 
 #if defined(WKR_PLATFORM_WINDOWS)
   #include <windows.h>
 #endif
 
-#include <Core/Base.h>
+#include <Platforms/DirectX12/DX12.h>

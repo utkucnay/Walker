@@ -19,7 +19,7 @@ namespace wkr::render
   class Adapter
   {
   public:
-    virtual ~Adapter();
+    virtual ~Adapter() {}
 
   public:
     virtual void* GetNativeHandle() = 0;

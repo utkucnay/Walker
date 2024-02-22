@@ -1,15 +1,36 @@
-#include <Render/RenderMakro.h>
-#include <Platforms/DirectX12/DX12Renderer.h>
+#include <Render/Renderer.h>
+
+#include <Platforms/DirectX12/DX12.h>
+#include <Render/RendererMakro.h>
 #include <Render/RendererAPI.h>
 
 namespace wkr::render
 {
-  Ref<Renderer> Renderer::Create(Window* window)
+  Renderer* RendererFactory::CreateFactoryRaw(Window* window)
   {
     BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_CREATE(
-        RendererAPI::APIType::DirectX12,
-        CreateRef<DX12Renderer>(window))
+    ADD_RENDERERAPI_DIRECTX12_CREATE(
+        new DX12Renderer(window))
+    END_RENDERERAPI_CREATE()
+
+    return NULL;
+  }
+
+  Ref<Renderer> RendererFactory::CreateFactoryRef(Window* window)
+  {
+    BEGIN_RENDERERAPI_CREATE()
+    ADD_RENDERERAPI_DIRECTX12_CREATE(
+        Ref<DX12Renderer>::Create(window))
+    END_RENDERERAPI_CREATE()
+
+    return NULL;
+  }
+
+  Scope<Renderer> RendererFactory::CreateFactoryScope(Window* window)
+  {
+    BEGIN_RENDERERAPI_CREATE()
+    ADD_RENDERERAPI_DIRECTX12_CREATE(
+        Scope<DX12Renderer>::Create(window))
     END_RENDERERAPI_CREATE()
 
     return NULL;
