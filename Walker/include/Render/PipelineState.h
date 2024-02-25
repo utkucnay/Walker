@@ -5,6 +5,9 @@ namespace wkr::render
   class PipelineState
   {
   public:
-    virtual void* GetNativeHandle();
+    virtual ~PipelineState() = 0;
+
+  public:
+    virtual void* GetNativeHandle() = 0;
   };
 }

@@ -2,13 +2,13 @@
 
 namespace wkr::render
 {
-  DX12Device::DX12Device(DX12DeviceSpec spec)
+  DX12Device::DX12Device()
   {
   }
 
-  DX12Device::DX12Device(Ref<Adapter> adapter, DX12DeviceSpec spec)
+  DX12Device::DX12Device(mem::Ref<Adapter> adapter)
   {
-    CreateDevice(adapter, spec);
+    CreateDevice(adapter);
   }
 
   DX12Device::~DX12Device()
@@ -16,42 +16,42 @@ namespace wkr::render
     device->Release();
   }
 
-  Ref<CommandQueue> DX12Device::CreateCommandQueue(CommandQueueDesc& desc)
+  mem::Ref<CommandQueue> DX12Device::CreateCommandQueue(CommandQueueDesc& desc)
   {
     return NULL;
   }
 
-  Ref<CommandAllocator> DX12Device::CreateCommandAllocator()
+  mem::Ref<CommandAllocator> DX12Device::CreateCommandAllocator()
   {
     return NULL;
   }
 
-  Ref<CommandList> DX12Device::CreateCommandList()
+  mem::Ref<CommandList> DX12Device::CreateCommandList()
   {
     return NULL;
   }
 
-  Ref<DescriptorHeap> DX12Device::CreateDescriptorHeap()
+  mem::Ref<DescriptorHeap> DX12Device::CreateDescriptorHeap()
   {
     return NULL;
   }
 
-  Ref<RenderTargetView> DX12Device::CreateRenderTargetView()
+  mem::Ref<RenderTargetView> DX12Device::CreateRenderTargetView()
   {
     return NULL;
   }
 
-  Ref<RootSignature> DX12Device::CreateRootSignature()
+  mem::Ref<RootSignature> DX12Device::CreateRootSignature()
   {
     return NULL;
   }
 
-  Ref<Fence> DX12Device::CreateFence()
+  mem::Ref<Fence> DX12Device::CreateFence()
   {
     return NULL;
   }
 
-  void DX12Device::CreateDevice(Ref<Adapter> adapter, DX12DeviceSpec spec)
+  void DX12Device::CreateDevice(mem::Ref<Adapter> adapter)
   {
     HRESULT hr;
 

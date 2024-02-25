@@ -13,6 +13,8 @@
   #include <Platforms/DirectX12/DX12Factory.h>
   #include <Platforms/DirectX12/DX12Device.h>
   #include <Platforms/DirectX12/DX12Adapter.h>
-  #include <Platforms/DirectX12/DX12Command.h>
+  #include <Platforms/DirectX12/DX12CommandList.h>
+  #include <Platforms/DirectX12/DX12CommandAllocator.h>
+  #include <Platforms/DirectX12/DX12CommandQueue.h>
   #include <Platforms/DirectX12/DX12Renderer.h>
 #endif

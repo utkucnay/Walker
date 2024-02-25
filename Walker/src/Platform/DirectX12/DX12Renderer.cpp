@@ -19,7 +19,7 @@ namespace wkr::render
 
     auto adapters = render::DX12Adapter::GetAllAdapters();
 
-    Ref<render::Adapter> adapter;
+    mem::Ref<render::Adapter> adapter;
     for(size_t i = 0; i < adapters.size(); i++)
     {
       //TODO(utku): find rtx 30 or later adapter
@@ -30,8 +30,7 @@ namespace wkr::render
     }
 
     //DX12Device device;
-    DX12DeviceSpec spec;
-    Ref<DX12Device> device2 = Ref<DX12Device>::Create(adapter, spec);
+    mem::Ref<Device> device = mem::Scope<DeviceFactory>::Create()->CreateFactoryRef(adapter);
 
     DXGI_MODE_DESC backBufferDesc = {};
     backBufferDesc.Width = window->GetWidth();
@@ -108,7 +107,6 @@ namespace wkr::render
 
     if(m_fenceEvent == NULL)
     {
-      //TODO(utku) : log
     }
   }
 

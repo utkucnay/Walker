@@ -8,9 +8,9 @@ namespace wkr::render
     adapter->Release();
   }
 
-  std::vector<Ref<Adapter>> DX12Adapter::GetAllAdapters()
+  std::vector<mem::Ref<Adapter>> DX12Adapter::GetAllAdapters()
   {
-    std::vector<Ref<Adapter>> ret;
+    std::vector<mem::Ref<Adapter>> ret;
 
     IDXGIAdapter1* adapter;
     int adapterIndex = 0;
@@ -33,7 +33,7 @@ namespace wkr::render
       //Note(utku): check buffer count
       wcstombs_s(NULL, desc.description, 128, tmpDesc.Description, 128);
 
-      Ref<DX12Adapter> dadapter = Ref<DX12Adapter>::Create(adapter);
+      mem::Ref<DX12Adapter> dadapter = mem::Ref<DX12Adapter>::Create(adapter);
       dadapter->desc = desc;
 
       ret.push_back(dadapter);

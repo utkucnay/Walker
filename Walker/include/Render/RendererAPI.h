@@ -9,7 +9,7 @@ namespace wkr::render
   public:
     enum class APIType
     {
-      None = 0,
+      None      = 0,
       DirectX12 = 1
     };
 
@@ -19,6 +19,6 @@ namespace wkr::render
     static void ChangeAPI(APIType type) { s_Api = type; }
 
   private:
-    static APIType s_Api;
+    static inline APIType s_Api;
   };
 }

@@ -14,12 +14,12 @@ namespace wkr
   public:
     std::function<void(EventArg)> bind;
   private:
-    Ref<Event> nextEvent;
+    mem::Ref<Event> nextEvent;
     friend EventListener;
   };
 
   class EventListener
   {
-    Ref<Event> event;
+    mem::Ref<Event> event;
   };
 }

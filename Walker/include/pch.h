@@ -16,6 +16,12 @@
 #include <unordered_set>
 
 #include <Core/Base.h>
+#include <Memory/Ref.h>
+#include <Memory/Scope.h>
+
+#include <Core/Builder.h>
+#include <Core/Factory.h>
+
 
 #if defined(WKR_PLATFORM_WINDOWS)
   #include <windows.h>

@@ -10,18 +10,18 @@ namespace wkr::render
 
   enum class Usage
   {
-    DXGI_CPU_ACCESS_NONE                = 0,
-    DXGI_CPU_ACCESS_DYNAMIC             = 1,
-    DXGI_CPU_ACCESS_READ_WRITE          = 2,
-    DXGI_CPU_ACCESS_SCRATCH             = 3,
-    DXGI_CPU_ACCESS_FIELD               = 15,
-    DXGI_USAGE_SHADER_INPUT             = 1L << (0 + 4),
-    DXGI_USAGE_RENDER_TARGET_OUTPUT     = 1L << (1 + 4),
-    DXGI_USAGE_BACK_BUFFER              = 1L << (2 + 4),
-    DXGI_USAGE_SHARED                   = 1L << (3 + 4),
-    DXGI_USAGE_READ_ONLY                = 1L << (4 + 4),
-    DXGI_USAGE_DISCARD_ON_PRESENT       = 1L << (5 + 4),
-    DXGI_USAGE_UNORDERED_ACCESS         = 1L << (6 + 4)
+    CPU_ACCESS_NONE                = 0,
+    CPU_ACCESS_DYNAMIC             = 1,
+    CPU_ACCESS_READ_WRITE          = 2,
+    CPU_ACCESS_SCRATCH             = 3,
+    CPU_ACCESS_FIELD               = 15,
+    USAGE_SHADER_INPUT             = 1L << (0 + 4),
+    USAGE_RENDER_TARGET_OUTPUT     = 1L << (1 + 4),
+    USAGE_BACK_BUFFER              = 1L << (2 + 4),
+    USAGE_SHARED                   = 1L << (3 + 4),
+    USAGE_READ_ONLY                = 1L << (4 + 4),
+    USAGE_DISCARD_ON_PRESENT       = 1L << (5 + 4),
+    USAGE_UNORDERED_ACCESS         = 1L << (6 + 4)
   };
 
   enum class Format

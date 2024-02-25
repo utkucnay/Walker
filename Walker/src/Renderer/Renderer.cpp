@@ -6,6 +6,11 @@
 
 namespace wkr::render
 {
+  Renderer::~Renderer()
+  {
+
+  }
+
   Renderer* RendererFactory::CreateFactoryRaw(Window* window)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -16,7 +21,7 @@ namespace wkr::render
     return NULL;
   }
 
-  Ref<Renderer> RendererFactory::CreateFactoryRef(Window* window)
+  mem::Ref<Renderer> RendererFactory::CreateFactoryRef(Window* window)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -26,7 +31,7 @@ namespace wkr::render
     return NULL;
   }
 
-  Scope<Renderer> RendererFactory::CreateFactoryScope(Window* window)
+  mem::Scope<Renderer> RendererFactory::CreateFactoryScope(Window* window)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(

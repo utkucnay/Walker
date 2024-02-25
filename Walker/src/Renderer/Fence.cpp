@@ -5,9 +5,33 @@
 
 namespace wkr::render
 {
+  FenceBuilder* FenceBuilder::SetFenceFlag(Fence::Flag fenceFlag)
+  {
+    m_fenceFlag = fenceFlag;
+    return this;
+  }
+
+  Fence* FenceBuilder::BuildRaw(mem::Ref<Device> device)
+  {
+    return mem::Scope<FenceFactory>::Create()
+      ->CreateFactoryRaw(device, m_fenceFlag);
+  }
+
+  mem::Ref<Fence> FenceBuilder::BuildRef(mem::Ref<Device> device)
+  {
+    return mem::Scope<FenceFactory>::Create()
+      ->CreateFactoryRef(device, m_fenceFlag);
+  }
+
+  mem::Scope<Fence> FenceBuilder::BuildScope(mem::Ref<Device> device)
+  {
+    return mem::Scope<FenceFactory>::Create()
+      ->CreateFactoryScope(device, m_fenceFlag);
+  }
+
   Fence* FenceFactory::CreateFactoryRaw(
-      Ref<Device> device,
-      FenceFlag fenceFlag)
+      mem::Ref<Device> device,
+      Fence::Flag fenceFlag)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -17,9 +41,9 @@ namespace wkr::render
     return NULL;
   }
 
-  Ref<Fence> FenceFactory::CreateFactoryRef(
-      Ref<Device> device,
-      FenceFlag fenceFlag)
+  mem::Ref<Fence> FenceFactory::CreateFactoryRef(
+      mem::Ref<Device> device,
+      Fence::Flag fenceFlag)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -29,9 +53,9 @@ namespace wkr::render
     return NULL;
   }
 
-  Scope<Fence> FenceFactory::CreateFactoryScope(
-      Ref<Device> device,
-      FenceFlag fenceFlag)
+  mem::Scope<Fence> FenceFactory::CreateFactoryScope(
+      mem::Ref<Device> device,
+      Fence::Flag fenceFlag)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(

@@ -44,6 +44,9 @@ namespace wkr::render
   class SwapChain
   {
   public:
-    virtual void* GetNativeHandle();
+    virtual ~SwapChain() = 0;
+
+  public:
+    virtual void* GetNativeHandle() = 0;
   };
 }

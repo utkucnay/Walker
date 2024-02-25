@@ -5,8 +5,8 @@
 namespace wkr::render
 {
   DX12Fence::DX12Fence(
-      Ref<Device> device,
-      FenceFlag fenceFlag)
+      mem::Ref<Device> device,
+      Fence::Flag fenceFlag)
   {
     ID3D12Device* nDevice = (ID3D12Device*)device->GetNativeHandle();
 

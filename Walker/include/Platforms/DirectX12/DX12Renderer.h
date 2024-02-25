@@ -11,11 +11,11 @@ namespace wkr::render
   {
   public:
     DX12Renderer(Window* window);
-    ~DX12Renderer();
+    ~DX12Renderer() override;
 
   public:
-    void Render() override;
-    void SwapChain() override;
+    void Render()     override;
+    void SwapChain()  override;
 
   private:
     void UpdatePipeline();

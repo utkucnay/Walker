@@ -32,8 +32,8 @@ namespace wkr
 
   private:
     ApplicationSpecs appSpecs;
-    Scope<Window> window;
-    Scope<render::Renderer> graphics;
+    mem::Scope<Window> window;
+    mem::Scope<render::Renderer> graphics;
 
     friend int ::main(int argc, char** argv);
   };

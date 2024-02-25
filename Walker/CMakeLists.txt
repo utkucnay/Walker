@@ -9,18 +9,24 @@ set(header_files
 
 set(source_files
   ./src/Core/Application.cpp
+  ./src/Core/Window.cpp
 
   ./src/Platform/Windows/WindowsWindow.cpp
 
   ./src/Platform/DirectX12/DX12Renderer.cpp
   ./src/Platform/DirectX12/DX12Adapter.cpp
   ./src/Platform/DirectX12/DX12Device.cpp
-  ./src/Platform/DirectX12/DX12Command.cpp
+  ./src/Platform/DirectX12/DX12CommandList.cpp
+  ./src/Platform/DirectX12/DX12CommandQueue.cpp
+  ./src/Platform/DirectX12/DX12CommandAllocator.cpp
   ./src/Platform/DirectX12/DX12Fence.cpp
 
   ./src/Renderer/Renderer.cpp
-  ./src/Renderer/Command.cpp
+  ./src/Renderer/CommandQueue.cpp
+  ./src/Renderer/CommandList.cpp
+  ./src/Renderer/CommandAllocator.cpp
   ./src/Renderer/Adapter.cpp
+  ./src/Renderer/Device.cpp
   )
 
 set(all_files

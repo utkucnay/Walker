@@ -28,6 +28,6 @@ namespace wkr::render
     AdapterDesc desc;
 
   public:
-    static std::vector<Ref<Adapter>> GetAllAdapters();
+    static std::vector<mem::Ref<Adapter>> GetAllAdapters();
   };
 }
