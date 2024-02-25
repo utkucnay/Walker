@@ -1,5 +1,4 @@
 #include "Platforms/DirectX12/DX12Adapter.h"
-#include "Platforms/DirectX12/DX12Device.h"
 #include "Platforms/DirectX12/DX12Factory.h"
 #include <Platforms/DirectX12/DX12Renderer.h>
 
@@ -9,7 +8,7 @@ extern "C" { __declspec(dllexport) extern const char* D3D12SDKPath = u8".\\D3D12
 
 namespace wkr::render
 {
-  DX12Renderer::DX12Renderer(Window* window)
+  DX12Renderer::DX12Renderer(mem::Ref<Window> window)
   {
     HWND* hwnd = (HWND*)window->GetNativeHandle();
 

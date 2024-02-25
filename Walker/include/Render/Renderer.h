@@ -15,10 +15,10 @@ namespace wkr::render
     virtual void SwapChain() = 0;
   };
 
-  class RendererFactory : Factory<Renderer, Window*>
+  class RendererFactory : Factory<Renderer, mem::Ref<Window>>
   {
-    Renderer*             CreateFactoryRaw  (Window* window);
-    mem::Ref<Renderer>    CreateFactoryRef  (Window* window);
-    mem::Scope<Renderer>  CreateFactoryScope(Window* window);
+    Renderer*             CreateFactoryRaw  (mem::Ref<Window> window);
+    mem::Ref<Renderer>    CreateFactoryRef  (mem::Ref<Window> window);
+    mem::Scope<Renderer>  CreateFactoryScope(mem::Ref<Window> window);
   };
 }

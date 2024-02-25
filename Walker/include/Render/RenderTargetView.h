@@ -9,5 +9,6 @@ namespace wkr::render
 
   public:
     virtual void* GetNativeHandle() = 0;
+    virtual void* GetGPUVirtualAdress() = 0;
   };
 }

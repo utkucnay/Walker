@@ -10,7 +10,7 @@ namespace wkr::render
   class DX12Renderer : public Renderer
   {
   public:
-    DX12Renderer(Window* window);
+    DX12Renderer(mem::Ref<Window> window);
     ~DX12Renderer() override;
 
   public:

@@ -1,8 +1,5 @@
 #include <Render/Renderer.h>
-
-#include <Platforms/DirectX12/DX12.h>
 #include <Render/RendererMakro.h>
-#include <Render/RendererAPI.h>
 
 namespace wkr::render
 {
@@ -11,7 +8,7 @@ namespace wkr::render
 
   }
 
-  Renderer* RendererFactory::CreateFactoryRaw(Window* window)
+  Renderer* RendererFactory::CreateFactoryRaw(mem::Ref<Window> window)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -21,7 +18,7 @@ namespace wkr::render
     return NULL;
   }
 
-  mem::Ref<Renderer> RendererFactory::CreateFactoryRef(Window* window)
+  mem::Ref<Renderer> RendererFactory::CreateFactoryRef(mem::Ref<Window> window)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -31,7 +28,7 @@ namespace wkr::render
     return NULL;
   }
 
-  mem::Scope<Renderer> RendererFactory::CreateFactoryScope(Window* window)
+  mem::Scope<Renderer> RendererFactory::CreateFactoryScope(mem::Ref<Window> window)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
