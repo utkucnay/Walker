@@ -7,3 +7,6 @@
   #define WKR_CORE_LOG(cond, ...)
   #define WKR_CORE_LOG_COND(cond, ...)
 #endif
+
+#define KB * 1024
+#define MB * 1024 * KB

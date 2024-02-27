@@ -17,6 +17,7 @@ namespace wkr::render
     static void Init(APIType apiType)
     {
       s_Api = apiType;
+      DX12Factory::Init();
     }
 
     static APIType GetAPI() { return s_Api; }

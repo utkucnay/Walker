@@ -1,3 +1,4 @@
+#include "Render/Adapter.h"
 #include <Render/Renderer.h>
 #include <Render/RendererMakro.h>
 #include <Render/Command.h>
@@ -6,10 +7,21 @@ namespace wkr::render
 {
   Renderer::Renderer(Window* window)
   {
-    RendererAPI::ChangeAPI(RendererAPI::APIType::DirectX12);
+    RendererAPI::Init(RendererAPI::APIType::DirectX12);
+
+    auto adapters = Adapter::GetAllAdapters();
+
+    mem::Ref<Adapter> adapter;
+    for(auto adap : adapters)
+    {
+      if(adap->desc.dedicatedVideoMemory > 4096)
+      {
+        adapter = adap;
+      }
+    }
 
     m_device = mem::Scope<DeviceFactory>::Create()
-      ->CreateFactoryRef(NULL);
+      ->CreateFactoryRef(adapter);
 
     CommandQueueBuilder cqBuilder;
     cqBuilder
@@ -21,12 +33,13 @@ namespace wkr::render
     CommandAllocatorBuilder caBuilder;
     caBuilder
       .SetCommandListType(CommandList::Type::Direct);
-    m_commandAllocator = caBuilder.BuildRef(m_device.Get());
+    for(int i = 0; i < 3; i++)
+      m_commandAllocator[i] = caBuilder.BuildRef(m_device.Get());
 
     CommandListBuilder clBuilder;
     clBuilder
       .SetCommandListType(CommandList::Type::Direct)
-      .SetCommandAllocator(m_commandAllocator.Get());
+      .SetCommandAllocator(m_commandAllocator[0].Get());
     m_commandList = clBuilder.BuildRef(m_device.Get());
 
     SwapChainBuilder scBuilder;
@@ -36,7 +49,7 @@ namespace wkr::render
       .SetMSAA(1, 0)
       .SetVsync(SwapChain::VsyncDesc::TripleBuffering);
 
-    window->SetSwapChain(scBuilder);
+    m_swapChain = window->SetSwapChain(scBuilder);
   }
 
   Renderer::~Renderer()

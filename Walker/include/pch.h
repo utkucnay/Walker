@@ -18,6 +18,7 @@
 #include <Core/Base.h>
 
 #include <Memory/Ref.h>
+#include <Memory/WeakRef.h>
 #include <Memory/Scope.h>
 
 #include <Core/Builder.h>

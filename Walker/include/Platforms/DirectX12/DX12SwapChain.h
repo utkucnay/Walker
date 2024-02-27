@@ -18,7 +18,7 @@ namespace wkr::render
 
   public:
     void ChangeWindowSize(Window* window) override;
-    void ChangeWindowFullScreen(Window* window);
+    void SetFullscreen(Window* window) override;
     void SwapBuffers() override;
     void* GetNativeHandle() override { return m_swapChain; }
 
@@ -28,6 +28,6 @@ namespace wkr::render
   private:
     IDXGISwapChain3*  m_swapChain;
     uint8_t           m_frameBufferCount;
-    uint32_t           m_frameIndex;
+    uint32_t          m_frameIndex;
   };
 }

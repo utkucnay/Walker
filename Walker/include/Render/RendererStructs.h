@@ -15,13 +15,13 @@ namespace wkr::render
     CPU_ACCESS_READ_WRITE          = 2,
     CPU_ACCESS_SCRATCH             = 3,
     CPU_ACCESS_FIELD               = 15,
-    SHADER_INPUT             = 1L << (0 + 4),
-    RENDER_TARGET_OUTPUT     = 1L << (1 + 4),
-    BACK_BUFFER              = 1L << (2 + 4),
-    SHARED                   = 1L << (3 + 4),
-    READ_ONLY                = 1L << (4 + 4),
-    DISCARD_ON_PRESENT       = 1L << (5 + 4),
-    UNORDERED_ACCESS         = 1L << (6 + 4)
+    SHADER_INPUT             = 0x00000010UL,
+    RENDER_TARGET_OUTPUT     = 0x00000020UL,
+    BACK_BUFFER              = 0x00000040UL,
+    SHARED                   = 0x00000080UL,
+    READ_ONLY                = 0x00000100UL,
+    DISCARD_ON_PRESENT       = 0x00000200UL,
+    UNORDERED_ACCESS         = 0x00000400UL
   };
 
   enum class Format : uint32_t

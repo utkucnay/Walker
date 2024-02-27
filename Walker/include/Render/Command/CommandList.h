@@ -35,19 +35,19 @@ namespace wkr::render
   class CommandListBuilder : Builder<CommandList, Device*>
   {
   public:
-    CommandListBuilder& SetCommandListType  (CommandList::Type listType);
-    CommandListBuilder& SetCommandAllocator (CommandAllocator* alloc);
-    CommandListBuilder& SetPiplineState     (PipelineState* pipelineState);
+    CommandListBuilder& SetCommandListType(CommandList::Type listType);
+    CommandListBuilder& SetCommandAllocator(CommandAllocator* alloc);
+    CommandListBuilder& SetPiplineState(PipelineState* pipelineState);
 
   public:
-    CommandList*            BuildRaw  (Device* device) override;
-    mem::Ref<CommandList>   BuildRef  (Device* device) override;
+    CommandList* BuildRaw(Device* device) override;
+    mem::Ref<CommandList>   BuildRef(Device* device) override;
     mem::Scope<CommandList> BuildScope(Device* device) override;
 
   private:
-    CommandList::Type           m_listType;
-    CommandAllocator*           m_commandAllocator;
-    PipelineState*              m_piplelineState;
+    CommandList::Type         m_listType;
+    CommandAllocator*         m_commandAllocator = {};
+    PipelineState*            m_piplelineState = {};
   };
 
   class CommandListFactory : Factory<

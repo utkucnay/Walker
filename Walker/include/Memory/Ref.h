@@ -3,6 +3,9 @@
 namespace wkr::mem
 {
   template<typename T>
+  class WeakRef;
+
+  template<typename T>
   class Ref
   {
   public:
@@ -21,6 +24,14 @@ namespace wkr::mem
     operator Ref<TConv>()
     {
       Ref<TConv> ret;
+      ret.ptr = std::static_pointer_cast<TConv>(this->ptr);
+      return ret;
+    }
+
+    template<typename TConv>
+    operator WeakRef<TConv>()
+    {
+      WeakRef<TConv> ret;
       ret.ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }

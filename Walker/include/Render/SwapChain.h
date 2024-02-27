@@ -52,6 +52,7 @@ namespace wkr::render
 
   public:
     virtual void ChangeWindowSize(Window* window) = 0;
+    virtual void SetFullscreen(Window* window) = 0;
     virtual void SwapBuffers() = 0;
     virtual void* GetNativeHandle() = 0;
 

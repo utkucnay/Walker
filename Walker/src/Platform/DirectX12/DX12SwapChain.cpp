@@ -7,16 +7,18 @@ namespace wkr::render
       const SwapChainDesc& desc)
   {
     IDXGISwapChain* swapChain;
+    mem::Scope<DXGI_SWAP_CHAIN_DESC> translatedDesc = TranslateDesc(desc);
 
     HRESULT hr = DX12Factory::GetFactory()->CreateSwapChain(
         static_cast<ID3D12CommandQueue*>(commandQueue->GetNativeHandle()),
-        TranslateDesc(desc).Get(),
+        translatedDesc.Get(),
         &swapChain);
 
     WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create SwapChain");
 
     m_swapChain = static_cast<IDXGISwapChain3*>(swapChain);
     m_frameBufferCount = desc.bufferCount;
+
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
   }
 
@@ -30,7 +32,7 @@ namespace wkr::render
     m_swapChain->SetSourceSize(window->GetWidth(), window->GetHeight());
   }
 
-  void DX12SwapChain::ChangeWindowFullScreen(Window* window)
+  void DX12SwapChain::SetFullscreen(Window* window)
   {
     m_swapChain->SetFullscreenState(window->GetFullscreen(), NULL);
   }
@@ -39,7 +41,7 @@ namespace wkr::render
   {
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-    m_fence[m_frameIndex]->FenceEvent();
+    //m_fence[m_frameIndex]->FenceEvent();
   }
 
   mem::Scope<DXGI_SWAP_CHAIN_DESC> DX12SwapChain::TranslateDesc(
@@ -67,7 +69,7 @@ namespace wkr::render
 
     retDesc->BufferUsage = static_cast<DXGI_USAGE>(tDesc.bufferUsage);
     retDesc->BufferCount = tDesc.bufferCount;
-    retDesc->OutputWindow = static_cast<HWND>(tDesc.window->GetNativeHandle());
+    retDesc->OutputWindow = *(static_cast<HWND*>(tDesc.window->GetNativeHandle()));
     retDesc->Windowed = tDesc.window->GetWindowed();
     retDesc->SwapEffect = static_cast<DXGI_SWAP_EFFECT>(tDesc.swapEffect);
     retDesc->Flags = static_cast<uint32_t>(tDesc.flag);

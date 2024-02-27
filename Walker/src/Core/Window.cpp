@@ -12,15 +12,23 @@ namespace wkr
 
   }
 
-  void Window::SetSwapChain(render::SwapChainBuilder& builder)
+  mem::Ref<render::SwapChain> Window::SetSwapChain(
+      render::SwapChainBuilder& builder)
   {
     builder.SetWindow(this);
-    m_swapChain = builder.BuildScope();
+    auto swapChain = builder.BuildRef();
+    m_swapChain = swapChain;
+    return swapChain;
   }
 
   void Window::SwapBuffers()
   {
-    m_swapChain->SwapBuffers();
+    if(m_swapChain.Expired())
+    {
+      WKR_CORE_LOG("Swap Chain Expired");
+      return;
+    }
+    m_swapChain.Lock()->SwapBuffers();
   }
 
   //Builder
