@@ -2,6 +2,10 @@
 
 #include <Render/Device.h>
 
+#if !defined (COMMAND_INCLUDE_BARRIER)
+  #error "Command Didn't Include Correctly"
+#endif
+
 namespace wkr::render
 {
   class Device;
@@ -18,15 +22,15 @@ namespace wkr::render
     CommandList::Type listType;
   };
 
-  class CommandAllocatorBuilder : Builder<CommandAllocator, mem::Ref<Device>>
+  class CommandAllocatorBuilder : Builder<CommandAllocator, Device*>
   {
   public:
     CommandAllocatorBuilder& SetCommandListType(CommandList::Type listType);
 
   public:
-    CommandAllocator*             BuildRaw  (mem::Ref<Device> device) override;
-    mem::Ref<CommandAllocator>    BuildRef  (mem::Ref<Device> device) override;
-    mem::Scope<CommandAllocator>  BuildScope(mem::Ref<Device> device) override;
+    CommandAllocator*             BuildRaw  (Device* device) override;
+    mem::Ref<CommandAllocator>    BuildRef  (Device* device) override;
+    mem::Scope<CommandAllocator>  BuildScope(Device* device) override;
 
   private:
     CommandList::Type m_commandListType;
@@ -34,20 +38,20 @@ namespace wkr::render
 
   class CommandAllocatorFactory : Factory<
                                     CommandAllocator,
-                                    mem::Ref<Device>,
+                                    Device*,
                                     CommandList::Type>
   {
   public:
     CommandAllocator*             CreateFactoryRaw  (
-        mem::Ref<Device>     device,
+        Device*           device,
         CommandList::Type listType) override;
 
     mem::Ref<CommandAllocator>    CreateFactoryRef  (
-        mem::Ref<Device>     device,
+        Device*           device,
         CommandList::Type listType) override;
 
     mem::Scope<CommandAllocator>  CreateFactoryScope(
-        mem::Ref<Device>     device,
+        Device*           device,
         CommandList::Type listType) override;
   };
 }

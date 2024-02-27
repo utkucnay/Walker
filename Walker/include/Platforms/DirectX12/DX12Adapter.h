@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-
 #include <Render/Adapter.h>
+
+#include <Platforms/DirectX12/DX12.h>
 
 namespace wkr::render
 {

@@ -5,6 +5,11 @@
 
 namespace wkr::render
 {
+  CommandList::~CommandList()
+  {
+
+  }
+
   //Builder
   CommandListBuilder& CommandListBuilder::SetCommandListType(
       CommandList::Type listType)
@@ -14,25 +19,55 @@ namespace wkr::render
   }
 
   CommandListBuilder& CommandListBuilder::SetCommandAllocator(
-      mem::Ref<CommandAllocator> allocator)
+      CommandAllocator* allocator)
   {
     m_commandAllocator = allocator;
     return *this;
   }
 
   CommandListBuilder& CommandListBuilder::SetPiplineState(
-      mem::Ref<PipelineState> pipelineState)
+      PipelineState* pipelineState)
   {
     m_piplelineState = pipelineState;
     return *this;
   }
 
+  CommandList* CommandListBuilder::BuildRaw(Device* device)
+  {
+    return mem::Scope<CommandListFactory>::Create()
+      ->CreateFactoryRaw(
+          device,
+          m_listType,
+          m_commandAllocator,
+          m_piplelineState);
+  }
+
+  mem::Ref<CommandList> CommandListBuilder::BuildRef(Device* device)
+  {
+    return mem::Scope<CommandListFactory>::Create()
+      ->CreateFactoryRef(
+          device,
+          m_listType,
+          m_commandAllocator,
+          m_piplelineState);
+  }
+
+  mem::Scope<CommandList> CommandListBuilder::BuildScope(Device* device)
+  {
+    return mem::Scope<CommandListFactory>::Create()
+      ->CreateFactoryScope(
+          device,
+          m_listType,
+          m_commandAllocator,
+          m_piplelineState);
+  }
+
   //Factory
   CommandList* CommandListFactory::CreateFactoryRaw(
-      mem::Ref<Device> device,
+      Device*           device,
       CommandList::Type listType,
-      mem::Ref<CommandAllocator> commandAllocator,
-      mem::Ref<PipelineState> pipelineState)
+      CommandAllocator* commandAllocator,
+      PipelineState*    pipelineState)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
@@ -46,14 +81,14 @@ namespace wkr::render
   }
 
   mem::Ref<CommandList> CommandListFactory::CreateFactoryRef(
-      mem::Ref<Device> device,
+      Device* device,
       CommandList::Type listType,
-      mem::Ref<CommandAllocator> commandAllocator,
-      mem::Ref<PipelineState> pipelineState)
+      CommandAllocator* commandAllocator,
+      PipelineState* pipelineState)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Ref<DX12CommandList>::Create(
+        mem::Ref<DX12CommandList>::Create(
           device,
           listType,
           commandAllocator,
@@ -63,14 +98,14 @@ namespace wkr::render
   }
 
   mem::Scope<CommandList> CommandListFactory::CreateFactoryScope(
-      mem::Ref<Device> device,
+      Device*           device,
       CommandList::Type listType,
-      mem::Ref<CommandAllocator> commandAllocator,
-      mem::Ref<PipelineState> pipelineState)
+      CommandAllocator* commandAllocator,
+      PipelineState*    pipelineState)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Scope<DX12CommandList>::Create(
+        mem::Scope<DX12CommandList>::Create(
           device,
           listType,
           commandAllocator,

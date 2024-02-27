@@ -59,7 +59,7 @@ namespace wkr::render
     {
       hr = D3D12CreateDevice(
         NULL,
-        D3D_FEATURE_LEVEL_12_2,
+        D3D_FEATURE_LEVEL_12_1,
         IID_PPV_ARGS(&device));
     }
     else

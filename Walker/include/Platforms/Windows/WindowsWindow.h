@@ -12,7 +12,7 @@ namespace wkr
   class WindowsWindow : public Window
   {
   public:
-    WindowsWindow(const WindowProps& windowProps);
+    WindowsWindow(const WindowDesc& windowProps);
     ~WindowsWindow();
 
   public:

@@ -1,3 +1,4 @@
+#include "Core/Base.h"
 #include <Platforms/Windows/WindowsWindow.h>
 
 namespace wkr
@@ -7,7 +8,8 @@ namespace wkr
       UINT uMsg,
       WPARAM wParam, LPARAM lParam)
   {
-    switch (uMsg) {
+    switch (uMsg)
+    {
       case WM_QUIT:
         {
         } break;
@@ -20,7 +22,7 @@ namespace wkr
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
   }
 
-  WindowsWindow::WindowsWindow(const WindowProps& windowProps)
+  WindowsWindow::WindowsWindow(const WindowDesc& windowProps)
   {
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -47,12 +49,7 @@ namespace wkr
       NULL
       );
 
-    if(window == NULL)
-    {
-      //TODO(utku): correct loging
-      std::cout << "Didn't create window" << "\n";
-    }
-
+    WKR_CORE_LOG_COND(NULL == window, "Didn't create window");
     ShowWindow(window, true);
   }
 

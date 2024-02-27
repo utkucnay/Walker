@@ -1,6 +1,4 @@
 #include <Core/EntryPoint.h>
-#include <Core/Application.h>
-#include <Render/RendererAPI.h>
 
 namespace wkr
 {
@@ -16,7 +14,6 @@ namespace wkr
     ApplicationSpecs specs;
     specs.name = "Sandbox";
     specs.showCLI = true;
-    specs.apiType = render::RendererAPI::APIType::DirectX12;
     specs.ApplicationCommandLineArgs = args;
 
     return new SandboxApp(specs);

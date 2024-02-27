@@ -6,6 +6,7 @@
   #define WKR_PLATFORM_DIRECTX12
 
   #include <d3d12.h>
+  #include <d3dx12/d3dx12.h>
   #include <dxgi.h>
   #include <dxgi1_4.h>
   #include <d3dcompiler.h>
@@ -16,5 +17,6 @@
   #include <Platforms/DirectX12/DX12CommandList.h>
   #include <Platforms/DirectX12/DX12CommandAllocator.h>
   #include <Platforms/DirectX12/DX12CommandQueue.h>
-  #include <Platforms/DirectX12/DX12Renderer.h>
+  #include <Platforms/DirectX12/DX12SwapChain.h>
+  #include <Platforms/DirectX12/DX12Fence.h>
 #endif

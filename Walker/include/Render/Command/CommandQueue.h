@@ -2,6 +2,10 @@
 
 #include <Render/Device.h>
 
+#if !defined (COMMAND_INCLUDE_BARRIER)
+  #error "Command Didn't Include Correctly"
+#endif
+
 namespace wkr::render
 {
   class Device;
@@ -36,7 +40,7 @@ namespace wkr::render
     CommandQueue::Flags     m_commandQueueFlags;
   };
 
-  class CommandQueueBuilder : Builder<CommandQueue, mem::Ref<Device>>
+  class CommandQueueBuilder : Builder<CommandQueue, Device*>
   {
   public:
     CommandQueueBuilder& SetCommandListType(CommandList::Type listType);
@@ -44,9 +48,9 @@ namespace wkr::render
     CommandQueueBuilder& SetCommandQueueFlags   (CommandQueue::Flags    flags);
 
   public:
-    CommandQueue*             BuildRaw  (mem::Ref<Device> device) override;
-    mem::Ref<CommandQueue>    BuildRef  (mem::Ref<Device> device) override;
-    mem::Scope<CommandQueue>  BuildScope(mem::Ref<Device> device) override;
+    CommandQueue*             BuildRaw  (Device* device) override;
+    mem::Ref<CommandQueue>    BuildRef  (Device* device) override;
+    mem::Scope<CommandQueue>  BuildScope(Device* device) override;
 
   private:
     CommandList::Type       m_commandListType;
@@ -56,20 +60,20 @@ namespace wkr::render
 
   class CommandQueueFactory : Factory<
                                     CommandQueue,
-                                    mem::Ref<Device>,
+                                    Device*,
                                     const CommandQueueDesc&>
   {
   public:
     CommandQueue*       CreateFactoryRaw   (
-        mem::Ref<Device>       device,
+        Device*       device,
         const CommandQueueDesc& desc) override;
 
     mem::Ref<CommandQueue>    CreateFactoryRef  (
-        mem::Ref<Device>       device,
+        Device*       device,
         const CommandQueueDesc& desc) override;
 
     mem::Scope<CommandQueue>  CreateFactoryScope(
-        mem::Ref<Device>       device,
+        Device*       device,
         const CommandQueueDesc& desc) override;
   };
 }

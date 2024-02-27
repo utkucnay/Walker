@@ -3,10 +3,13 @@
 #include <Render/Command.h>
 #include <Render/RendererMakro.h>
 
-#include <Platforms/DirectX12/DX12.h>
-
 namespace wkr::render
 {
+  CommandQueue::~CommandQueue()
+  {
+
+  }
+
   //Builder
   CommandQueueBuilder& CommandQueueBuilder::SetCommandListType(
       CommandList::Type listType)
@@ -29,7 +32,7 @@ namespace wkr::render
     return *this;
   }
 
-  CommandQueue* CommandQueueBuilder::BuildRaw (mem::Ref<Device> device)
+  CommandQueue* CommandQueueBuilder::BuildRaw(Device* device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRaw(
         device,
@@ -38,7 +41,7 @@ namespace wkr::render
         m_commandQueueFlags});
   }
 
-  mem::Ref<CommandQueue> CommandQueueBuilder:: BuildRef (mem::Ref<Device> device)
+  mem::Ref<CommandQueue> CommandQueueBuilder:: BuildRef(Device* device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRef(
         device,
@@ -47,7 +50,7 @@ namespace wkr::render
         m_commandQueueFlags});
   }
 
-  mem::Scope<CommandQueue>CommandQueueBuilder:: BuildScope (mem::Ref<Device> device)
+  mem::Scope<CommandQueue>CommandQueueBuilder:: BuildScope(Device* device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryScope(
         device,
@@ -58,7 +61,7 @@ namespace wkr::render
 
   //Factory
   CommandQueue* CommandQueueFactory::CreateFactoryRaw(
-      mem::Ref<Device> device,
+      Device* device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -69,23 +72,23 @@ namespace wkr::render
   }
 
   mem::Ref<CommandQueue> CommandQueueFactory::CreateFactoryRef(
-      mem::Ref<Device> device,
+      Device* device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Ref<DX12CommandQueue>::Create(device, desc))
+        mem::Ref<DX12CommandQueue>::Create(device, desc))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Scope<CommandQueue> CommandQueueFactory::CreateFactoryScope(
-      mem::Ref<Device> device,
+      Device* device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Scope<DX12CommandQueue>::Create(device, desc))
+        mem::Scope<DX12CommandQueue>::Create(device, desc))
     END_RENDERERAPI_CREATE()
     return NULL;
   }

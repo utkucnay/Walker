@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/PlatformDetection.h>
+#include <Platforms/DirectX12/DX12.h>
 
 namespace wkr::render
 {
@@ -14,6 +14,11 @@ namespace wkr::render
     };
 
   public:
+    static void Init(APIType apiType)
+    {
+      s_Api = apiType;
+    }
+
     static APIType GetAPI() { return s_Api; }
     //TODO(utku): ChangeAPI at Runtime
     static void ChangeAPI(APIType type) { s_Api = type; }

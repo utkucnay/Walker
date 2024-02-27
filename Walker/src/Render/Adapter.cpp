@@ -1,7 +1,5 @@
 #include <Render/Adapter.h>
 
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/RendererAPI.h>
 #include <Render/RendererMakro.h>
 
 namespace wkr::render

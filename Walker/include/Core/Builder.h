@@ -5,8 +5,9 @@ namespace wkr
   template<typename T, typename... Args>
   class Builder
   {
-    virtual T*              BuildRaw  (Args... args);
-    virtual mem::Ref<T>     BuildRef  (Args... args);
-    virtual mem::Scope<T>   BuildScope(Args... args);
+  public:
+    virtual T*              BuildRaw  (Args... args) = 0;
+    virtual mem::Ref<T>     BuildRef  (Args... args) = 0;
+    virtual mem::Scope<T>   BuildScope(Args... args) = 0;
   };
 }

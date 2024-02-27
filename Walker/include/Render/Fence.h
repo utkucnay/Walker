@@ -6,7 +6,6 @@ namespace wkr::render
 {
   class Device;
 
-
   class Fence
   {
   public:
@@ -22,6 +21,7 @@ namespace wkr::render
     virtual ~Fence() = 0;
 
   public:
+    virtual void FenceEvent() = 0;
     virtual void* GetNativeHandle();
   };
 

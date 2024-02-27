@@ -13,20 +13,22 @@ set(source_files
 
   ./src/Platform/Windows/WindowsWindow.cpp
 
-  ./src/Platform/DirectX12/DX12Renderer.cpp
   ./src/Platform/DirectX12/DX12Adapter.cpp
   ./src/Platform/DirectX12/DX12Device.cpp
   ./src/Platform/DirectX12/DX12CommandList.cpp
   ./src/Platform/DirectX12/DX12CommandQueue.cpp
   ./src/Platform/DirectX12/DX12CommandAllocator.cpp
   ./src/Platform/DirectX12/DX12Fence.cpp
+  ./src/Platform/DirectX12/DX12SwapChain.cpp
 
-  ./src/Renderer/Renderer.cpp
-  ./src/Renderer/CommandQueue.cpp
-  ./src/Renderer/CommandList.cpp
-  ./src/Renderer/CommandAllocator.cpp
-  ./src/Renderer/Adapter.cpp
-  ./src/Renderer/Device.cpp
+  ./src/Render/Renderer.cpp
+  ./src/Render/CommandQueue.cpp
+  ./src/Render/CommandList.cpp
+  ./src/Render/CommandAllocator.cpp
+  ./src/Render/Adapter.cpp
+  ./src/Render/Fence.cpp
+  ./src/Render/Device.cpp
+  ./src/Render/SwapChain.cpp
   )
 
 set(all_files

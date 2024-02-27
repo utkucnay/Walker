@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Core/EntryPoint.h>
 #include <Core/Application.h>
-
 
 extern wkr::Application* wkr::CreateApplication(const ApplicationCommandLineArgs& args);
 

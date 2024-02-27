@@ -21,7 +21,7 @@ namespace wkr::render
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Ref<DX12Device>::Create(adapter))
+        mem::Ref<DX12Device>::Create(adapter))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
@@ -30,7 +30,7 @@ namespace wkr::render
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Scope<DX12Device>::Create(adapter))
+        mem::Scope<DX12Device>::Create(adapter))
     END_RENDERERAPI_CREATE()
     return NULL;
   }

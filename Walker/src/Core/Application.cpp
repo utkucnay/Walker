@@ -4,7 +4,6 @@
 
 #if defined (WKR_PLATFORM_WINDOWS)
   #include <Platforms/Windows/WindowsWindow.h>
-  #include <Platforms/DirectX12/DX12Renderer.h>
 #endif
 
 namespace wkr
@@ -17,26 +16,22 @@ namespace wkr
 
     ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
 
-    WindowProps wnProps;
-    wnProps.name = "Walker Engine";
-    wnProps.width = 1280;
-    wnProps.height = 720;
+    WindowBuilder windowBuilder;
+    windowBuilder.SetName("Walker Engine");
+    windowBuilder.SetSize(1280, 720);
 
-    #if defined(WKR_PLATFORM_WINDOWS)
-      window =    mem::Ref<WindowsWindow>::Create(wnProps);
-      graphics =  mem::Ref<render::DX12Renderer>::Create(window);
-    #endif
+    m_window = windowBuilder.BuildScope();
+    m_renderer = mem::Scope<render::Renderer>::Create(m_window.Get());
   }
 
   void Application::Run()
   {
-    while (window->IsShouldClose())
+    while (m_window->IsShouldClose())
     {
+      m_window->PoolEvents();
 
-      window->PoolEvents();
-
-      graphics->Render();
-      graphics->SwapChain();
+      m_renderer->RenderScene();
+      m_window->SwapBuffers();
     }
   }
 }

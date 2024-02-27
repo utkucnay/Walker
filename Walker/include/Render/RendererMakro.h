@@ -16,9 +16,9 @@
       break; \
   }
 
-#if defined(WKR_PLATFORMS_DIRECTX12)
+#if defined(WKR_PLATFORM_DIRECTX12)
   #define ADD_RENDERERAPI_DIRECTX12_CREATE(CreationFunc, ...) \
-    case RendererAPI::APIType::Directx12: \
+    case RendererAPI::APIType::DirectX12: \
       __VA_ARGS__ \
       return CreationFunc; \
       break;

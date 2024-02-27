@@ -5,6 +5,11 @@
 
 namespace wkr::render
 {
+  CommandAllocator::~CommandAllocator()
+  {
+
+  }
+
   //Builder
   CommandAllocatorBuilder& CommandAllocatorBuilder::SetCommandListType(
       CommandList::Type listType)
@@ -13,19 +18,19 @@ namespace wkr::render
     return *this;
   }
 
-  CommandAllocator* CommandAllocatorBuilder::BuildRaw(mem::Ref<Device> device)
+  CommandAllocator* CommandAllocatorBuilder::BuildRaw(Device* device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryRaw(device, m_commandListType);
   }
 
-  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef(mem::Ref<Device> device)
+  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef(Device* device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryRef(device, m_commandListType);
   }
 
-  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope(mem::Ref<Device> device)
+  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope(Device* device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryScope(device, m_commandListType);
@@ -33,7 +38,7 @@ namespace wkr::render
 
   //Factory
   CommandAllocator* CommandAllocatorFactory::CreateFactoryRaw(
-      mem::Ref<Device> device,
+      Device* device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -44,23 +49,23 @@ namespace wkr::render
   }
 
   mem::Ref<CommandAllocator> CommandAllocatorFactory::CreateFactoryRef(
-      mem::Ref<Device> device,
+      Device* device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Ref<DX12CommandAllocator>::Create(device, listType))
+        mem::Ref<DX12CommandAllocator>::Create(device, listType))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Scope<CommandAllocator> CommandAllocatorFactory::CreateFactoryScope(
-      mem::Ref<Device> device,
+      Device* device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Scope<DX12CommandAllocator>::Create(device, listType))
+        mem::Scope<DX12CommandAllocator>::Create(device, listType))
     END_RENDERERAPI_CREATE()
     return NULL;
   }

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
 #include <Render/Fence.h>
 #include <Render/Device.h>
+
+#include <Platforms/DirectX12/DX12.h>
 
 namespace wkr::render
 {
@@ -13,9 +14,12 @@ namespace wkr::render
     ~DX12Fence() override;
 
   public:
-    void* GetNativeHandle() override { return fence; }
+    void FenceEvent() override;
+    void* GetNativeHandle() override { return m_fence; }
 
   private:
-    ID3D12Fence* fence;
+    ID3D12Fence* m_fence;
+    uint64_t m_fenceValue;
+    HANDLE m_fenceEvent;
   };
 }

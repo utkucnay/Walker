@@ -3,10 +3,10 @@
 namespace wkr::render
 {
   DX12CommandList::DX12CommandList(
-      mem::Ref<Device> device,
+      Device*           device,
       CommandList::Type listType,
-      mem::Ref<CommandAllocator> commandAllocator,
-      mem::Ref<PipelineState> pipelineState)
+      CommandAllocator* commandAllocator,
+      PipelineState*    pipelineState)
   {
     ID3D12Device* nDevice = (ID3D12Device*)device->GetNativeHandle();
 
@@ -15,13 +15,13 @@ namespace wkr::render
         static_cast<D3D12_COMMAND_LIST_TYPE>(listType),
         static_cast<ID3D12CommandAllocator*>(commandAllocator->GetNativeHandle()),
         static_cast<ID3D12PipelineState*>(pipelineState->GetNativeHandle()),
-        IID_PPV_ARGS(&commandList));
+        IID_PPV_ARGS(&m_commandList));
 
     WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create Command Command List");
   }
 
   DX12CommandList::~DX12CommandList()
   {
-    commandList->Release();
+    m_commandList->Release();
   }
 }

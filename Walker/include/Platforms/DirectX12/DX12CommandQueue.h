@@ -2,12 +2,14 @@
 
 #include <Render/Command.h>
 
+#include <Platforms/DirectX12/DX12.h>
+
 namespace wkr::render
 {
   class DX12CommandQueue : public CommandQueue
   {
   public:
-    DX12CommandQueue(mem::Ref<Device> device, const CommandQueueDesc& desc);
+    DX12CommandQueue(Device* device, const CommandQueueDesc& desc);
     ~DX12CommandQueue() override;
 
   public:

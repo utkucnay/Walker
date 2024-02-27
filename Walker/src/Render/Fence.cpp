@@ -47,7 +47,7 @@ namespace wkr::render
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Ref<DX12Fence>::Create(device, fenceFlag))
+        mem::Ref<DX12Fence>::Create(device, fenceFlag))
     END_RENDERERAPI_CREATE()
 
     return NULL;
@@ -59,7 +59,7 @@ namespace wkr::render
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        Scope<DX12Fence>::Create(device, fenceFlag))
+        mem::Scope<DX12Fence>::Create(device, fenceFlag))
     END_RENDERERAPI_CREATE()
 
     return NULL;

@@ -3,6 +3,8 @@
 #include <Render/Device.h>
 #include <Render/Adapter.h>
 
+#include <Platforms/DirectX12/DX12.h>
+
 namespace wkr::render
 {
   class DX12Device : public Device

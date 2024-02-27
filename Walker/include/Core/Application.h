@@ -2,7 +2,6 @@
 
 #include <Core/Window.h>
 #include <Render/Renderer.h>
-#include <Render/RendererAPI.h>
 
 int main(int argc, char** argv);
 
@@ -18,7 +17,6 @@ namespace wkr
   {
     std::string name;
     bool showCLI;
-    render::RendererAPI::APIType apiType;
     ApplicationCommandLineArgs ApplicationCommandLineArgs;
   };
 
@@ -31,9 +29,9 @@ namespace wkr
     void Run();
 
   private:
-    ApplicationSpecs appSpecs;
-    mem::Ref<Window> window;
-    mem::Ref<render::Renderer> graphics;
+    ApplicationSpecs              appSpecs; //?
+    mem::Scope<Window>            m_window;
+    mem::Scope<render::Renderer>  m_renderer;
 
     friend int ::main(int argc, char** argv);
   };
