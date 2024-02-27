@@ -21,7 +21,8 @@ namespace wkr
     windowBuilder.SetSize(1280, 720);
 
     m_window = windowBuilder.BuildScope();
-    m_renderer = mem::Scope<render::Renderer>::Create(m_window.Get());
+    m_renderer = mem::Scope<render::Renderer>::Create(
+        mem::Visitor<Window>(m_window.Get()));
   }
 
   void Application::Run()

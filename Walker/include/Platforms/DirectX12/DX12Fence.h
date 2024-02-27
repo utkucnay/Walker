@@ -10,7 +10,7 @@ namespace wkr::render
   class DX12Fence : public Fence
   {
   public:
-    DX12Fence(mem::Ref<Device> device, Fence::Flag fenceFlag);
+    DX12Fence(mem::Visitor<Device> device, Fence::Flag fenceFlag);
     ~DX12Fence() override;
 
   public:

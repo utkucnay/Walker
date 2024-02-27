@@ -2,24 +2,29 @@
 
 namespace wkr
 {
-  struct EventArg
-  {
-
-  };
-
-  class EventListener;
-
+  template<typename... Args>
   class Event
   {
   public:
-    std::function<void(EventArg)> bind;
-  private:
-    mem::Ref<Event> nextEvent;
-    friend EventListener;
-  };
+    void Invoke(Args... args)
+    {
+      for(auto eventListener : m_eventListeners)
+      {
+        eventListener(args...);
+      }
+    }
 
-  class EventListener
-  {
-    mem::Ref<Event> event;
+    void AddListener(std::function<void(Args...)> func)
+    {
+      m_eventListeners.push_back(func);
+    }
+
+    void RemoveListener(std::function<void(Args...)> func)
+    {
+      m_eventListeners.remove(func);
+    }
+
+  private:
+    std::list<std::function<void(Args...)>> m_eventListeners;
   };
 }

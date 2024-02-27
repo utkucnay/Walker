@@ -32,7 +32,7 @@ namespace wkr::render
     virtual void* GetNativeHandle() = 0;
   };
 
-  class CommandListBuilder : Builder<CommandList, Device*>
+  class CommandListBuilder : Builder<CommandList, mem::Visitor<Device>>
   {
   public:
     CommandListBuilder& SetCommandListType(CommandList::Type listType);
@@ -40,9 +40,12 @@ namespace wkr::render
     CommandListBuilder& SetPiplineState(PipelineState* pipelineState);
 
   public:
-    CommandList* BuildRaw(Device* device) override;
-    mem::Ref<CommandList>   BuildRef(Device* device) override;
-    mem::Scope<CommandList> BuildScope(Device* device) override;
+    CommandList* BuildRaw(
+        mem::Visitor<Device> device) override;
+    mem::Ref<CommandList> BuildRef(
+        mem::Visitor<Device> device) override;
+    mem::Scope<CommandList> BuildScope(
+        mem::Visitor<Device> device) override;
 
   private:
     CommandList::Type         m_listType;
@@ -52,28 +55,28 @@ namespace wkr::render
 
   class CommandListFactory : Factory<
                                     CommandList,
-                                    Device*,
+                                    mem::Visitor<Device>,
                                     CommandList::Type,
-                                    CommandAllocator*,
+                                    mem::Visitor<CommandAllocator>,
                                     PipelineState*>
   {
   public:
     CommandList*            CreateFactoryRaw  (
-        Device*               device,
-        CommandList::Type     listType,
-        CommandAllocator*     allocator,
+        mem::Visitor<Device>            device,
+        CommandList::Type               listType,
+        mem::Visitor<CommandAllocator>  allocator,
         PipelineState*        pipelineState = NULL) override;
 
     mem::Ref<CommandList>   CreateFactoryRef  (
-        Device*               device,
-        CommandList::Type     listType,
-        CommandAllocator*     allocator,
+        mem::Visitor<Device>            device,
+        CommandList::Type               listType,
+        mem::Visitor<CommandAllocator>  allocator,
         PipelineState*        pipelineState = NULL) override;
 
     mem::Scope<CommandList> CreateFactoryScope(
-        Device*           device,
-        CommandList::Type listType,
-        CommandAllocator* allocator,
+        mem::Visitor<Device>            device,
+        CommandList::Type               listType,
+        mem::Visitor<CommandAllocator>  allocator,
         PipelineState*    pipelineState = NULL) override;
   };
 }

@@ -12,13 +12,13 @@ namespace wkr::render
   {
   public:
     DX12SwapChain(
-        CommandQueue* commandQueue,
-        const SwapChainDesc& desc);
+        mem::Visitor<CommandQueue>  commandQueue,
+        const SwapChainDesc&        desc);
     ~DX12SwapChain() override;
 
   public:
-    void ChangeWindowSize(Window* window) override;
-    void SetFullscreen(Window* window) override;
+    void ChangeWindowSize(int width, int height) override;
+    void SetFullscreen(mem::Visitor<Window> window) override;
     void SwapBuffers() override;
     void* GetNativeHandle() override { return m_swapChain; }
 
@@ -27,7 +27,6 @@ namespace wkr::render
 
   private:
     IDXGISwapChain3*  m_swapChain;
-    uint8_t           m_frameBufferCount;
     uint32_t          m_frameIndex;
   };
 }

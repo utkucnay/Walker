@@ -8,29 +8,38 @@ namespace wkr::render
 
   }
 
-  Device* DeviceFactory::CreateFactoryRaw(mem::Ref<Adapter> adapter)
+  Device* DeviceFactory::CreateFactoryRaw(Adapter* adapter)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12Device(adapter))
+        (NULL == adapter) ?
+          new DX12Device() :
+          new DX12Device(mem::Visitor<Adapter>(adapter))
+        )
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
-  mem::Ref<Device> DeviceFactory::CreateFactoryRef(mem::Ref<Adapter> adapter)
+  mem::Ref<Device> DeviceFactory::CreateFactoryRef(Adapter* adapter)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12Device>::Create(adapter))
+        (NULL == adapter) ?
+          mem::Ref<DX12Device>::Create() :
+          mem::Ref<DX12Device>::Create(mem::Visitor<Adapter>(adapter))
+          )
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
-  mem::Scope<Device> DeviceFactory::CreateFactoryScope(mem::Ref<Adapter> adapter)
+  mem::Scope<Device> DeviceFactory::CreateFactoryScope(Adapter* adapter)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12Device>::Create(adapter))
+        (NULL == adapter) ?
+          mem::Scope<DX12Device>::Create() :
+          mem::Scope<DX12Device>::Create(mem::Visitor<Adapter>(adapter))
+          )
     END_RENDERERAPI_CREATE()
     return NULL;
   }

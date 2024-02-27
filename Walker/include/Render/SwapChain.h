@@ -51,8 +51,8 @@ namespace wkr::render
     virtual ~SwapChain() = 0;
 
   public:
-    virtual void ChangeWindowSize(Window* window) = 0;
-    virtual void SetFullscreen(Window* window) = 0;
+    virtual void ChangeWindowSize(int width, int height) = 0;
+    virtual void SetFullscreen(mem::Visitor<Window> window) = 0;
     virtual void SwapBuffers() = 0;
     virtual void* GetNativeHandle() = 0;
 
@@ -84,9 +84,9 @@ namespace wkr::render
     SwapChainBuilder& SetWindow(Window* window);
 
   public:
-    SwapChain*            BuildRaw(void) override;
-    mem::Ref<SwapChain>   BuildRef(void) override;
-    mem::Scope<SwapChain> BuildScope(void) override;
+    SwapChain*            BuildRaw() override;
+    mem::Ref<SwapChain>   BuildRef() override;
+    mem::Scope<SwapChain> BuildScope() override;
 
   private:
     Device*       m_device;
@@ -96,18 +96,18 @@ namespace wkr::render
 
   class SwapChainFactory : Factory<
                            SwapChain,
-                           CommandQueue*,
+                           mem::Visitor<CommandQueue>,
                            const SwapChainDesc&>
   {
   public:
     SwapChain*              CreateFactoryRaw  (
-        CommandQueue* commandQueue,
-        const SwapChainDesc& desc) override;
+        mem::Visitor<CommandQueue>  commandQueue,
+        const SwapChainDesc&        desc) override;
     mem::Ref<SwapChain>     CreateFactoryRef  (
-        CommandQueue* commandQueue,
-        const SwapChainDesc& desc) override;
+        mem::Visitor<CommandQueue>  commandQueue,
+        const SwapChainDesc&        desc) override;
     mem::Scope<SwapChain>   CreateFactoryScope(
-        CommandQueue* commandQueue,
-        const SwapChainDesc& desc) override;
+        mem::Visitor<CommandQueue>  commandQueue,
+        const SwapChainDesc&        desc) override;
   };
 }

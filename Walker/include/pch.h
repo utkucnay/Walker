@@ -16,10 +16,12 @@
 #include <unordered_set>
 
 #include <Core/Base.h>
+#include <Core/Event.h>
 
 #include <Memory/Ref.h>
 #include <Memory/WeakRef.h>
 #include <Memory/Scope.h>
+#include <Memory/Visitor.h>
 
 #include <Core/Builder.h>
 #include <Core/Factory.h>

@@ -2,18 +2,15 @@
 
 #include <Core/Window.h>
 
+LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 namespace wkr
 {
-  LRESULT CALLBACK WindowProc(
-      HWND hwnd,
-      UINT uMsg,
-      WPARAM wParam, LPARAM lParam);
-
   class WindowsWindow : public Window
   {
   public:
     WindowsWindow(const WindowDesc& windowProps);
-    ~WindowsWindow();
+    ~WindowsWindow() override;
 
   public:
     void OnUpdate() override;
@@ -49,12 +46,27 @@ namespace wkr
 
     void* GetNativeHandle() override { return &window; }
 
+  private:
+    void WindowProc(
+        UINT uMsg,
+        WPARAM wParam, LPARAM lParam);
+
+  public:
+    static bool WindowProcHandle(
+        HWND hwnd,
+        UINT uMsg,
+        WPARAM wParam, LPARAM lParam);
+
   public:
     HWND window{};
     MSG message{};
     WNDCLASS wc = {};
 
   private:
-  friend LRESULT WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    bool m_isRunning;
+    static inline std::unordered_map<HWND, WindowsWindow*> m_windowMap{};
+
+    friend :: LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    friend bool WindowProcHandle(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   };
 }

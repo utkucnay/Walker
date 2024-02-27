@@ -10,10 +10,15 @@ namespace wkr::render
   {
   public:
     DX12CommandList(
-        Device*           device,
-        CommandList::Type listType,
-        CommandAllocator* commandAllocator,
-        PipelineState*    PipelineState);
+        mem::Visitor<Device>            device,
+        CommandList::Type               listType,
+        mem::Visitor<CommandAllocator>  commandAllocator
+        );
+    DX12CommandList(
+        mem::Visitor<Device>            device,
+        CommandList::Type               listType,
+        mem::Visitor<CommandAllocator>  commandAllocator,
+        mem::Visitor<PipelineState>     pipelineState);
 
     ~DX12CommandList() override;
 

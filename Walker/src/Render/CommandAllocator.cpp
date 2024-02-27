@@ -18,19 +18,22 @@ namespace wkr::render
     return *this;
   }
 
-  CommandAllocator* CommandAllocatorBuilder::BuildRaw(Device* device)
+  CommandAllocator* CommandAllocatorBuilder::BuildRaw(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryRaw(device, m_commandListType);
   }
 
-  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef(Device* device)
+  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryRef(device, m_commandListType);
   }
 
-  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope(Device* device)
+  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandAllocatorFactory>::Create()
       ->CreateFactoryScope(device, m_commandListType);
@@ -38,7 +41,7 @@ namespace wkr::render
 
   //Factory
   CommandAllocator* CommandAllocatorFactory::CreateFactoryRaw(
-      Device* device,
+      mem::Visitor<Device> device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -49,7 +52,7 @@ namespace wkr::render
   }
 
   mem::Ref<CommandAllocator> CommandAllocatorFactory::CreateFactoryRef(
-      Device* device,
+      mem::Visitor<Device> device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -60,7 +63,7 @@ namespace wkr::render
   }
 
   mem::Scope<CommandAllocator> CommandAllocatorFactory::CreateFactoryScope(
-      Device* device,
+      mem::Visitor<Device> device,
       CommandList::Type listType)
   {
     BEGIN_RENDERERAPI_CREATE()

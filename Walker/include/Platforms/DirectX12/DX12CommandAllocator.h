@@ -9,7 +9,9 @@ namespace wkr::render
   class DX12CommandAllocator : public CommandAllocator
   {
   public:
-    DX12CommandAllocator(Device* device, CommandList::Type listType);
+    DX12CommandAllocator(
+        mem::Visitor<Device> device,
+        CommandList::Type listType);
     ~DX12CommandAllocator() override;
 
   public:

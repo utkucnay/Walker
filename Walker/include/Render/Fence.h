@@ -25,32 +25,32 @@ namespace wkr::render
     virtual void* GetNativeHandle();
   };
 
-  class FenceBuilder : Builder<Fence, mem::Ref<Device>>
+  class FenceBuilder : Builder<Fence, mem::Visitor<Device>>
   {
   public:
     FenceBuilder* SetFenceFlag(Fence::Flag fenceFlag);
 
-    Fence*            BuildRaw  (mem::Ref<Device> device) override;
-    mem::Ref<Fence>   BuildRef  (mem::Ref<Device> device) override;
-    mem::Scope<Fence> BuildScope(mem::Ref<Device> device) override;
+    Fence*            BuildRaw  (mem::Visitor<Device> device) override;
+    mem::Ref<Fence>   BuildRef  (mem::Visitor<Device> device) override;
+    mem::Scope<Fence> BuildScope(mem::Visitor<Device> device) override;
 
   private:
     Fence::Flag m_fenceFlag;
   };
 
-  class FenceFactory : Factory<Fence, mem::Ref<Device>, Fence::Flag>
+  class FenceFactory : Factory<Fence, mem::Visitor<Device>, Fence::Flag>
   {
   public:
     Fence*            CreateFactoryRaw(
-        mem::Ref<Device> device,
+        mem::Visitor<Device> device,
         Fence::Flag fenceFlag) override;
 
     mem::Ref<Fence>   CreateFactoryRef  (
-        mem::Ref<Device> device,
+        mem::Visitor<Device> device,
         Fence::Flag fenceFlag) override;
 
     mem::Scope<Fence> CreateFactoryScope(
-        mem::Ref<Device> device,
+        mem::Visitor<Device> device,
         Fence::Flag fenceFlag) override;
   };
 }

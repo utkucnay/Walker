@@ -32,7 +32,8 @@ namespace wkr::render
     return *this;
   }
 
-  CommandQueue* CommandQueueBuilder::BuildRaw(Device* device)
+  CommandQueue* CommandQueueBuilder::BuildRaw(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRaw(
         device,
@@ -41,7 +42,8 @@ namespace wkr::render
         m_commandQueueFlags});
   }
 
-  mem::Ref<CommandQueue> CommandQueueBuilder:: BuildRef(Device* device)
+  mem::Ref<CommandQueue> CommandQueueBuilder::BuildRef(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRef(
         device,
@@ -50,7 +52,8 @@ namespace wkr::render
         m_commandQueueFlags});
   }
 
-  mem::Scope<CommandQueue>CommandQueueBuilder:: BuildScope(Device* device)
+  mem::Scope<CommandQueue>CommandQueueBuilder::BuildScope(
+      mem::Visitor<Device> device)
   {
     return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryScope(
         device,
@@ -61,7 +64,7 @@ namespace wkr::render
 
   //Factory
   CommandQueue* CommandQueueFactory::CreateFactoryRaw(
-      Device* device,
+      mem::Visitor<Device> device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -72,7 +75,7 @@ namespace wkr::render
   }
 
   mem::Ref<CommandQueue> CommandQueueFactory::CreateFactoryRef(
-      Device* device,
+      mem::Visitor<Device> device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -83,7 +86,7 @@ namespace wkr::render
   }
 
   mem::Scope<CommandQueue> CommandQueueFactory::CreateFactoryScope(
-      Device* device,
+      mem::Visitor<Device> device,
       const CommandQueueDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()

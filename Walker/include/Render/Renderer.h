@@ -9,7 +9,7 @@ namespace wkr::render
   class Renderer
   {
   public:
-    Renderer(Window* window);
+    Renderer(mem::Visitor<Window> window);
     ~Renderer();
 
   public:

@@ -90,7 +90,7 @@ namespace wkr::render
 
   //Factory
   SwapChain* SwapChainFactory::CreateFactoryRaw(
-      CommandQueue* commandQueue,
+      mem::Visitor<CommandQueue> commandQueue,
       const SwapChainDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -101,7 +101,7 @@ namespace wkr::render
   }
 
   mem::Ref<SwapChain> SwapChainFactory::CreateFactoryRef(
-      CommandQueue* commandQueue,
+      mem::Visitor<CommandQueue> commandQueue,
       const SwapChainDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()
@@ -112,7 +112,7 @@ namespace wkr::render
   }
 
   mem::Scope<SwapChain> SwapChainFactory::CreateFactoryScope(
-      CommandQueue* commandQueue,
+      mem::Visitor<CommandQueue> commandQueue,
       const SwapChainDesc& desc)
   {
     BEGIN_RENDERERAPI_CREATE()

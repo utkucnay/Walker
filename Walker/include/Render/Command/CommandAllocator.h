@@ -22,15 +22,17 @@ namespace wkr::render
     CommandList::Type listType;
   };
 
-  class CommandAllocatorBuilder : Builder<CommandAllocator, Device*>
+  class CommandAllocatorBuilder : Builder<
+                                  CommandAllocator,
+                                  mem::Visitor<Device>>
   {
   public:
     CommandAllocatorBuilder& SetCommandListType(CommandList::Type listType);
 
   public:
-    CommandAllocator*             BuildRaw  (Device* device) override;
-    mem::Ref<CommandAllocator>    BuildRef  (Device* device) override;
-    mem::Scope<CommandAllocator>  BuildScope(Device* device) override;
+    CommandAllocator*             BuildRaw  (mem::Visitor<Device> device) override;
+    mem::Ref<CommandAllocator>    BuildRef  (mem::Visitor<Device> device) override;
+    mem::Scope<CommandAllocator>  BuildScope(mem::Visitor<Device> device) override;
 
   private:
     CommandList::Type m_commandListType;
@@ -38,20 +40,20 @@ namespace wkr::render
 
   class CommandAllocatorFactory : Factory<
                                     CommandAllocator,
-                                    Device*,
+                                    mem::Visitor<Device>,
                                     CommandList::Type>
   {
   public:
     CommandAllocator*             CreateFactoryRaw  (
-        Device*           device,
-        CommandList::Type listType) override;
+        mem::Visitor<Device>  device,
+        CommandList::Type     listType) override;
 
     mem::Ref<CommandAllocator>    CreateFactoryRef  (
-        Device*           device,
-        CommandList::Type listType) override;
+        mem::Visitor<Device>  device,
+        CommandList::Type     listType) override;
 
     mem::Scope<CommandAllocator>  CreateFactoryScope(
-        Device*           device,
+        mem::Visitor<Device>  device,
         CommandList::Type listType) override;
   };
 }

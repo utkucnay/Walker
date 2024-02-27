@@ -40,17 +40,24 @@ namespace wkr::render
     CommandQueue::Flags     m_commandQueueFlags;
   };
 
-  class CommandQueueBuilder : Builder<CommandQueue, Device*>
+  class CommandQueueBuilder : Builder<
+                              CommandQueue,
+                              mem::Visitor<Device>>
   {
   public:
     CommandQueueBuilder& SetCommandListType(CommandList::Type listType);
-    CommandQueueBuilder& SetCommandQueuePriority(CommandQueue::Priority priority);
-    CommandQueueBuilder& SetCommandQueueFlags   (CommandQueue::Flags    flags);
+    CommandQueueBuilder& SetCommandQueuePriority(
+        CommandQueue::Priority priority);
+    CommandQueueBuilder& SetCommandQueueFlags(
+        CommandQueue::Flags    flags);
 
   public:
-    CommandQueue*             BuildRaw  (Device* device) override;
-    mem::Ref<CommandQueue>    BuildRef  (Device* device) override;
-    mem::Scope<CommandQueue>  BuildScope(Device* device) override;
+    CommandQueue*             BuildRaw  (
+        mem::Visitor<Device> device) override;
+    mem::Ref<CommandQueue>    BuildRef  (
+        mem::Visitor<Device> device) override;
+    mem::Scope<CommandQueue>  BuildScope(
+        mem::Visitor<Device> device) override;
 
   private:
     CommandList::Type       m_commandListType;
@@ -60,20 +67,20 @@ namespace wkr::render
 
   class CommandQueueFactory : Factory<
                                     CommandQueue,
-                                    Device*,
+                                    mem::Visitor<Device>,
                                     const CommandQueueDesc&>
   {
   public:
     CommandQueue*       CreateFactoryRaw   (
-        Device*       device,
+        mem::Visitor<Device>    device,
         const CommandQueueDesc& desc) override;
 
     mem::Ref<CommandQueue>    CreateFactoryRef  (
-        Device*       device,
+        mem::Visitor<Device>       device,
         const CommandQueueDesc& desc) override;
 
     mem::Scope<CommandQueue>  CreateFactoryScope(
-        Device*       device,
+        mem::Visitor<Device>       device,
         const CommandQueueDesc& desc) override;
   };
 }

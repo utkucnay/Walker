@@ -1,11 +1,10 @@
-#include "Render/Adapter.h"
 #include <Render/Renderer.h>
 #include <Render/RendererMakro.h>
 #include <Render/Command.h>
 
 namespace wkr::render
 {
-  Renderer::Renderer(Window* window)
+  Renderer::Renderer(mem::Visitor<Window> window)
   {
     RendererAPI::Init(RendererAPI::APIType::DirectX12);
 
@@ -21,7 +20,7 @@ namespace wkr::render
     }
 
     m_device = mem::Scope<DeviceFactory>::Create()
-      ->CreateFactoryRef(adapter);
+      ->CreateFactoryRef(adapter.Get());
 
     CommandQueueBuilder cqBuilder;
     cqBuilder
@@ -49,7 +48,7 @@ namespace wkr::render
       .SetMSAA(1, 0)
       .SetVsync(SwapChain::VsyncDesc::TripleBuffering);
 
-    m_swapChain = window->SetSwapChain(scBuilder);
+    m_swapChain = window->SetSwapChain(&scBuilder);
   }
 
   Renderer::~Renderer()

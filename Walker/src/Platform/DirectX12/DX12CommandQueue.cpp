@@ -3,7 +3,7 @@
 namespace wkr::render
 {
   DX12CommandQueue::DX12CommandQueue(
-      Device* device,
+      mem::Visitor<Device> device,
       const CommandQueueDesc& desc)
   {
     ID3D12Device* nDevice = (ID3D12Device*)device->GetNativeHandle();

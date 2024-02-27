@@ -10,6 +10,8 @@ namespace wkr::render
 
 namespace wkr
 {
+  using WindowResizeEvent = Event<int, int>;
+
   struct WindowDesc
   {
     std::string name;
@@ -24,7 +26,7 @@ namespace wkr
   public:
     bool GetFullscreen() { return !GetWindowed(); }
     mem::Ref<render::SwapChain> SetSwapChain(
-        render::SwapChainBuilder& builder);
+        mem::Visitor<render::SwapChainBuilder> builder);
     void SwapBuffers();
 
   public:
@@ -38,7 +40,10 @@ namespace wkr
 
     virtual void* GetNativeHandle() = 0;
 
-  private:
+  public:
+    WindowResizeEvent m_resizeEvent;
+
+  protected:
     mem::WeakRef<render::SwapChain> m_swapChain;
   };
 

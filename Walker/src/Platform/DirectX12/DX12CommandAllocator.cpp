@@ -3,7 +3,7 @@
 namespace wkr::render
 {
   DX12CommandAllocator::DX12CommandAllocator(
-      Device* device,
+      mem::Visitor<Device> device,
       CommandList::Type listType)
   {
     ID3D12Device* nDevice = (ID3D12Device*)device->GetNativeHandle();

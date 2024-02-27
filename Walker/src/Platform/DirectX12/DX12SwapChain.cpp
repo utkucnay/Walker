@@ -3,8 +3,8 @@
 namespace wkr::render
 {
   DX12SwapChain::DX12SwapChain(
-      CommandQueue* commandQueue,
-      const SwapChainDesc& desc)
+      mem::Visitor<CommandQueue>  commandQueue,
+      const SwapChainDesc&        desc)
   {
     IDXGISwapChain* swapChain;
     mem::Scope<DXGI_SWAP_CHAIN_DESC> translatedDesc = TranslateDesc(desc);
@@ -17,9 +17,16 @@ namespace wkr::render
     WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create SwapChain");
 
     m_swapChain = static_cast<IDXGISwapChain3*>(swapChain);
-    m_frameBufferCount = desc.bufferCount;
 
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+    desc.window->m_resizeEvent.AddListener(
+        std::bind(
+          &DX12SwapChain::ChangeWindowSize,
+          this,
+          std::placeholders::_1,
+          std::placeholders::_2)
+        );
   }
 
   DX12SwapChain::~DX12SwapChain()
@@ -27,12 +34,12 @@ namespace wkr::render
     m_swapChain->Release();
   }
 
-  void DX12SwapChain::ChangeWindowSize(Window* window)
+  void DX12SwapChain::ChangeWindowSize(int width, int height)
   {
-    m_swapChain->SetSourceSize(window->GetWidth(), window->GetHeight());
+    m_swapChain->SetSourceSize(width, height);
   }
 
-  void DX12SwapChain::SetFullscreen(Window* window)
+  void DX12SwapChain::SetFullscreen(mem::Visitor<Window> window)
   {
     m_swapChain->SetFullscreenState(window->GetFullscreen(), NULL);
   }
