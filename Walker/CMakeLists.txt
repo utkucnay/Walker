@@ -11,15 +11,18 @@ set(source_files
   ./src/Core/Application.cpp
   ./src/Core/Window.cpp
 
-  ./src/Platform/Windows/WindowsWindow.cpp
+  ./src/Platforms/Windows/WindowsWindow.cpp
 
-  ./src/Platform/DirectX12/DX12Adapter.cpp
-  ./src/Platform/DirectX12/DX12Device.cpp
-  ./src/Platform/DirectX12/DX12CommandList.cpp
-  ./src/Platform/DirectX12/DX12CommandQueue.cpp
-  ./src/Platform/DirectX12/DX12CommandAllocator.cpp
-  ./src/Platform/DirectX12/DX12Fence.cpp
-  ./src/Platform/DirectX12/DX12SwapChain.cpp
+  ./src/Platforms/DirectX12/DX12Adapter.cpp
+  ./src/Platforms/DirectX12/DX12Device.cpp
+  ./src/Platforms/DirectX12/DX12CommandList.cpp
+  ./src/Platforms/DirectX12/DX12CommandQueue.cpp
+  ./src/Platforms/DirectX12/DX12CommandAllocator.cpp
+  ./src/Platforms/DirectX12/DX12Fence.cpp
+  ./src/Platforms/DirectX12/DX12SwapChain.cpp
+  ./src/Platforms/DirectX12/DX12DescriptorHeap.cpp
+  ./src/Platforms/DirectX12/DX12RenderTargetView.cpp
+  ./src/Platforms/DirectX12/DX12Texture2D.cpp
 
   ./src/Render/Renderer.cpp
   ./src/Render/CommandQueue.cpp
@@ -29,6 +32,8 @@ set(source_files
   ./src/Render/Fence.cpp
   ./src/Render/Device.cpp
   ./src/Render/SwapChain.cpp
+  ./src/Render/DescriptorHeap.cpp
+  ./src/Render/RenderTargetView.cpp
   )
 
 set(all_files

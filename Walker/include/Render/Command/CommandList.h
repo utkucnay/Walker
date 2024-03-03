@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Render/PipelineState.h>
-#include <Render/Device.h>
+#include <Render/Core/PipelineState.h>
+#include <Render/Core/Device.h>
 
 #define COMMAND_INCLUDE_BARRIER
 
@@ -9,6 +9,8 @@ namespace wkr::render
 {
   class Device;
   class CommandAllocator;
+
+  class CommandListBuilder;
 
   class CommandList
   {
@@ -26,10 +28,17 @@ namespace wkr::render
     };
 
   public:
+    CommandList(mem::Visitor<CommandListBuilder> clb);
     virtual ~CommandList() = 0;
 
   public:
+    CommandList::Type GetType() const { return m_type; }
+
+  public:
     virtual void* GetNativeHandle() = 0;
+
+  protected:
+    CommandList::Type m_type;
   };
 
   class CommandListBuilder : Builder<CommandList, mem::Visitor<Device>>
@@ -39,44 +48,43 @@ namespace wkr::render
     CommandListBuilder& SetCommandAllocator(CommandAllocator* alloc);
     CommandListBuilder& SetPiplineState(PipelineState* pipelineState);
 
+    std::tuple<CommandAllocator*, PipelineState*> GetPointers() const
+    {
+      return {m_commandAllocator, m_piplelineState};
+    }
+
   public:
     CommandList* BuildRaw(
-        mem::Visitor<Device> device) override;
+        mem::Visitor<Device> device) override final;
     mem::Ref<CommandList> BuildRef(
-        mem::Visitor<Device> device) override;
+        mem::Visitor<Device> device) override final;
     mem::Scope<CommandList> BuildScope(
-        mem::Visitor<Device> device) override;
+        mem::Visitor<Device> device) override final;
 
   private:
-    CommandList::Type         m_listType;
-    CommandAllocator*         m_commandAllocator = {};
-    PipelineState*            m_piplelineState = {};
+    CommandList::Type         m_listType{};
+    CommandAllocator*         m_commandAllocator{};
+    PipelineState*            m_piplelineState{};
+
+    friend class CommandList;
   };
 
   class CommandListFactory : Factory<
                                     CommandList,
                                     mem::Visitor<Device>,
-                                    CommandList::Type,
-                                    mem::Visitor<CommandAllocator>,
-                                    PipelineState*>
+                                    mem::Visitor<CommandListBuilder>>
   {
   public:
     CommandList*            CreateFactoryRaw  (
-        mem::Visitor<Device>            device,
-        CommandList::Type               listType,
-        mem::Visitor<CommandAllocator>  allocator,
-        PipelineState*        pipelineState = NULL) override;
+        mem::Visitor<Device>              device,
+        mem::Visitor<CommandListBuilder>  clb) override final;
 
     mem::Ref<CommandList>   CreateFactoryRef  (
         mem::Visitor<Device>            device,
-        CommandList::Type               listType,
-        mem::Visitor<CommandAllocator>  allocator,
-        PipelineState*        pipelineState = NULL) override;
+        mem::Visitor<CommandListBuilder>  clb) override final;
 
     mem::Scope<CommandList> CreateFactoryScope(
         mem::Visitor<Device>            device,
-        CommandList::Type               listType,
-        mem::Visitor<CommandAllocator>  allocator,
-        PipelineState*    pipelineState = NULL) override;
+        mem::Visitor<CommandListBuilder>  clb) override final;
   };
 }

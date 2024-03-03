@@ -1,6 +1,6 @@
-#include <Render/Adapter.h>
+#include <Render/Core/Adapter.h>
 
-#include <Render/RendererMakro.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {

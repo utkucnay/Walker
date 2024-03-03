@@ -7,6 +7,7 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <cassert>
 
 #include <string>
 #include <sstream>
@@ -25,6 +26,8 @@
 
 #include <Core/Builder.h>
 #include <Core/Factory.h>
+
+#include <Core/Events.h>
 
 #if defined(WKR_PLATFORM_WINDOWS)
   #include <windows.h>

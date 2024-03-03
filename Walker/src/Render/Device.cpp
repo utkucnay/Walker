@@ -1,5 +1,5 @@
-#include <Render/Device.h>
-#include <Render/RendererMakro.h>
+#include <Render/Core/Device.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {
@@ -14,7 +14,7 @@ namespace wkr::render
     ADD_RENDERERAPI_DIRECTX12_CREATE(
         (NULL == adapter) ?
           new DX12Device() :
-          new DX12Device(mem::Visitor<Adapter>(adapter))
+          new DX12Device(adapter)
         )
     END_RENDERERAPI_CREATE()
     return NULL;
@@ -26,7 +26,7 @@ namespace wkr::render
     ADD_RENDERERAPI_DIRECTX12_CREATE(
         (NULL == adapter) ?
           mem::Ref<DX12Device>::Create() :
-          mem::Ref<DX12Device>::Create(mem::Visitor<Adapter>(adapter))
+          mem::Ref<DX12Device>::Create(adapter)
           )
     END_RENDERERAPI_CREATE()
     return NULL;
@@ -38,7 +38,7 @@ namespace wkr::render
     ADD_RENDERERAPI_DIRECTX12_CREATE(
         (NULL == adapter) ?
           mem::Scope<DX12Device>::Create() :
-          mem::Scope<DX12Device>::Create(mem::Visitor<Adapter>(adapter))
+          mem::Scope<DX12Device>::Create(adapter)
           )
     END_RENDERERAPI_CREATE()
     return NULL;

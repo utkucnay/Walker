@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/Window.h>
-#include <Render/Renderer.h>
+#include <Render/Core/Renderer.h>
 
 int main(int argc, char** argv);
 
@@ -30,7 +30,7 @@ namespace wkr
 
   private:
     ApplicationSpecs              appSpecs; //?
-    mem::Scope<Window>            m_window;
+    mem::Scope<Window>            m_mainWindow;
     mem::Scope<render::Renderer>  m_renderer;
 
     friend int ::main(int argc, char** argv);

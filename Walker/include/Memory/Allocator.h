@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wkr::memory
+namespace wkr::mem
 {
   class Allocator
   {

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Render/SwapChain.h>
-#include <Render/RenderTargetView.h>
-#include <Render/Command.h>
+#include <Render/Core/SwapChain.h>
 
 #include <Platforms/DirectX12/DX12.h>
 
@@ -13,20 +11,36 @@ namespace wkr::render
   public:
     DX12SwapChain(
         mem::Visitor<CommandQueue>  commandQueue,
-        const SwapChainDesc&        desc);
+        mem::Visitor<SwapChainBuilder> scb);
     ~DX12SwapChain() override;
 
   public:
-    void ChangeWindowSize(int width, int height) override;
-    void SetFullscreen(mem::Visitor<Window> window) override;
-    void SwapBuffers() override;
-    void* GetNativeHandle() override { return m_swapChain; }
+    void WindowSizeEvent(int width, int height) override final;
+    void FullscreenEvent(bool isTrue) override final;
+
+    void SwapBuffers() override final;
+
+    void* GetNativeHandle() override final { return m_swapChain; }
+
+    ModeDesc          GetBufferDesc()   override final;
+    SampleDesc        GetSampleDesc()   override final;
+    Usage             GetBufferUsage()  override final;
+    uint32_t          GetBufferCount()  override final;
+    SwapChain::Effect GetSwapEffect()   override final;
+    SwapChain::Flag   GetFlag()         override final;
+
+  protected:
+    mem::Visitor<rsc::Texture2D> GetTexture2D(uint32_t index) override final;
+    std::vector<mem::Visitor<rsc::Texture2D>>
+      GetAllTexture2D() override final;
 
   private:
-    mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(const SwapChainDesc& desc);
+    mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(
+        mem::Visitor<SwapChainBuilder> scb);
+    void SetupEvents();
+    void DestroyEvents();
 
   private:
     IDXGISwapChain3*  m_swapChain;
-    uint32_t          m_frameIndex;
   };
 }

@@ -17,22 +17,23 @@ namespace wkr
     ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
 
     WindowBuilder windowBuilder;
-    windowBuilder.SetName("Walker Engine");
-    windowBuilder.SetSize(1280, 720);
+    windowBuilder
+      .SetName("Walker Engine")
+      .SetSize(1280, 720);
 
-    m_window = windowBuilder.BuildScope();
-    m_renderer = mem::Scope<render::Renderer>::Create(
-        mem::Visitor<Window>(m_window.Get()));
+    m_mainWindow = windowBuilder.BuildScope();
+    m_renderer = mem::Scope<render::Renderer>::Create();
+    m_renderer->CreateSwapChain(m_mainWindow.Get());
   }
 
   void Application::Run()
   {
-    while (m_window->IsShouldClose())
+    while (m_mainWindow->IsShouldClose())
     {
-      m_window->PoolEvents();
+      m_mainWindow->PoolEvents();
 
-      m_renderer->RenderScene();
-      m_window->SwapBuffers();
+      m_renderer->Render(m_mainWindow.Get());
+      m_mainWindow->SwapBuffers();
     }
   }
 }

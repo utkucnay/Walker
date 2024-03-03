@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/SwapChain.h>
+#include <Render/Core/SwapChain.h>
 
 namespace wkr::render
 {
@@ -10,7 +10,6 @@ namespace wkr::render
 
 namespace wkr
 {
-  using WindowResizeEvent = Event<int, int>;
 
   struct WindowDesc
   {
@@ -41,7 +40,8 @@ namespace wkr
     virtual void* GetNativeHandle() = 0;
 
   public:
-    WindowResizeEvent m_resizeEvent;
+    WindowResizeEvent         m_resizeEvent;
+    WindowSetFullscreenEvent  m_setFullscreenEvent;
 
   protected:
     mem::WeakRef<render::SwapChain> m_swapChain;

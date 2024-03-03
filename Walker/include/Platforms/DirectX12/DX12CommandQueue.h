@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Command.h>
+#include <Render/Command/CommandQueue.h>
 
 #include <Platforms/DirectX12/DX12.h>
 
@@ -10,14 +10,16 @@ namespace wkr::render
   {
   public:
     DX12CommandQueue(
-        mem::Visitor<Device> device,
-        const CommandQueueDesc& desc);
+        mem::Visitor<Device>    device,
+        CommandList::Type       commandType,
+        CommandQueue::Priority  queuePriorty,
+        CommandQueue::Flags     flags);
     ~DX12CommandQueue() override;
 
   public:
-    void* GetNativeHandle() override { return commandQueue; }
+    void* GetNativeHandle() override { return m_commandQueue; }
 
   private:
-    ID3D12CommandQueue* commandQueue;
+    ID3D12CommandQueue* m_commandQueue;
   };
 }

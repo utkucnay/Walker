@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Render/Command.h>
-#include <Render/RendererMakro.h>
+#include <Render/Command/CommandQueue.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {
@@ -35,63 +35,93 @@ namespace wkr::render
   CommandQueue* CommandQueueBuilder::BuildRaw(
       mem::Visitor<Device> device)
   {
-    return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRaw(
+    auto ret = mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRaw(
         device,
-        {m_commandListType,
+        m_commandListType,
         m_commandQueuePriority,
-        m_commandQueueFlags});
+        m_commandQueueFlags);
+    ret->m_listType = m_commandListType;
+    ret->m_priority = m_commandQueuePriority;
+    ret->m_flags = m_commandQueueFlags;
+    return ret;
   }
 
   mem::Ref<CommandQueue> CommandQueueBuilder::BuildRef(
       mem::Visitor<Device> device)
   {
-    return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRef(
+    auto ret = mem::Scope<CommandQueueFactory>::Create()->CreateFactoryRef(
         device,
-        {m_commandListType,
+        m_commandListType,
         m_commandQueuePriority,
-        m_commandQueueFlags});
+        m_commandQueueFlags);
+    ret->m_listType = m_commandListType;
+    ret->m_priority = m_commandQueuePriority;
+    ret->m_flags = m_commandQueueFlags;
+    return ret;
   }
 
   mem::Scope<CommandQueue>CommandQueueBuilder::BuildScope(
       mem::Visitor<Device> device)
   {
-    return mem::Scope<CommandQueueFactory>::Create()->CreateFactoryScope(
+    auto ret = mem::Scope<CommandQueueFactory>::Create()->CreateFactoryScope(
         device,
-        {m_commandListType,
+        m_commandListType,
         m_commandQueuePriority,
-        m_commandQueueFlags});
+        m_commandQueueFlags);
+    ret->m_listType = m_commandListType;
+    ret->m_priority = m_commandQueuePriority;
+    ret->m_flags = m_commandQueueFlags;
+    return ret;
   }
 
   //Factory
   CommandQueue* CommandQueueFactory::CreateFactoryRaw(
-      mem::Visitor<Device> device,
-      const CommandQueueDesc& desc)
+      mem::Visitor<Device>    device,
+      CommandList::Type       commandType,
+      CommandQueue::Priority  queuePriorty,
+      CommandQueue::Flags     flags)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12CommandQueue(device, desc))
+        new DX12CommandQueue(
+          device,
+          commandType,
+          queuePriorty,
+          flags))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Ref<CommandQueue> CommandQueueFactory::CreateFactoryRef(
-      mem::Visitor<Device> device,
-      const CommandQueueDesc& desc)
+      mem::Visitor<Device>    device,
+      CommandList::Type       commandType,
+      CommandQueue::Priority  queuePriorty,
+      CommandQueue::Flags     flags)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12CommandQueue>::Create(device, desc))
+        mem::Ref<DX12CommandQueue>::Create(
+          device,
+          commandType,
+          queuePriorty,
+          flags))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Scope<CommandQueue> CommandQueueFactory::CreateFactoryScope(
-      mem::Visitor<Device> device,
-      const CommandQueueDesc& desc)
+      mem::Visitor<Device>    device,
+      CommandList::Type       commandType,
+      CommandQueue::Priority  queuePriorty,
+      CommandQueue::Flags     flags)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12CommandQueue>::Create(device, desc))
+        mem::Scope<DX12CommandQueue>::Create(
+          device,
+          commandType,
+          queuePriorty,
+          flags))
     END_RENDERERAPI_CREATE()
     return NULL;
   }

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Render/Device.h>
+#include <Render/Command/Command.h>
+#include <Render/Core/Device.h>
 
 #if !defined (COMMAND_INCLUDE_BARRIER)
   #error "Command Didn't Include Correctly"
@@ -9,17 +10,19 @@
 namespace wkr::render
 {
   class Device;
+  class CommandAllocatorBuilder;
 
   class CommandAllocator
   {
   public:
+    CommandAllocator(mem::Visitor<CommandAllocatorBuilder> cab);
     virtual ~CommandAllocator() = 0;
 
   public:
     virtual void* GetNativeHandle() = 0;
 
-  public:
-    CommandList::Type listType;
+  protected:
+    CommandList::Type m_listType;
   };
 
   class CommandAllocatorBuilder : Builder<
@@ -30,30 +33,35 @@ namespace wkr::render
     CommandAllocatorBuilder& SetCommandListType(CommandList::Type listType);
 
   public:
-    CommandAllocator*             BuildRaw  (mem::Visitor<Device> device) override;
-    mem::Ref<CommandAllocator>    BuildRef  (mem::Visitor<Device> device) override;
-    mem::Scope<CommandAllocator>  BuildScope(mem::Visitor<Device> device) override;
+    CommandAllocator*             BuildRaw  (
+        mem::Visitor<Device> device) override final;
+    mem::Ref<CommandAllocator>    BuildRef  (
+        mem::Visitor<Device> device) override final;
+    mem::Scope<CommandAllocator>  BuildScope(
+        mem::Visitor<Device> device) override final;
 
   private:
-    CommandList::Type m_commandListType;
+    CommandList::Type m_commandListType{};
+
+    friend class CommandAllocator;
   };
 
   class CommandAllocatorFactory : Factory<
                                     CommandAllocator,
                                     mem::Visitor<Device>,
-                                    CommandList::Type>
+                                    mem::Visitor<CommandAllocatorBuilder>>
   {
   public:
     CommandAllocator*             CreateFactoryRaw  (
-        mem::Visitor<Device>  device,
-        CommandList::Type     listType) override;
+        mem::Visitor<Device>                  device,
+        mem::Visitor<CommandAllocatorBuilder> listType) override final;
 
     mem::Ref<CommandAllocator>    CreateFactoryRef  (
-        mem::Visitor<Device>  device,
-        CommandList::Type     listType) override;
+        mem::Visitor<Device>                  device,
+        mem::Visitor<CommandAllocatorBuilder> listType) override final;
 
     mem::Scope<CommandAllocator>  CreateFactoryScope(
-        mem::Visitor<Device>  device,
-        CommandList::Type listType) override;
+        mem::Visitor<Device>                  device,
+        mem::Visitor<CommandAllocatorBuilder> listType) override final;
   };
 }

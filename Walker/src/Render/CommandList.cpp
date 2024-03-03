@@ -1,10 +1,15 @@
 #pragma once
 
-#include <Render/Command.h>
-#include <Render/RendererMakro.h>
+#include <Render/Command/CommandList.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {
+  CommandList::CommandList(mem::Visitor<CommandListBuilder> clb)
+  {
+    m_type = clb->m_listType;
+  }
+
   CommandList::~CommandList()
   {
 
@@ -38,20 +43,16 @@ namespace wkr::render
     return mem::Scope<CommandListFactory>::Create()
       ->CreateFactoryRaw(
           device,
-          m_listType,
-          m_commandAllocator,
-          m_piplelineState);
+          this);
   }
 
   mem::Ref<CommandList> CommandListBuilder::BuildRef(
       mem::Visitor<Device> device)
   {
-    return mem::Scope<CommandListFactory>::Create()
+    return  mem::Scope<CommandListFactory>::Create()
       ->CreateFactoryRef(
           device,
-          m_listType,
-          m_commandAllocator,
-          m_piplelineState);
+          this);
   }
 
   mem::Scope<CommandList> CommandListBuilder::BuildScope(
@@ -60,74 +61,45 @@ namespace wkr::render
     return mem::Scope<CommandListFactory>::Create()
       ->CreateFactoryScope(
           device,
-          m_listType,
-          m_commandAllocator,
-          m_piplelineState);
+          this);
   }
 
   //Factory
   CommandList* CommandListFactory::CreateFactoryRaw(
-      mem::Visitor<Device>            device,
-      CommandList::Type               listType,
-      mem::Visitor<CommandAllocator>  commandAllocator,
-      PipelineState*                  pipelineState)
+      mem::Visitor<Device>                  device,
+      mem::Visitor<CommandListBuilder> cab)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        (NULL == pipelineState) ?
         new DX12CommandList(
           device,
-          listType,
-          commandAllocator) :
-        new DX12CommandList(
-          device,
-          listType,
-          commandAllocator,
-          pipelineState))
+          cab))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Ref<CommandList> CommandListFactory::CreateFactoryRef(
       mem::Visitor<Device>            device,
-      CommandList::Type               listType,
-      mem::Visitor<CommandAllocator>  commandAllocator,
-      PipelineState*                  pipelineState)
+      mem::Visitor<CommandListBuilder> cab)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        (NULL == pipelineState) ?
         mem::Ref<DX12CommandList>::Create(
           device,
-          listType,
-          commandAllocator) :
-        mem::Ref<DX12CommandList>::Create(
-          device,
-          listType,
-          commandAllocator,
-          pipelineState))
+          cab))
     END_RENDERERAPI_CREATE()
     return NULL;
   }
 
   mem::Scope<CommandList> CommandListFactory::CreateFactoryScope(
       mem::Visitor<Device>            device,
-      CommandList::Type               listType,
-      mem::Visitor<CommandAllocator>  commandAllocator,
-      PipelineState*                  pipelineState)
+      mem::Visitor<CommandListBuilder> cab)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        (NULL == pipelineState) ?
         mem::Scope<DX12CommandList>::Create(
           device,
-          listType,
-          commandAllocator) :
-        mem::Scope<DX12CommandList>::Create(
-          device,
-          listType,
-          commandAllocator,
-          pipelineState))
+          cab))
     END_RENDERERAPI_CREATE()
     return NULL;
   }

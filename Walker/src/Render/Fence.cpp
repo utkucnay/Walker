@@ -1,10 +1,17 @@
-#include <Render/Fence.h>
+#include <Render/Core/Fence.h>
 
-#include <Render/RendererAPI.h>
-#include <Render/RendererMakro.h>
+#include <Render/Core/RendererAPI.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {
+  Fence::Fence(mem::Visitor<FenceBuilder> fb)
+  {
+    m_flag = fb->m_fenceFlag;
+  }
+
+  Fence::~Fence(){}
+
   FenceBuilder* FenceBuilder::SetFenceFlag(Fence::Flag fenceFlag)
   {
     m_fenceFlag = fenceFlag;
@@ -14,28 +21,28 @@ namespace wkr::render
   Fence* FenceBuilder::BuildRaw(mem::Visitor<Device> device)
   {
     return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryRaw(device, m_fenceFlag);
+      ->CreateFactoryRaw(device, this);
   }
 
   mem::Ref<Fence> FenceBuilder::BuildRef(mem::Visitor<Device> device)
   {
-    return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryRef(device, m_fenceFlag);
+     return mem::Scope<FenceFactory>::Create()
+      ->CreateFactoryRef(device, this);
   }
 
   mem::Scope<Fence> FenceBuilder::BuildScope(mem::Visitor<Device> device)
   {
     return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryScope(device, m_fenceFlag);
+      ->CreateFactoryScope(device, this);
   }
 
   Fence* FenceFactory::CreateFactoryRaw(
       mem::Visitor<Device> device,
-      Fence::Flag fenceFlag)
+      mem::Visitor<FenceBuilder> fb)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12Fence(device, fenceFlag))
+        new DX12Fence(device, fb))
     END_RENDERERAPI_CREATE()
 
     return NULL;
@@ -43,11 +50,11 @@ namespace wkr::render
 
   mem::Ref<Fence> FenceFactory::CreateFactoryRef(
       mem::Visitor<Device> device,
-      Fence::Flag fenceFlag)
+      mem::Visitor<FenceBuilder> fb)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12Fence>::Create(device, fenceFlag))
+        mem::Ref<DX12Fence>::Create(device, fb))
     END_RENDERERAPI_CREATE()
 
     return NULL;
@@ -55,11 +62,11 @@ namespace wkr::render
 
   mem::Scope<Fence> FenceFactory::CreateFactoryScope(
       mem::Visitor<Device> device,
-      Fence::Flag fenceFlag)
+      mem::Visitor<FenceBuilder> fb)
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12Fence>::Create(device, fenceFlag))
+        mem::Scope<DX12Fence>::Create(device, fb))
     END_RENDERERAPI_CREATE()
 
     return NULL;

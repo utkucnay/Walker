@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Command.h>
+#include <Render/Command/CommandAllocator.h>
 
 #include <Platforms/DirectX12/DX12.h>
 
@@ -10,8 +10,8 @@ namespace wkr::render
   {
   public:
     DX12CommandAllocator(
-        mem::Visitor<Device> device,
-        CommandList::Type listType);
+        mem::Visitor<Device>                  device,
+        mem::Visitor<CommandAllocatorBuilder> cab);
     ~DX12CommandAllocator() override;
 
   public:

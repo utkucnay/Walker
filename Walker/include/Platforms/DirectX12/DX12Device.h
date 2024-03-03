@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Render/Device.h>
-#include <Render/Adapter.h>
+#include <Render/Core/Device.h>
+#include <Render/Core/Adapter.h>
 
 #include <Platforms/DirectX12/DX12.h>
 

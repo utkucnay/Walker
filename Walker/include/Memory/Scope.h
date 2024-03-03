@@ -43,7 +43,7 @@ namespace wkr::mem
 
   public:
     template<typename... Args>
-    static Scope<T> Create(Args&&... args)
+    static Scope<T> Create(Args&&... args) noexcept
     {
       Scope<T> ret;
       ret.ptr = std::make_unique<T>(std::forward<Args>(args)...);

@@ -1,11 +1,29 @@
 #pragma once
 
 #if DEBUG
-  #define WKR_CORE_LOG(...) std::cout << __VA_ARGS__ << std::endl
-  #define WKR_CORE_LOG_COND(cond, ...) if(cond) std::cout << __VA_ARGS__ << std::endl
+  #define WKR_CORE_LOG(...) std::cout << "L:" __VA_ARGS__ << std::endl;
+  #define WKR_CORE_LOG_COND(cond, ...) if(cond) \
+    std::cout << "L:" __VA_ARGS__ << std::endl;
+
+  #define WKR_CORE_WARNING(...) std::cout << "W:" __VA_ARGS__ << std::endl;
+  #define WKR_CORE_WARNING_COND(cond, ...) if(cond) \
+    std::cout << "W:" __VA_ARGS__ << std::endl;
+
+  #define WKR_CORE_ERROR(...) std::cout << "E:" __VA_ARGS__ << std::endl; \
+    assert(0);
+  #define WKR_CORE_ERROR_COND(cond, ...) if(cond) { \
+    std::cout << "E:" __VA_ARGS__ << std::endl; \
+    assert(0); \
+  }
 #else
   #define WKR_CORE_LOG(cond, ...)
   #define WKR_CORE_LOG_COND(cond, ...)
+
+  #define WKR_CORE_WARNING(...)
+  #define WKR_CORE_WARNING_COND(cond, ...)
+
+  #define WKR_CORE_ERROR(...)
+  #define WKR_CORE_ERROR_COND(cond, ...)
 #endif
 
 #define KB * 1024

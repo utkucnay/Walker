@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Render/Device.h>
+#include <Render/Command/Command.h>
+#include <Render/Core/Device.h>
 
 #if !defined (COMMAND_INCLUDE_BARRIER)
   #error "Command Didn't Include Correctly"
@@ -9,6 +10,7 @@
 namespace wkr::render
 {
   class Device;
+  class CommandQueueBuilder;
 
   class CommandQueue
   {
@@ -27,17 +29,24 @@ namespace wkr::render
     };
 
   public:
+    CommandQueue(
+        CommandList::Type listType,
+        CommandQueue::Priority priority,
+        CommandQueue::Flags flags) :
+      m_listType(listType),
+      m_priority(priority),
+      m_flags(flags) {}
     virtual ~CommandQueue() = 0;
 
   public:
     virtual void* GetNativeHandle() = 0;
-  };
 
-  struct CommandQueueDesc
-  {
-    CommandList::Type       m_commandListType;
-    CommandQueue::Priority  m_commandQueuePriority;
-    CommandQueue::Flags     m_commandQueueFlags;
+  protected:
+    CommandList::Type       m_listType;
+    CommandQueue::Priority  m_priority;
+    CommandQueue::Flags     m_flags;
+
+    friend class CommandQueueBuilder;
   };
 
   class CommandQueueBuilder : Builder<
@@ -60,27 +69,35 @@ namespace wkr::render
         mem::Visitor<Device> device) override;
 
   private:
-    CommandList::Type       m_commandListType;
-    CommandQueue::Priority  m_commandQueuePriority;
-    CommandQueue::Flags     m_commandQueueFlags;
+    CommandList::Type       m_commandListType{};
+    CommandQueue::Priority  m_commandQueuePriority{};
+    CommandQueue::Flags     m_commandQueueFlags{};
   };
 
   class CommandQueueFactory : Factory<
                                     CommandQueue,
                                     mem::Visitor<Device>,
-                                    const CommandQueueDesc&>
+                                    CommandList::Type,
+                                    CommandQueue::Priority,
+                                    CommandQueue::Flags>
   {
   public:
     CommandQueue*       CreateFactoryRaw   (
         mem::Visitor<Device>    device,
-        const CommandQueueDesc& desc) override;
+        CommandList::Type       commandType,
+        CommandQueue::Priority  queuePriorty,
+        CommandQueue::Flags     flags) override final;
 
     mem::Ref<CommandQueue>    CreateFactoryRef  (
         mem::Visitor<Device>       device,
-        const CommandQueueDesc& desc) override;
+        CommandList::Type       commandType,
+        CommandQueue::Priority  queuePriorty,
+        CommandQueue::Flags     flags) override final;
 
     mem::Scope<CommandQueue>  CreateFactoryScope(
         mem::Visitor<Device>       device,
-        const CommandQueueDesc& desc) override;
+        CommandList::Type       commandType,
+        CommandQueue::Priority  queuePriorty,
+        CommandQueue::Flags     flags) override final;
   };
 }

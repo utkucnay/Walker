@@ -19,4 +19,7 @@
   #include <Platforms/DirectX12/DX12CommandQueue.h>
   #include <Platforms/DirectX12/DX12SwapChain.h>
   #include <Platforms/DirectX12/DX12Fence.h>
+  #include <Platforms/DirectX12/DX12DescriptorHeap.h>
+  #include <Platforms/DirectX12/DX12RenderTargetView.h>
+  #include <Platforms/DirectX12/DX12Texture2D.h>
 #endif

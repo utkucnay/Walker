@@ -8,3 +8,9 @@
 [submodule "Walker/vendor/DIContainer"]
 	path = Walker/vendor/DIContainer
 	url = git@github.com:utkucnay/DIContainer.git
+[submodule "Walker/vendor/Streamline"]
+	path = Walker/vendor/Streamline
+	url = https://github.com/NVIDIAGameWorks/Streamline
+[submodule "Walker/vendor/PhysX"]
+	path = Walker/vendor/PhysX
+	url = https://github.com/NVIDIA-Omniverse/PhysX
