@@ -1,4 +1,4 @@
-#include <Platforms/DirectX12/DX12Device.h>
+#include <Platforms/DirectX12/Core/DX12Device.h>
 
 namespace wkr::render
 {

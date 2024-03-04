@@ -1,7 +1,5 @@
-#pragma once
-
 #include <Render/Command/CommandQueue.h>
-#include <Render/Core/RendererMakro.h>
+#include <Render/Core/RendererAPI.h>
 
 namespace wkr::render
 {

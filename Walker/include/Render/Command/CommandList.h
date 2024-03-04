@@ -2,6 +2,7 @@
 
 #include <Render/Core/PipelineState.h>
 #include <Render/Core/Device.h>
+#include <Render/ResourceView/RenderTargetView.h>
 
 #define COMMAND_INCLUDE_BARRIER
 
@@ -35,6 +36,12 @@ namespace wkr::render
     CommandList::Type GetType() const { return m_type; }
 
   public:
+    virtual void ResourceBarrier(std::vector<rsc::Resource>);
+    virtual void OMSetRenderTargets(
+        std::vector<mem::Visitor<view::RenderTargetView>> rtvs);
+    virtual void ClearRenderTargetView();
+    virtual void Close();
+
     virtual void* GetNativeHandle() = 0;
 
   protected:

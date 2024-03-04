@@ -1,8 +1,5 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/Core/RendererAPI.h>
-
 #define BEGIN_RENDERERAPI_CREATE() \
   switch (RendererAPI::GetAPI()) \
   { \

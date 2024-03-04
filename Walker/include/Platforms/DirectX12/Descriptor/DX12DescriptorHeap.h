@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Render/Resource/Resource.h>
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/Descriptor/DescriptorHeap.h>
 
@@ -20,7 +21,7 @@ namespace wkr::render
     void Bind(
         mem::Visitor<Device> device,
         int count,
-        std::vector<mem::Visitor<rsc::Texture2D>> allTexture) override final;
+        std::vector<mem::WeakRef<rsc::Resource>> resources) override final;
 
   public:
     void* GetNativeHandle() override { return m_descriptorHeap; }

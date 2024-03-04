@@ -1,3 +1,5 @@
+#pragma once
+
 #if defined(_WIN32)
   #if defined(_WIN64)
     #define WKR_PLATFORM_WINDOWS

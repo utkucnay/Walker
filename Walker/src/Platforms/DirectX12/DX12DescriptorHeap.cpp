@@ -1,6 +1,7 @@
-#include "d3d12.h"
-#include "d3dx12/d3dx12_root_signature.h"
-#include <Platforms/DirectX12/DX12DescriptorHeap.h>
+#include "Core/Base.h"
+#include "Platforms/DirectX12/ResourceView/DX12RenderTargetView.h"
+#include "Render/Descriptor/DescriptorHeap.h"
+#include <Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h>
 
 namespace wkr::render
 {
@@ -54,7 +55,7 @@ namespace wkr::render
   void DX12DescriptorHeap::Bind(
       mem::Visitor<Device> device,
       int count,
-      std::vector<mem::Visitor<rsc::Texture2D>> allTexture)
+      std::vector<mem::WeakRef<rsc::Resource>> resources)
   {
     auto nDevice = static_cast<ID3D12Device*>(device->GetNativeHandle());
     auto rtvSize = nDevice->
@@ -65,11 +66,25 @@ namespace wkr::render
     for(int i = 0; i < count; i++)
     {
       auto resource = static_cast<ID3D12Resource*>(
-          allTexture[i]->GetNativeHandle());
+          resources[i].Lock()->GetNativeHandle());
 
       nDevice->CreateRenderTargetView(resource, NULL, rtvHandle);
       WKR_CORE_LOG("Binding Render Texture on Descriptor Heap")
+        switch (GetType())
+        {
+          case DescriptorHeap::Type::RTV:
+            {
+              m_resourceViews.push_back(mem::Scope<view::DX12RenderTargetView>
+                  ::Create(rtvHandle, resources[i]));
+            } break;
+
+          default:
+            {
+              WKR_CORE_WARNING("Not Implemented Heap Type");
+            } break;
+        }
       rtvHandle.Offset(1, rtvSize);
     }
+
   }
 }

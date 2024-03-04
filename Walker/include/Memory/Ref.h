@@ -32,7 +32,7 @@ namespace wkr::mem
     operator WeakRef<TConv>()
     {
       WeakRef<TConv> ret;
-      ret.ptr = std::static_pointer_cast<TConv>(this->ptr);
+      ret.m_ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }
 

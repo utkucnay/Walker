@@ -1,7 +1,4 @@
-#include <Platforms/DirectX12/DX12Adapter.h>
-#include <Platforms/DirectX12/DX12Factory.h>
-#include <cstdint>
-#include <wchar.h>
+#include <Platforms/DirectX12/Core/DX12Adapter.h>
 
 namespace wkr::render
 {

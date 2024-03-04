@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Platforms/DirectX12/DX12.h>
+#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {
@@ -17,7 +18,9 @@ namespace wkr::render
     static void Init(APIType apiType)
     {
       s_Api = apiType;
+#if defined (WKR_PLATFORM_DIRECTX12)
       DX12Factory::Init();
+#endif
     }
 
     static APIType GetAPI() { return s_Api; }

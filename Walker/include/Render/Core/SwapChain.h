@@ -77,11 +77,6 @@ namespace wkr::render
     virtual SwapChain::Effect GetSwapEffect() = 0;
     virtual SwapChain::Flag   GetFlag() = 0;
 
-  protected:
-    virtual mem::Visitor<rsc::Texture2D> GetTexture2D(uint32_t index) = 0;
-    virtual std::vector<mem::Visitor<rsc::Texture2D>>
-      GetAllTexture2D() = 0;
-
   public:
     virtual uint32_t GetFrameIndex() { return m_frameIndex; }
 

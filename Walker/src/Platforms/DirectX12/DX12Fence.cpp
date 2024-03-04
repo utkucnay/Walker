@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core/Base.h"
-#include <Platforms/DirectX12/DX12Fence.h>
+#include <Platforms/DirectX12/Core/DX12Fence.h>
 
 namespace wkr::render
 {

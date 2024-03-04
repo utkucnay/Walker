@@ -39,6 +39,9 @@ namespace wkr::render
     virtual ~CommandQueue() = 0;
 
   public:
+    virtual void ExecuteCommandList(
+        std::vector<mem::Scope<CommandList>> commandLists);
+
     virtual void* GetNativeHandle() = 0;
 
   protected:

@@ -1,4 +1,4 @@
-#include <Platforms/DirectX12/DX12CommandQueue.h>
+#include <Platforms/DirectX12/Command/DX12CommandQueue.h>
 
 namespace wkr::render
 {

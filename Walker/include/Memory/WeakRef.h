@@ -32,6 +32,14 @@ namespace wkr::mem
     }
 
   public:
+    template<typename TConv>
+    operator WeakRef<TConv>()
+    {
+      WeakRef<TConv> ret;
+      ret.m_ptr = std::static_pointer_cast<TConv>(this->m_ptr.lock());
+      return ret;
+    }
+
     template<typename TO>
     WeakRef<T>& operator=(Ref<TO> other)
     {

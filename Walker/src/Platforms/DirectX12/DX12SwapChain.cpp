@@ -1,4 +1,4 @@
-#include <Platforms/DirectX12/DX12SwapChain.h>
+#include <Platforms/DirectX12/Core/DX12SwapChain.h>
 
 namespace wkr::render
 {
@@ -21,6 +21,14 @@ namespace wkr::render
 
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
+    for(uint32_t i = 0; i < GetBufferCount(); i++)
+    {
+      ID3D12Resource* res;
+      m_swapChain->GetBuffer(i, IID_PPV_ARGS(&res));
+      m_textures.push_back(mem::Ref<rsc::DX12Texture2D>::Create(res));
+      WKR_CORE_LOG("Binding Each Resource in Swap Chain");
+    }
+
     DescriptorHeapBuilder dhBuilder;
     dhBuilder
       .SetCount(GetBufferCount())
@@ -28,7 +36,15 @@ namespace wkr::render
       .SetFlags(DescriptorHeap::Flags::None);
 
     m_descripHeap = dhBuilder.BuildScope(scb->m_device);
-    m_descripHeap->Bind(scb->m_device, GetBufferCount(), GetAllTexture2D());
+
+    std::vector<mem::WeakRef<rsc::Resource>> m_weakTexture;
+    std::transform(m_textures.begin(), m_textures.end(),
+        std::back_inserter(m_weakTexture), [](mem::Ref<rsc::Texture2D> res)
+        {
+          return res;
+        });
+
+    m_descripHeap->Bind(scb->m_device, GetBufferCount(), m_weakTexture);
 
     m_resizeEvent     = BIND_EVENT_2(DX12SwapChain::WindowSizeEvent);
     m_fullscreenEvent = BIND_EVENT_1(DX12SwapChain::FullscreenEvent);
@@ -128,29 +144,6 @@ namespace wkr::render
 
     m_swapChain->GetDesc(&desc);
     return static_cast<SwapChain::Flag>(desc.Flags);
-  }
-
-  std::vector<mem::Visitor<rsc::Texture2D>>
-    DX12SwapChain::GetAllTexture2D()
-  {
-    std::vector<mem::Visitor<rsc::Texture2D>> ret;
-    ID3D12Resource* res;
-
-    for(uint32_t i = 0; i < GetBufferCount(); i++)
-    {
-      m_swapChain->GetBuffer(i, IID_PPV_ARGS(&res));
-      ret.push_back(new rsc::DX12Texture2D(res));
-    }
-    return ret;
-  }
-
-  mem::Visitor<rsc::Texture2D> DX12SwapChain::GetTexture2D(uint32_t index)
-  {
-    ID3D12Resource* res;
-
-    m_swapChain->GetBuffer(index, IID_PPV_ARGS(&res));
-    auto ret = new rsc::DX12Texture2D(res);
-    return ret;
   }
 
   mem::Scope<DXGI_SWAP_CHAIN_DESC> DX12SwapChain::TranslateDesc(

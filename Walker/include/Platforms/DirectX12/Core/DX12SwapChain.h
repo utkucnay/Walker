@@ -29,11 +29,6 @@ namespace wkr::render
     SwapChain::Effect GetSwapEffect()   override final;
     SwapChain::Flag   GetFlag()         override final;
 
-  protected:
-    mem::Visitor<rsc::Texture2D> GetTexture2D(uint32_t index) override final;
-    std::vector<mem::Visitor<rsc::Texture2D>>
-      GetAllTexture2D() override final;
-
   private:
     mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(
         mem::Visitor<SwapChainBuilder> scb);
@@ -42,5 +37,6 @@ namespace wkr::render
 
   private:
     IDXGISwapChain3*  m_swapChain;
+    std::vector<mem::Ref<rsc::Texture2D>> m_textures;
   };
 }

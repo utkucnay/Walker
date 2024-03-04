@@ -1,7 +1,6 @@
 #include <Render/Core/Fence.h>
 
 #include <Render/Core/RendererAPI.h>
-#include <Render/Core/RendererMakro.h>
 
 namespace wkr::render
 {

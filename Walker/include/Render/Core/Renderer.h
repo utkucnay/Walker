@@ -2,7 +2,6 @@
 
 #include <Render/Core/SwapChain.h>
 #include <Core/Window.h>
-#include <Platforms/DirectX12/DX12.h>
 
 namespace wkr::render
 {

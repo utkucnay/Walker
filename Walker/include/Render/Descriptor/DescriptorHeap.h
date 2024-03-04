@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Render/ResourceView/ResourceView.h>
 #include <Render/Core/Device.h>
 #include <Render/Resource/Texture2D.h>
 
@@ -35,10 +36,19 @@ namespace wkr::render
     virtual void Bind(
         mem::Visitor<Device> device,
         int count,
-        std::vector<mem::Visitor<rsc::Texture2D>> allTexture) = 0;
+        std::vector<mem::WeakRef<rsc::Resource>> resources) = 0;
+
+    template<typename T>
+    mem::Visitor<T> Get(std::size_t index)
+    {
+      return m_resourceViews[index].Get();
+    }
 
   public:
     virtual void* GetNativeHandle() = 0;
+
+  protected:
+    std::vector<mem::Scope<view::ResourceView>> m_resourceViews;
   };
 
   class DescriptorHeapBuilder : Builder<

@@ -18,6 +18,7 @@
 
 #include <Core/Base.h>
 #include <Core/Event.h>
+#include <Core/Events.h>
 
 #include <Memory/Ref.h>
 #include <Memory/WeakRef.h>
@@ -32,3 +33,5 @@
 #if defined(WKR_PLATFORM_WINDOWS)
   #include <windows.h>
 #endif
+
+#include <Render/RenderPCH.h>

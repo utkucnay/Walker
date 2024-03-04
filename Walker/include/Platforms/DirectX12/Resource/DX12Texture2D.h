@@ -14,6 +14,7 @@ namespace wkr::render::rsc
     void* GetNativeHandle() override final { return m_resource; }
     uint64_t GetWidth() override final;
     uint64_t GetHeight() override final;
+    SampleDesc  GetMSAA() override final;
 
   private:
     ID3D12Resource* m_resource;
