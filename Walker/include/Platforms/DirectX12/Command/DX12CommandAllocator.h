@@ -10,8 +10,7 @@ namespace wkr::render
   {
   public:
     DX12CommandAllocator(
-        mem::Visitor<Device>                  device,
-        mem::Visitor<CommandAllocatorBuilder> cab);
+        CommandAllocatorBuilder* cab);
     ~DX12CommandAllocator() override;
 
   public:

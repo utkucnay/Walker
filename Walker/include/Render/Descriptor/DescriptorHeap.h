@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Render/Descriptor/DescriptorTable.h>
 #include <Render/ResourceView/ResourceView.h>
 #include <Render/Core/Device.h>
 #include <Render/Resource/Texture2D.h>
@@ -34,13 +35,17 @@ namespace wkr::render
     virtual DescriptorHeap::Type  GetType()  = 0;
     virtual DescriptorHeap::Flags GetFlags() = 0;
     virtual void Bind(
-        mem::Visitor<Device> device,
-        int count,
         std::vector<mem::WeakRef<rsc::Resource>> resources) = 0;
 
+    virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
+        uint32_t offset, uint32_t size);
+
     template<typename T>
-    mem::Visitor<T> Get(std::size_t index)
+    T* Get(std::size_t index)
     {
+      WKR_CORE_ERROR_COND(
+          m_resourceViews[index]->GetTypeName() == T::GetStaticTypeName(),
+          "Didn't Match View Type");
       return m_resourceViews[index].Get();
     }
 
@@ -51,9 +56,7 @@ namespace wkr::render
     std::vector<mem::Scope<view::ResourceView>> m_resourceViews;
   };
 
-  class DescriptorHeapBuilder : Builder<
-                                DescriptorHeap,
-                                mem::Visitor<Device>>
+  class DescriptorHeapBuilder : Builder<DescriptorHeap>
   {
   public:
     DescriptorHeapBuilder& SetCount(uint32_t count);
@@ -61,35 +64,13 @@ namespace wkr::render
     DescriptorHeapBuilder& SetFlags(DescriptorHeap::Flags flags);
 
   public:
-    DescriptorHeap*             BuildRaw(
-        mem::Visitor<Device> device) override final;
-    mem::Ref<DescriptorHeap>    BuildRef(
-        mem::Visitor<Device> device) override final;
-    mem::Scope<DescriptorHeap>  BuildScope(
-        mem::Visitor<Device> device) override final;
+    DescriptorHeap*             BuildRaw()    override final;
+    mem::Ref<DescriptorHeap>    BuildRef()    override final;
+    mem::Scope<DescriptorHeap>  BuildScope()  override final;
 
   public:
     uint32_t              m_count{};
     DescriptorHeap::Type  m_type{};
     DescriptorHeap::Flags m_flags{};
-
-    friend class DescriptorHeap;
-  };
-
-  class DescriptorHeapFactory : Factory<
-                                DescriptorHeap,
-                                mem::Visitor<Device>,
-                                mem::Visitor<DescriptorHeapBuilder>>
-  {
-  public:
-    DescriptorHeap* CreateFactoryRaw(
-        mem::Visitor<Device> device,
-        mem::Visitor<DescriptorHeapBuilder> dhb) override final;
-    mem::Ref<DescriptorHeap> CreateFactoryRef(
-        mem::Visitor<Device> device,
-        mem::Visitor<DescriptorHeapBuilder> dhb) override final;
-    mem::Scope<DescriptorHeap> CreateFactoryScope(
-        mem::Visitor<Device> device,
-        mem::Visitor<DescriptorHeapBuilder> dhb) override final;
   };
 }

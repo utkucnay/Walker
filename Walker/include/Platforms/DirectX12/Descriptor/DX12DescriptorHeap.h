@@ -10,8 +10,7 @@ namespace wkr::render
   {
   public:
     DX12DescriptorHeap(
-        mem::Visitor<Device> device,
-        mem::Visitor<DescriptorHeapBuilder> dhb);
+        DescriptorHeapBuilder* dhb);
     ~DX12DescriptorHeap() override;
 
   public:
@@ -19,8 +18,6 @@ namespace wkr::render
     DescriptorHeap::Type  GetType()  override final;
     DescriptorHeap::Flags GetFlags() override final;
     void Bind(
-        mem::Visitor<Device> device,
-        int count,
         std::vector<mem::WeakRef<rsc::Resource>> resources) override final;
 
   public:

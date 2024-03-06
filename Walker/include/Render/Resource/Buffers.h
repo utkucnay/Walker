@@ -13,5 +13,8 @@ namespace wkr::render::rsc
     std::string GetTypeName() override final { return "Buffers"; }
 
     virtual uint64_t GetSize() = 0;
+
+  public:
+    static std::string GetStaticTypeName() { return "Buffers"; }
   };
 }

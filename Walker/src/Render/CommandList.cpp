@@ -5,16 +5,6 @@
 
 namespace wkr::render
 {
-  CommandList::CommandList(mem::Visitor<CommandListBuilder> clb)
-  {
-    m_type = clb->m_listType;
-  }
-
-  CommandList::~CommandList()
-  {
-
-  }
-
   //Builder
   CommandListBuilder& CommandListBuilder::SetCommandListType(
       CommandList::Type listType)
@@ -37,70 +27,21 @@ namespace wkr::render
     return *this;
   }
 
-  CommandList* CommandListBuilder::BuildRaw(
-      mem::Visitor<Device> device)
+  CommandList* CommandListBuilder::BuildRaw()
   {
-    return mem::Scope<CommandListFactory>::Create()
-      ->CreateFactoryRaw(
-          device,
-          this);
+    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
+      ->CreateFactoryRaw(this);
   }
 
-  mem::Ref<CommandList> CommandListBuilder::BuildRef(
-      mem::Visitor<Device> device)
+  mem::Ref<CommandList> CommandListBuilder::BuildRef()
   {
-    return  mem::Scope<CommandListFactory>::Create()
-      ->CreateFactoryRef(
-          device,
-          this);
+    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
+      ->CreateFactoryRef(this);
   }
 
-  mem::Scope<CommandList> CommandListBuilder::BuildScope(
-      mem::Visitor<Device> device)
+  mem::Scope<CommandList> CommandListBuilder::BuildScope()
   {
-    return mem::Scope<CommandListFactory>::Create()
-      ->CreateFactoryScope(
-          device,
-          this);
-  }
-
-  //Factory
-  CommandList* CommandListFactory::CreateFactoryRaw(
-      mem::Visitor<Device>                  device,
-      mem::Visitor<CommandListBuilder> cab)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12CommandList(
-          device,
-          cab))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Ref<CommandList> CommandListFactory::CreateFactoryRef(
-      mem::Visitor<Device>            device,
-      mem::Visitor<CommandListBuilder> cab)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12CommandList>::Create(
-          device,
-          cab))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Scope<CommandList> CommandListFactory::CreateFactoryScope(
-      mem::Visitor<Device>            device,
-      mem::Visitor<CommandListBuilder> cab)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12CommandList>::Create(
-          device,
-          cab))
-    END_RENDERERAPI_CREATE()
-    return NULL;
+    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
+      ->CreateFactoryScope(this);
   }
 }

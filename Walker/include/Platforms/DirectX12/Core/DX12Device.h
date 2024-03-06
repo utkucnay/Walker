@@ -11,7 +11,7 @@ namespace wkr::render
   {
   public:
     DX12Device();
-    DX12Device(mem::Visitor<Adapter> adapter);
+    DX12Device(Adapter* adapter);
     ~DX12Device() override;
 
   public:

@@ -4,16 +4,13 @@
 
 namespace wkr::render
 {
-  DX12Fence::DX12Fence(
-      mem::Visitor<Device> device,
-      mem::Visitor<FenceBuilder> fb) :
-    Fence(fb)
+  DX12Fence::DX12Fence(FenceBuilder* fb)
   {
-    ID3D12Device* nDevice = (ID3D12Device*)device->GetNativeHandle();
+    ID3D12Device* nDevice = (ID3D12Device*)fb->m_device->GetNativeHandle();
 
     HRESULT hr = nDevice->CreateFence(
         0,
-        static_cast<D3D12_FENCE_FLAGS>(m_flag),
+        static_cast<D3D12_FENCE_FLAGS>(fb->m_fenceFlag),
         IID_PPV_ARGS(&m_fence));
 
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Fence");

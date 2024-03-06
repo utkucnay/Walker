@@ -29,18 +29,11 @@ namespace wkr::render
     };
 
   public:
-    CommandQueue(
-        CommandList::Type listType,
-        CommandQueue::Priority priority,
-        CommandQueue::Flags flags) :
-      m_listType(listType),
-      m_priority(priority),
-      m_flags(flags) {}
     virtual ~CommandQueue() = 0;
 
   public:
     virtual void ExecuteCommandList(
-        std::vector<mem::Scope<CommandList>> commandLists);
+        std::vector<CommandList*> commandLists);
 
     virtual void* GetNativeHandle() = 0;
 
@@ -52,9 +45,7 @@ namespace wkr::render
     friend class CommandQueueBuilder;
   };
 
-  class CommandQueueBuilder : Builder<
-                              CommandQueue,
-                              mem::Visitor<Device>>
+  class CommandQueueBuilder : Builder<CommandQueue>
   {
   public:
     CommandQueueBuilder& SetCommandListType(CommandList::Type listType);
@@ -64,43 +55,13 @@ namespace wkr::render
         CommandQueue::Flags    flags);
 
   public:
-    CommandQueue*             BuildRaw  (
-        mem::Visitor<Device> device) override;
-    mem::Ref<CommandQueue>    BuildRef  (
-        mem::Visitor<Device> device) override;
-    mem::Scope<CommandQueue>  BuildScope(
-        mem::Visitor<Device> device) override;
+    CommandQueue*             BuildRaw  () override;
+    mem::Ref<CommandQueue>    BuildRef  () override;
+    mem::Scope<CommandQueue>  BuildScope() override;
 
-  private:
+  public:
     CommandList::Type       m_commandListType{};
     CommandQueue::Priority  m_commandQueuePriority{};
     CommandQueue::Flags     m_commandQueueFlags{};
-  };
-
-  class CommandQueueFactory : Factory<
-                                    CommandQueue,
-                                    mem::Visitor<Device>,
-                                    CommandList::Type,
-                                    CommandQueue::Priority,
-                                    CommandQueue::Flags>
-  {
-  public:
-    CommandQueue*       CreateFactoryRaw   (
-        mem::Visitor<Device>    device,
-        CommandList::Type       commandType,
-        CommandQueue::Priority  queuePriorty,
-        CommandQueue::Flags     flags) override final;
-
-    mem::Ref<CommandQueue>    CreateFactoryRef  (
-        mem::Visitor<Device>       device,
-        CommandList::Type       commandType,
-        CommandQueue::Priority  queuePriorty,
-        CommandQueue::Flags     flags) override final;
-
-    mem::Scope<CommandQueue>  CreateFactoryScope(
-        mem::Visitor<Device>       device,
-        CommandList::Type       commandType,
-        CommandQueue::Priority  queuePriorty,
-        CommandQueue::Flags     flags) override final;
   };
 }

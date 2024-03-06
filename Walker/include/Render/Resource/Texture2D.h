@@ -15,5 +15,8 @@ namespace wkr::render::rsc
     virtual uint64_t    GetWidth()  = 0;
     virtual uint64_t    GetHeight() = 0;
     virtual SampleDesc  GetMSAA()   = 0;
+
+  public:
+    static std::string GetStaticTypeName() { return "Texture2D"; }
   };
 }

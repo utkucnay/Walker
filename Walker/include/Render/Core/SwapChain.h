@@ -10,6 +10,8 @@
 #include <Render/Descriptor/DescriptorHeap.h>
 #include <Render/Resource/Texture2D.h>
 
+#include <Render/ResourceView/RenderTargetView.h>
+
 namespace wkr
 {
   class Window;
@@ -79,6 +81,10 @@ namespace wkr::render
 
   public:
     virtual uint32_t GetFrameIndex() { return m_frameIndex; }
+    view::RenderTargetView* GetCurrentRenderTarget()
+    {
+      return m_descripHeap->Get<view::RenderTargetView>(GetFrameIndex());
+    }
 
   protected:
     WindowResizeEvent::Event        m_resizeEvent;
@@ -120,22 +126,5 @@ namespace wkr::render
     SwapChain::Flag   m_flag{};
 
     friend class SwapChain;
-  };
-
-  class SwapChainFactory : Factory<
-                            SwapChain,
-                            mem::Visitor<CommandQueue>,
-                            mem::Visitor<SwapChainBuilder>>
-  {
-  public:
-    SwapChain*              CreateFactoryRaw  (
-        mem::Visitor<CommandQueue>  commandQueue,
-        mem::Visitor<SwapChainBuilder>) override final;
-    mem::Ref<SwapChain>     CreateFactoryRef  (
-        mem::Visitor<CommandQueue>  commandQueue,
-        mem::Visitor<SwapChainBuilder>) override final;
-    mem::Scope<SwapChain>   CreateFactoryScope(
-        mem::Visitor<CommandQueue>  commandQueue,
-        mem::Visitor<SwapChainBuilder>) override final;
   };
 }

@@ -1,5 +1,26 @@
 #pragma once
 
+#define REGISTER_FACTORY(Type, SubType, ...)                          \
+  template<typename... Args>                                          \
+  class SubType##FactoryTemp : public Factory<Type, Args...>             \
+  {                                                                   \
+  public:                                                             \
+    Type*              CreateFactoryRaw  (Args... args)               \
+    {                                                                 \
+      return new SubType(std::forward<Args>(args)...);                \
+    }                                                                 \
+    mem::Ref<Type>     CreateFactoryRef  (Args... args)               \
+    {                                                                 \
+      return mem::Ref<SubType>::Create(std::forward<Args>(args)...);  \
+    }                                                                 \
+    mem::Scope<Type>   CreateFactoryScope(Args... args)               \
+    {                                                                 \
+      return mem::Scope<SubType>::Create(std::forward<Args>(args)...);\
+    }                                                                 \
+  };                                                                  \
+  using SubType##Factory = SubType##FactoryTemp<__VA_ARGS__>;
+
+
 namespace wkr
 {
   template <typename T,typename... Args>

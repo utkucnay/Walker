@@ -23,56 +23,21 @@ namespace wkr::render
     return *this;
   }
 
-  DescriptorHeap* DescriptorHeapBuilder::BuildRaw(mem::Visitor<Device> device)
+  DescriptorHeap* DescriptorHeapBuilder::BuildRaw()
   {
-    return mem::Scope<DescriptorHeapFactory>::Create()->
-      CreateFactoryRaw(device, this);
+    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
+      CreateFactoryRaw(this);
   }
 
-  mem::Ref<DescriptorHeap> DescriptorHeapBuilder::BuildRef(
-      mem::Visitor<Device> device)
+  mem::Ref<DescriptorHeap> DescriptorHeapBuilder::BuildRef()
   {
-    return mem::Scope<DescriptorHeapFactory>::Create()->
-      CreateFactoryRef(device, this);
+    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
+      CreateFactoryRef(this);
   }
 
-  mem::Scope<DescriptorHeap> DescriptorHeapBuilder::BuildScope(
-      mem::Visitor<Device> device)
+  mem::Scope<DescriptorHeap> DescriptorHeapBuilder::BuildScope()
   {
-    return mem::Scope<DescriptorHeapFactory>::Create()->
-      CreateFactoryScope(device, this);
-  }
-
-  DescriptorHeap* DescriptorHeapFactory::CreateFactoryRaw(
-      mem::Visitor<Device> device,
-      mem::Visitor<DescriptorHeapBuilder> dhb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12DescriptorHeap(device, dhb))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Ref<DescriptorHeap> DescriptorHeapFactory::CreateFactoryRef(
-      mem::Visitor<Device> device,
-      mem::Visitor<DescriptorHeapBuilder> dhb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12DescriptorHeap>::Create(device, dhb))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Scope<DescriptorHeap> DescriptorHeapFactory::CreateFactoryScope(
-      mem::Visitor<Device> device,
-      mem::Visitor<DescriptorHeapBuilder> dhb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12DescriptorHeap>::Create(device, dhb))
-    END_RENDERERAPI_CREATE()
-    return NULL;
+    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
+      CreateFactoryScope(this);
   }
 }

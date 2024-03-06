@@ -10,8 +10,7 @@ namespace wkr::render
   {
   public:
     DX12SwapChain(
-        mem::Visitor<CommandQueue>  commandQueue,
-        mem::Visitor<SwapChainBuilder> scb);
+        SwapChainBuilder* scb);
     ~DX12SwapChain() override;
 
   public:
@@ -31,7 +30,7 @@ namespace wkr::render
 
   private:
     mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(
-        mem::Visitor<SwapChainBuilder> scb);
+        SwapChainBuilder* scb);
     void SetupEvents();
     void DestroyEvents();
 

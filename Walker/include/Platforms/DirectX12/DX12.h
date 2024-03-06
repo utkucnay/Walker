@@ -21,7 +21,6 @@
   #include <Platforms/DirectX12/Command/DX12CommandAllocator.h>
   #include <Platforms/DirectX12/Command/DX12CommandQueue.h>
 
-  #include <Platforms/DirectX12/Resource/DX12Resource.h>
   #include <Platforms/DirectX12/Resource/DX12Texture2D.h>
 
   #include <Platforms/DirectX12/ResourceView/DX12RenderTargetView.h>

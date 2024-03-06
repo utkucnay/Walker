@@ -4,10 +4,10 @@
 
 namespace wkr::render::rsc
 {
-  class Texture2D : public Resource
+  class Texture3D : public Resource
   {
   public:
-    virtual ~Texture2D() override {}
+    virtual ~Texture3D() override {}
 
   public:
     std::string GetTypeName() override final { return "Texture3D"; }
@@ -15,5 +15,8 @@ namespace wkr::render::rsc
     virtual uint64_t  GetWidth()  = 0;
     virtual uint64_t  GetHeight() = 0;
     virtual uint64_t  GetDepth()  = 0;
+
+  public:
+    static std::string GetStaticTypeName() { return "Texture3D"; }
   };
 }

@@ -9,14 +9,10 @@ namespace wkr::render::view
   {
   public:
     DX12RenderTargetView(
-        mem::Visitor<Device> device,
-        mem::Visitor<rsc::Resource> resource,
-        mem::Visitor<DescriptorHeap> heap,
-        uint32_t index);
-    DX12RenderTargetView(
         CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
         mem::WeakRef<rsc::Resource> res)
       : m_resourveViewHandle(handle) { m_resource = res; }
+
     ~DX12RenderTargetView() override;
 
   public:

@@ -13,7 +13,7 @@ namespace wkr
   }
 
   mem::Ref<render::SwapChain> Window::SetSwapChain(
-      mem::Visitor<render::SwapChainBuilder> builder)
+      render::SwapChainBuilder* builder)
   {
     builder->SetWindow(this);
     auto swapChain = builder->BuildRef();

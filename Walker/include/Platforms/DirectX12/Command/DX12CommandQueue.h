@@ -9,11 +9,7 @@ namespace wkr::render
   class DX12CommandQueue : public CommandQueue
   {
   public:
-    DX12CommandQueue(
-        mem::Visitor<Device>    device,
-        CommandList::Type       commandType,
-        CommandQueue::Priority  queuePriorty,
-        CommandQueue::Flags     flags);
+    DX12CommandQueue(CommandQueueBuilder* cqb);
     ~DX12CommandQueue() override;
 
   public:

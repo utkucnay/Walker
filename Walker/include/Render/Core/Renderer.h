@@ -12,8 +12,8 @@ namespace wkr::render
     ~Renderer();
 
   public:
-    void Render(mem::Visitor<Window> window);
-    void CreateSwapChain(mem::Visitor<Window> window);
+    void Render(Window* window);
+    void CreateSwapChain(Window* window);
 
   private:
     mem::Scope<Device> m_device;
@@ -23,5 +23,11 @@ namespace wkr::render
     mem::Scope<CommandQueue>      m_commandQueue;
 
     std::vector<mem::Ref<SwapChain>> m_swapChain;
+
+  public:
+    static Device* GetDefaultDevice() { return s_defaultDevice.Get(); }
+
+  private:
+    static inline mem::Scope<Device> s_defaultDevice;
   };
 }

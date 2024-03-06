@@ -25,7 +25,7 @@ namespace wkr
   public:
     bool GetFullscreen() { return !GetWindowed(); }
     mem::Ref<render::SwapChain> SetSwapChain(
-        mem::Visitor<render::SwapChainBuilder> builder);
+          render::SwapChainBuilder* builder);
     void SwapBuffers();
 
   public:
@@ -36,6 +36,13 @@ namespace wkr
     virtual int GetWidth() = 0;
     virtual int GetHeight() = 0;
     virtual bool GetWindowed() = 0;
+
+    render::SwapChain* GetSwapChain()
+    {
+      if(!m_swapChain.Expired())
+        return m_swapChain.Lock().Get();
+      return NULL;
+    }
 
     virtual void* GetNativeHandle() = 0;
 
@@ -58,7 +65,7 @@ namespace wkr
     mem::Ref<Window>    BuildRef() override;
     mem::Scope<Window>  BuildScope() override;
 
-  private:
+  public:
     WindowDesc m_windowDesc;
   };
 }

@@ -8,6 +8,25 @@ namespace wkr::render
     uint32_t Denominator;
   };
 
+  struct Color32
+  {
+    Color32() : m_r(0), m_g(0), m_b(0), m_a(0) {}
+    Color32(
+        uint8_t r,
+        uint8_t g,
+        uint8_t b,
+        uint8_t a)
+      : m_r(r),
+        m_g(g),
+        m_b(b),
+        m_a(a) {}
+
+    uint8_t m_r;
+    uint8_t m_g;
+    uint8_t m_b;
+    uint8_t m_a;
+  };
+
   enum class Usage
   {
     CPU_ACCESS_NONE                = 0,

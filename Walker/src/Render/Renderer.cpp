@@ -1,6 +1,8 @@
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
 #include <Render/Command/Command.h>
+#include <Render/Resource/Resource.h>
+#include <Render/ResourceBarrier/TransitionBarrier.h>
 
 namespace wkr::render
 {
@@ -39,11 +41,11 @@ namespace wkr::render
     clBuilder
       .SetCommandListType(CommandList::Type::Direct)
       .SetCommandAllocator(m_commandAllocator[0].Get());
-    m_commandList = clBuilder.BuildScope(m_device.Get());
+    m_commandList = clBuilder.BuildScope();
 
   }
 
-  void Renderer::CreateSwapChain(mem::Visitor<Window> window)
+  void Renderer::CreateSwapChain(Window* window)
   {
     SwapChainBuilder scBuilder;
     scBuilder
@@ -60,8 +62,39 @@ namespace wkr::render
 
   }
 
-  void Renderer::Render(mem::Visitor<Window> window)
+  void Renderer::Render(Window* window)
   {
+    auto renderTarget = window->GetSwapChain()->GetCurrentRenderTarget();
 
+    m_commandList->ResourceBarriers(
+        {
+          mem::Scope<rsc::bar::TransitionBarrierBuilder>::Create()
+          ->SetResource(renderTarget->GetResource<rsc::Texture2D>())
+          ->SetBeforeState(rsc::Resource::State::RenderTarget)
+          ->SetAfterState(rsc::Resource::State::Present).BuildScope().Get()
+        });
+
+    m_commandList->OMSetRenderTargets(
+        {
+          renderTarget
+        });
+
+    m_commandList->ClearRenderTargetView(renderTarget,
+        Color32(255, 255, 255, 255));
+
+    m_commandList->ResourceBarriers(
+        {
+          mem::Scope<rsc::bar::TransitionBarrierBuilder>::Create()
+          ->SetResource(renderTarget->GetResource<rsc::Texture2D>())
+          ->SetBeforeState(rsc::Resource::State::Present)
+          ->SetAfterState(rsc::Resource::State::RenderTarget).BuildScope().Get()
+        });
+
+    m_commandList->Close();
+
+    m_commandQueue->ExecuteCommandList(
+        {
+          m_commandList.Get()
+        });
   }
 }

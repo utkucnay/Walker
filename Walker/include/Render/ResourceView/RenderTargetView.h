@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Render/Resource/Texture2D.h>
 #include <Render/ResourceView/ResourceView.h>
 
 namespace wkr::render::view
@@ -13,6 +12,7 @@ namespace wkr::render::view
   public:
     std::string GetTypeName() override final { return "RenderTargetView"; }
 
-    mem::WeakRef<rsc::Texture2D> GetTexture() { return m_resource; }
+  public:
+    static std::string GetStaticTypeName() { return "RenderTargetView"; }
   };
 }
