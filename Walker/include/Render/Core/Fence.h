@@ -22,21 +22,18 @@ namespace wkr::render
     virtual ~Fence() {}
 
   public:
-    virtual Fence::Flag GetFlag() = 0;
-
-  public:
     virtual void FenceEvent() = 0;
-    virtual void* GetNativeHandle();
+    virtual void* GetNativeHandle() = 0;
   };
 
-  class FenceBuilder : Builder<Fence, Device*>
+  class FenceBuilder : Builder<Fence>
   {
   public:
     FenceBuilder* SetFenceFlag(Fence::Flag fenceFlag);
 
-    Fence*            BuildRaw  (Device* device) override;
-    mem::Ref<Fence>   BuildRef  (Device* device) override;
-    mem::Scope<Fence> BuildScope(Device* device) override;
+    Fence*            BuildRaw  () override final;
+    mem::Ref<Fence>   BuildRef  () override final;
+    mem::Scope<Fence> BuildScope() override final;
 
   public:
     Device*     m_device;

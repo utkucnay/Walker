@@ -2,23 +2,23 @@
 
 #define REGISTER_FACTORY(Type, SubType, ...)                          \
   template<typename... Args>                                          \
-  class SubType##FactoryTemp : public Factory<Type, Args...>             \
+  class SubType##FactoryTemp : public Factory<Type, Args...>          \
   {                                                                   \
   public:                                                             \
     Type*              CreateFactoryRaw  (Args... args)               \
     {                                                                 \
-      return new SubType(std::forward<Args>(args)...);                \
+      return new SubType(args...);                                    \
     }                                                                 \
     mem::Ref<Type>     CreateFactoryRef  (Args... args)               \
     {                                                                 \
-      return mem::Ref<SubType>::Create(std::forward<Args>(args)...);  \
+      return mem::Ref<SubType>::Create(args...);                      \
     }                                                                 \
     mem::Scope<Type>   CreateFactoryScope(Args... args)               \
     {                                                                 \
-      return mem::Scope<SubType>::Create(std::forward<Args>(args)...);\
+      return mem::Scope<SubType>::Create(args...);                    \
     }                                                                 \
   };                                                                  \
-  using SubType##Factory = SubType##FactoryTemp<__VA_ARGS__>;
+  class SubType##Factory : public SubType##FactoryTemp<__VA_ARGS__> {};
 
 
 namespace wkr

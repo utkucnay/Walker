@@ -30,12 +30,14 @@ namespace wkr::render
     };
 
   public:
-    virtual ~CommandList() = 0;
+    virtual ~CommandList() {}
 
   public:
     virtual CommandList::Type GetType() = 0;
 
   public:
+    virtual void Reset(CommandAllocator* commandAllocator, PipelineState* pipelineState) = 0;
+
     virtual void ResourceBarriers(
         std::vector<rsc::bar::ResourceBarrier*> barriers) = 0;
 
@@ -67,6 +69,6 @@ namespace wkr::render
     Device*                   m_device;
     CommandList::Type         m_listType{};
     CommandAllocator*         m_commandAllocator{};
-    PipelineState*            m_piplelineState{};
+    PipelineState*            m_pipelineState{};
   };
 }

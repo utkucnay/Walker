@@ -1,21 +1,22 @@
+#include "d3d12.h"
 #include <Platforms/DirectX12/Command/DX12CommandList.h>
+#include <Render/Core/Renderer.h>
 
 namespace wkr::render
 {
 
   DX12CommandList::DX12CommandList(CommandListBuilder*  clb)
   {
-    ID3D12Device* nDevice = (ID3D12Device*)clb->m_device->GetNativeHandle();
-    auto [commandAllocator, pipelineState] = clb->GetPointers();
+    ID3D12Device* nDevice = (ID3D12Device*)Renderer::GetDefaultDevice()->GetNativeHandle();
 
     HRESULT hr = nDevice->CreateCommandList(
         NULL,
         static_cast<D3D12_COMMAND_LIST_TYPE>(clb->m_listType),
         static_cast<ID3D12CommandAllocator*>(
-          commandAllocator->GetNativeHandle()),
-        NULL == pipelineState ?
+          clb->m_commandAllocator->GetNativeHandle()),
+        NULL == clb->m_pipelineState ?
         NULL :
-        static_cast<ID3D12PipelineState*>(pipelineState->GetNativeHandle()),
+        static_cast<ID3D12PipelineState*>(clb->m_pipelineState->GetNativeHandle()),
         IID_PPV_ARGS(&m_commandList));
 
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command List");
@@ -30,6 +31,14 @@ namespace wkr::render
   CommandList::Type DX12CommandList::GetType()
   {
     return static_cast<CommandList::Type>(m_commandList->GetType());
+  }
+
+  void DX12CommandList::Reset(
+      CommandAllocator* commandAllocator,
+      PipelineState* pipelineState)
+  {
+    auto nCommandAllocator = static_cast<ID3D12CommandAllocator*>(commandAllocator->GetNativeHandle());
+    m_commandList->Reset(nCommandAllocator, NULL);
   }
 
   void DX12CommandList::ResourceBarriers(

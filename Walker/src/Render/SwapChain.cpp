@@ -66,71 +66,19 @@ namespace wkr::render
 
   SwapChain* SwapChainBuilder::BuildRaw()
   {
-    return mem::Scope<SwapChainFactory>::Create()
-      ->CreateFactoryRaw(
-          m_commandQueue,
-          this
-          );
+    return RendererAPI::GetAbstractFactory()->GetSwapChainFactory()
+      ->CreateFactoryRaw(this);
   }
 
   mem::Ref<SwapChain> SwapChainBuilder::BuildRef()
   {
-    return mem::Scope<SwapChainFactory>::Create()
-      ->CreateFactoryRef(
-          m_commandQueue,
-          this
-          );
+    return RendererAPI::GetAbstractFactory()->GetSwapChainFactory()
+      ->CreateFactoryRef(this);
   }
 
   mem::Scope<SwapChain> SwapChainBuilder::BuildScope()
   {
-    return mem::Scope<SwapChainFactory>::Create()
-      ->CreateFactoryScope(
-          m_commandQueue,
-          this
-          );
-  }
-
-  //Factory
-  SwapChain* SwapChainFactory::CreateFactoryRaw(
-      mem::Visitor<CommandQueue> commandQueue,
-      mem::Visitor<SwapChainBuilder> scb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        new DX12SwapChain(
-          commandQueue,
-          scb
-        ))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Ref<SwapChain> SwapChainFactory::CreateFactoryRef(
-      mem::Visitor<CommandQueue> commandQueue,
-      mem::Visitor<SwapChainBuilder> scb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Ref<DX12SwapChain>::Create(
-          commandQueue,
-          scb
-        ))
-    END_RENDERERAPI_CREATE()
-    return NULL;
-  }
-
-  mem::Scope<SwapChain> SwapChainFactory::CreateFactoryScope(
-      mem::Visitor<CommandQueue> commandQueue,
-      mem::Visitor<SwapChainBuilder> scb)
-  {
-    BEGIN_RENDERERAPI_CREATE()
-    ADD_RENDERERAPI_DIRECTX12_CREATE(
-        mem::Scope<DX12SwapChain>::Create(
-          commandQueue,
-          scb
-        ))
-    END_RENDERERAPI_CREATE()
-    return NULL;
+    return RendererAPI::GetAbstractFactory()->GetSwapChainFactory()
+      ->CreateFactoryScope(this);
   }
 }

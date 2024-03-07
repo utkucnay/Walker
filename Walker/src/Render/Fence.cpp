@@ -10,21 +10,21 @@ namespace wkr::render
     return this;
   }
 
-  Fence* FenceBuilder::BuildRaw(Device* device)
+  Fence* FenceBuilder::BuildRaw()
   {
-    return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryRaw(device, this);
+    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
+      ->CreateFactoryRaw(this);
   }
 
-  mem::Ref<Fence> FenceBuilder::BuildRef(Device* device)
+  mem::Ref<Fence> FenceBuilder::BuildRef()
   {
-     return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryRef(device, this);
+    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
+      ->CreateFactoryRef(this);
   }
 
-  mem::Scope<Fence> FenceBuilder::BuildScope(Device* device)
+  mem::Scope<Fence> FenceBuilder::BuildScope()
   {
-    return mem::Scope<FenceFactory>::Create()
-      ->CreateFactoryScope(device, this);
+    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
+      ->CreateFactoryScope(this);
   }
 }

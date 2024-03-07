@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Render/Core/Fence.h>
 #include <Render/Command/Command.h>
 #include <Render/Core/Device.h>
 
@@ -29,20 +30,15 @@ namespace wkr::render
     };
 
   public:
-    virtual ~CommandQueue() = 0;
+    virtual ~CommandQueue() {}
 
   public:
     virtual void ExecuteCommandList(
-        std::vector<CommandList*> commandLists);
+        std::vector<CommandList*> commandLists) = 0;
+
+    virtual void Signal(Fence* fence) = 0;
 
     virtual void* GetNativeHandle() = 0;
-
-  protected:
-    CommandList::Type       m_listType;
-    CommandQueue::Priority  m_priority;
-    CommandQueue::Flags     m_flags;
-
-    friend class CommandQueueBuilder;
   };
 
   class CommandQueueBuilder : Builder<CommandQueue>

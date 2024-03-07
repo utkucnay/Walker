@@ -23,7 +23,7 @@ namespace wkr::render
   CommandListBuilder& CommandListBuilder::SetPiplineState(
       PipelineState* pipelineState)
   {
-    m_piplelineState = pipelineState;
+    m_pipelineState = pipelineState;
     return *this;
   }
 

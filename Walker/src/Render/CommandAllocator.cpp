@@ -12,24 +12,21 @@ namespace wkr::render
     return *this;
   }
 
-  CommandAllocator* CommandAllocatorBuilder::BuildRaw(
-      Device* device)
+  CommandAllocator* CommandAllocatorBuilder::BuildRaw()
   {
-    return mem::Scope<CommandAllocatorFactory>::Create()
-      ->CreateFactoryRaw(device, this);
+    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
+      ->CreateFactoryRaw(this);
   }
 
-  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef(
-      Device* device)
+  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef()
   {
-    return mem::Scope<CommandAllocatorFactory>::Create()
-      ->CreateFactoryRef(device, this);
+    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
+      ->CreateFactoryRef(this);
   }
 
-  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope(
-      Device* device)
+  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope()
   {
-    return mem::Scope<CommandAllocatorFactory>::Create()
-      ->CreateFactoryScope(device, this);
+    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
+      ->CreateFactoryScope(this);
   }
 }

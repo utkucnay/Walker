@@ -2,6 +2,16 @@
 
 namespace wkr::render::rsc
 {
+  DX12Texture2D::~DX12Texture2D()
+  {
+    m_resource->Release();
+  }
+
+  Resource::State DX12Texture2D::GetState()
+  {
+    return Resource::State::Present;
+  }
+
   uint64_t DX12Texture2D::GetWidth()
   {
     D3D12_RESOURCE_DESC desc;

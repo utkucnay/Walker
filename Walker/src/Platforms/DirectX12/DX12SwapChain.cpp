@@ -1,16 +1,15 @@
+#include "Render/Core/Fence.h"
 #include <Platforms/DirectX12/Core/DX12SwapChain.h>
 
 namespace wkr::render
 {
-  DX12SwapChain::DX12SwapChain(
-        mem::Visitor<CommandQueue>  commandQueue,
-        mem::Visitor<SwapChainBuilder> scb)
+  DX12SwapChain::DX12SwapChain(SwapChainBuilder* scb)
   {
     IDXGISwapChain* swapChain;
     mem::Scope<DXGI_SWAP_CHAIN_DESC> translatedDesc = TranslateDesc(scb);
 
     HRESULT hr = DX12Factory::GetFactory()->CreateSwapChain(
-        static_cast<ID3D12CommandQueue*>(commandQueue->GetNativeHandle()),
+        static_cast<ID3D12CommandQueue*>(scb->m_commandQueue->GetNativeHandle()),
         translatedDesc.Get(),
         &swapChain);
 
@@ -35,19 +34,29 @@ namespace wkr::render
       .SetType(DescriptorHeap::Type::RTV)
       .SetFlags(DescriptorHeap::Flags::None);
 
-    m_descripHeap = dhBuilder.BuildScope(scb->m_device);
+    m_descripHeap = dhBuilder.BuildScope();
 
-    std::vector<mem::WeakRef<rsc::Resource>> m_weakTexture;
+    std::vector<mem::WeakRef<rsc::Resource>> m_weakTextures;
     std::transform(m_textures.begin(), m_textures.end(),
-        std::back_inserter(m_weakTexture), [](mem::Ref<rsc::Texture2D> res)
+        std::back_inserter(m_weakTextures), [](mem::Ref<rsc::Texture2D> res)
         {
           return res;
         });
 
-    m_descripHeap->Bind(scb->m_device, GetBufferCount(), m_weakTexture);
+    m_descripHeap->Bind(m_weakTextures);
+
+    FenceBuilder fBuilder;
+    fBuilder
+      .SetFenceFlag(Fence::Flag::None);
+
+    for(uint32_t i = 0; i < GetBufferCount(); i++)
+      m_fence.push_back(fBuilder.BuildScope());
 
     m_resizeEvent     = BIND_EVENT_2(DX12SwapChain::WindowSizeEvent);
     m_fullscreenEvent = BIND_EVENT_1(DX12SwapChain::FullscreenEvent);
+
+    scb->m_window->m_resizeEvent        += m_resizeEvent;
+    scb->m_window->m_setFullscreenEvent += m_fullscreenEvent;
 
     SetupEvents();
   }
@@ -72,7 +81,7 @@ namespace wkr::render
   {
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-    //m_fence[m_frameIndex]->FenceEvent();
+    m_fence[m_frameIndex]->FenceEvent();
   }
 
   void DX12SwapChain::SetupEvents()
@@ -146,8 +155,12 @@ namespace wkr::render
     return static_cast<SwapChain::Flag>(desc.Flags);
   }
 
-  mem::Scope<DXGI_SWAP_CHAIN_DESC> DX12SwapChain::TranslateDesc(
-      mem::Visitor<SwapChainBuilder> scb)
+  void DX12SwapChain::Present(uint8_t syncInterval, uint8_t flags)
+  {
+    m_swapChain->Present(syncInterval, flags);
+  }
+
+  mem::Scope<DXGI_SWAP_CHAIN_DESC> DX12SwapChain::TranslateDesc(SwapChainBuilder* scb)
   {
     auto retDesc = mem::Scope<DXGI_SWAP_CHAIN_DESC>::Create();
 

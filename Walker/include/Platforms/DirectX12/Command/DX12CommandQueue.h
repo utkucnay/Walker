@@ -15,6 +15,11 @@ namespace wkr::render
   public:
     void* GetNativeHandle() override { return m_commandQueue; }
 
+    void ExecuteCommandList(
+        std::vector<CommandList*> commandLists) override final;
+
+    void Signal(Fence* fence) override final;
+
   private:
     ID3D12CommandQueue* m_commandQueue;
   };

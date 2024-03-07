@@ -15,8 +15,8 @@ namespace wkr::render::view
     {
       if(m_resource.Expired()) return NULL;
 
-      WKR_CORE_ERROR_COND(T::GetStaticTypeName() == m_resource.Lock()->GetTypeName()
-          , "Resource Didn't Match");
+      WKR_CORE_ERROR_COND(T::GetStaticTypeName() != m_resource.Lock()->GetTypeName()
+          , "Resource Didn't Match " << T::GetStaticTypeName() << " " << m_resource.Lock()->GetTypeName());
 
       return static_cast<T*>(m_resource.Lock().Get());
     }

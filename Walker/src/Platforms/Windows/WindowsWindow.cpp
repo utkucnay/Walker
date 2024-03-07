@@ -70,24 +70,24 @@ namespace wkr
       case WM_SIZE:
         {
           m_resizeEvent(GetWidth(), GetHeight());
-        }
-        break;
+        } break;
       case WM_SYSKEYUP:
       case WM_SYSKEYDOWN:
       case WM_KEYUP:
       case WM_KEYDOWN:
         {
 
-        }
-        break;
+        } break;
       case WM_QUIT:
       case WM_DESTROY:
         {
           m_isRunning = false;
-        }
-        break;
+        } break;
+      default:
+        {
+          DefWindowProc(window, uMsg, wParam, lParam);
+        } break;
     }
-    DefWindowProc(window, uMsg, wParam, lParam);
   }
 
   bool WindowsWindow::WindowProcHandle(

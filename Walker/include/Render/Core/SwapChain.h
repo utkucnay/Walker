@@ -79,6 +79,11 @@ namespace wkr::render
     virtual SwapChain::Effect GetSwapEffect() = 0;
     virtual SwapChain::Flag   GetFlag() = 0;
 
+    virtual Fence* GetFence(uint32_t index) { return m_fence[index].Get(); }
+    virtual Fence* GetCurrentFence() { return m_fence[m_frameIndex].Get(); }
+
+    virtual void Present(uint8_t syncInterval, uint8_t flags) = 0;
+
   public:
     virtual uint32_t GetFrameIndex() { return m_frameIndex; }
     view::RenderTargetView* GetCurrentRenderTarget()

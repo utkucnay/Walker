@@ -4,6 +4,8 @@
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/Core/RendererMakro.h>
 
+#include<Platforms/DirectX12/Core/DX12AbstractFactory.h>
+
 namespace wkr::render
 {
   class RendererAPI

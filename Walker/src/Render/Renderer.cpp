@@ -1,8 +1,10 @@
+#include "Render/Core/Device.h"
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
 #include <Render/Command/Command.h>
 #include <Render/Resource/Resource.h>
 #include <Render/ResourceBarrier/TransitionBarrier.h>
+#include <winerror.h>
 
 namespace wkr::render
 {
@@ -21,21 +23,23 @@ namespace wkr::render
       }
     }
 
-    m_device = mem::Scope<DeviceFactory>::Create()
-      ->CreateFactoryScope(adapter.Get());
+    DeviceBuilder dBuilder;
+    dBuilder
+      .SetAdapter(adapter.Get());
+    s_defaultDevice = dBuilder.BuildScope();
 
     CommandQueueBuilder cqBuilder;
     cqBuilder
       .SetCommandListType(CommandList::Type::Direct)
       .SetCommandQueuePriority(CommandQueue::Priority::Normal)
       .SetCommandQueueFlags(CommandQueue::Flags::None);
-    m_commandQueue = cqBuilder.BuildScope(m_device.Get());
+    m_commandQueue = cqBuilder.BuildScope();
 
     CommandAllocatorBuilder caBuilder;
     caBuilder
       .SetCommandListType(CommandList::Type::Direct);
     for(int i = 0; i < 3; i++)
-      m_commandAllocator[i] = caBuilder.BuildScope(m_device.Get());
+      m_commandAllocator[i] = caBuilder.BuildScope();
 
     CommandListBuilder clBuilder;
     clBuilder
@@ -64,7 +68,13 @@ namespace wkr::render
 
   void Renderer::Render(Window* window)
   {
-    auto renderTarget = window->GetSwapChain()->GetCurrentRenderTarget();
+    auto swapChain = window->GetSwapChain();
+    auto renderTarget = swapChain->GetCurrentRenderTarget();
+    uint32_t frameIndex = swapChain->GetFrameIndex();
+
+    m_commandAllocator[frameIndex]->Reset();
+
+    m_commandList->Reset(m_commandAllocator[frameIndex].Get(), NULL);
 
     m_commandList->ResourceBarriers(
         {
@@ -80,7 +90,7 @@ namespace wkr::render
         });
 
     m_commandList->ClearRenderTargetView(renderTarget,
-        Color32(255, 255, 255, 255));
+        Color32(0, 255, 0, 255));
 
     m_commandList->ResourceBarriers(
         {
@@ -96,5 +106,9 @@ namespace wkr::render
         {
           m_commandList.Get()
         });
+
+    m_commandQueue->Signal(swapChain->GetCurrentFence());
+
+    swapChain->Present(0, 0);
   }
 }

@@ -1,15 +1,13 @@
-#include "Core/Base.h"
-#include "Platforms/DirectX12/ResourceView/DX12RenderTargetView.h"
-#include "Render/Descriptor/DescriptorHeap.h"
+#include <Render/Core/Renderer.h>
+#include <Render/Descriptor/DescriptorHeap.h>
 #include <Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h>
 
 namespace wkr::render
 {
-  DX12DescriptorHeap::DX12DescriptorHeap(
-      mem::Visitor<Device> device,
-      mem::Visitor<DescriptorHeapBuilder> dhb)
+  DX12DescriptorHeap::DX12DescriptorHeap(DescriptorHeapBuilder* dhb)
   {
-    ID3D12Device* nDevice = static_cast<ID3D12Device*>(device->GetNativeHandle());
+    ID3D12Device* nDevice = static_cast<ID3D12Device*>(Renderer::GetDefaultDevice()
+        ->GetNativeHandle());
 
     D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{};
     nDHeapDesc.NumDescriptors = dhb->m_count;
@@ -53,17 +51,16 @@ namespace wkr::render
   }
 
   void DX12DescriptorHeap::Bind(
-      mem::Visitor<Device> device,
-      int count,
       std::vector<mem::WeakRef<rsc::Resource>> resources)
   {
-    auto nDevice = static_cast<ID3D12Device*>(device->GetNativeHandle());
+    auto nDevice = static_cast<ID3D12Device*>(Renderer::GetDefaultDevice()
+        ->GetNativeHandle());
     auto rtvSize = nDevice->
       GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
         m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-    for(int i = 0; i < count; i++)
+    for(int i = 0; i < resources.size(); i++)
     {
       auto resource = static_cast<ID3D12Resource*>(
           resources[i].Lock()->GetNativeHandle());

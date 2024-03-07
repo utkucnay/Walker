@@ -10,17 +10,18 @@ namespace wkr::render
   class DX12Fence : public Fence
   {
   public:
-    DX12Fence(
-        FenceBuilder* fb);
+    DX12Fence(FenceBuilder* fb);
     ~DX12Fence() override;
 
   public:
     void FenceEvent() override final;
     void* GetNativeHandle() override final { return m_fence; }
 
-  private:
-    ID3D12Fence*  m_fence;
+  public:
     uint64_t      m_fenceValue;
     HANDLE        m_fenceEvent;
+
+  private:
+    ID3D12Fence*  m_fence;
   };
 }

@@ -14,9 +14,10 @@ namespace wkr::render
     ~DX12CommandAllocator() override;
 
   public:
-    void* GetNativeHandle() override { return commandAllocator; }
+    void* GetNativeHandle() override { return m_commandAllocator; }
+    void Reset() override final;
 
   private:
-    ID3D12CommandAllocator* commandAllocator;
+    ID3D12CommandAllocator* m_commandAllocator;
   };
 }

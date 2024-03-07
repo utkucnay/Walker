@@ -13,6 +13,10 @@ namespace wkr::render
     ~DX12CommandList() override;
 
   public:
+    void Reset(
+        CommandAllocator* commandAllocator,
+        PipelineState* pipelineState) override final;
+
     void* GetNativeHandle() override final { return m_commandList; }
 
     CommandList::Type GetType() override final;

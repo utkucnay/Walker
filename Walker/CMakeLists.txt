@@ -23,6 +23,7 @@ set(source_files
   ./src/Platforms/DirectX12/DX12DescriptorHeap.cpp
   ./src/Platforms/DirectX12/DX12RenderTargetView.cpp
   ./src/Platforms/DirectX12/DX12Texture2D.cpp
+  ./src/Platforms/DirectX12/DX12TransitionBarrier.cpp
 
   ./src/Render/Renderer.cpp
   ./src/Render/CommandQueue.cpp
@@ -34,6 +35,7 @@ set(source_files
   ./src/Render/SwapChain.cpp
   ./src/Render/DescriptorHeap.cpp
   ./src/Render/RenderTargetView.cpp
+  ./src/Render/TransitionBarrier.cpp
   )
 
 set(all_files

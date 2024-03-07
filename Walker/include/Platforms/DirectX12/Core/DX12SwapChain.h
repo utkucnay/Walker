@@ -28,6 +28,8 @@ namespace wkr::render
     SwapChain::Effect GetSwapEffect()   override final;
     SwapChain::Flag   GetFlag()         override final;
 
+    void Present(uint8_t syncInterval, uint8_t flags) override final;
+
   private:
     mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(
         SwapChainBuilder* scb);

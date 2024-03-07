@@ -10,8 +10,7 @@ namespace wkr::render
   class DX12Device : public Device
   {
   public:
-    DX12Device();
-    DX12Device(Adapter* adapter);
+    DX12Device(DeviceBuilder* db);
     ~DX12Device() override;
 
   public:

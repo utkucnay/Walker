@@ -7,8 +7,8 @@ namespace wkr::render::rsc::bar
 {
   class TransitionBarrier : public ResourceBarrier
   {
-    public:
-      virtual ~TransitionBarrier() override {}
+  public:
+    virtual ~TransitionBarrier() override {}
   };
 
   class TransitionBarrierBuilder : Builder<TransitionBarrier>

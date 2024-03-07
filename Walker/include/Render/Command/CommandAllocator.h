@@ -19,6 +19,7 @@ namespace wkr::render
 
   public:
     virtual void* GetNativeHandle() = 0;
+    virtual void Reset() = 0;
   };
 
   class CommandAllocatorBuilder : Builder<CommandAllocator>

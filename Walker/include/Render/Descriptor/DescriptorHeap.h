@@ -37,16 +37,16 @@ namespace wkr::render
     virtual void Bind(
         std::vector<mem::WeakRef<rsc::Resource>> resources) = 0;
 
-    virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
-        uint32_t offset, uint32_t size);
+   // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
+   //     uint32_t offset, uint32_t size);
 
     template<typename T>
     T* Get(std::size_t index)
     {
       WKR_CORE_ERROR_COND(
-          m_resourceViews[index]->GetTypeName() == T::GetStaticTypeName(),
-          "Didn't Match View Type");
-      return m_resourceViews[index].Get();
+          m_resourceViews[index]->GetTypeName() != T::GetStaticTypeName(),
+          "Didn't Match View Type " << m_resourceViews[index]->GetTypeName() << " " << T::GetStaticTypeName());
+      return static_cast<T*>(m_resourceViews[index].Get());
     }
 
   public:
