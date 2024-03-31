@@ -22,14 +22,15 @@ namespace wkr::render
     virtual ~Fence() {}
 
   public:
-    virtual void FenceEvent() = 0;
-    virtual void* GetNativeHandle() = 0;
+    virtual void FenceEvent(int frameIndex) = 0;
+    virtual void* GetNativeHandle(int frameIndex) = 0;
   };
 
   class FenceBuilder : Builder<Fence>
   {
   public:
-    FenceBuilder* SetFenceFlag(Fence::Flag fenceFlag);
+    FenceBuilder& SetFenceFlag(Fence::Flag fenceFlag);
+    FenceBuilder& SetFrameCount(uint8_t frameCount);
 
     Fence*            BuildRaw  () override final;
     mem::Ref<Fence>   BuildRef  () override final;
@@ -38,7 +39,6 @@ namespace wkr::render
   public:
     Device*     m_device;
     Fence::Flag m_fenceFlag{};
-
-    friend class Fence;
+    uint8_t m_frameCount;
   };
 }

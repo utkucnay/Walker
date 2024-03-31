@@ -1,14 +1,13 @@
-#include "Render/Core/Device.h"
+#include <Render/Core/Device.h>
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
 #include <Render/Command/Command.h>
 #include <Render/Resource/Resource.h>
 #include <Render/ResourceBarrier/TransitionBarrier.h>
-#include <winerror.h>
 
 namespace wkr::render
 {
-  Renderer::Renderer()
+  Renderer::Renderer(Window* window)
   {
     RendererAPI::Init(RendererAPI::APIType::DirectX12);
 
@@ -35,11 +34,13 @@ namespace wkr::render
       .SetCommandQueueFlags(CommandQueue::Flags::None);
     m_commandQueue = cqBuilder.BuildScope();
 
+    CreateSwapChain(window);
+
     CommandAllocatorBuilder caBuilder;
     caBuilder
       .SetCommandListType(CommandList::Type::Direct);
-    for(int i = 0; i < 3; i++)
-      m_commandAllocator[i] = caBuilder.BuildScope();
+    for(int i = 0; i < m_swapChain->GetBufferCount(); i++)
+      m_commandAllocator.push_back(caBuilder.BuildScope());
 
     CommandListBuilder clBuilder;
     clBuilder
@@ -58,17 +59,28 @@ namespace wkr::render
       .SetMSAA(1, 0)
       .SetVsync(SwapChain::VsyncDesc::None);
 
-    m_swapChain.push_back(window->SetSwapChain(&scBuilder));
+    m_swapChain = window->SetSwapChain(&scBuilder);
   }
 
   Renderer::~Renderer()
   {
+    for(int i = 0; i < m_swapChain->GetBufferCount(); i++)
+    {
+      m_swapChain->GetCurrentFence()->FenceEvent(i);
+    }
 
+    m_device.Release();
+    m_swapChain.Reset();
+    m_commandQueue.Release();
+    m_commandList.Release();
+
+    for(int i = 0; i < m_commandAllocator.size(); i++)
+      m_commandAllocator[i].Release();
   }
 
-  void Renderer::Render(Window* window)
+  void Renderer::Render()
   {
-    auto swapChain = window->GetSwapChain();
+    auto swapChain = m_swapChain;
     auto renderTarget = swapChain->GetCurrentRenderTarget();
     uint32_t frameIndex = swapChain->GetFrameIndex();
 
@@ -107,7 +119,7 @@ namespace wkr::render
           m_commandList.Get()
         });
 
-    m_commandQueue->Signal(swapChain->GetCurrentFence());
+    m_commandQueue->Signal(swapChain->GetCurrentFence(), frameIndex);
 
     swapChain->Present(0, 0);
   }

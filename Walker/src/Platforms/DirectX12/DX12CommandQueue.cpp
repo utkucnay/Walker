@@ -1,4 +1,4 @@
-#include "Platforms/DirectX12/Core/DX12Fence.h"
+#include <Platforms/DirectX12/Core/DX12Fence.h>
 #include <Platforms/DirectX12/Command/DX12CommandQueue.h>
 #include <Render/Core/Renderer.h>
 
@@ -35,12 +35,12 @@ namespace wkr::render
     m_commandQueue->ExecuteCommandLists(nCommandLists.size(), &nCommandLists[0]);
   }
 
-  void DX12CommandQueue::Signal(Fence* fence)
+  void DX12CommandQueue::Signal(Fence* fence, int frameIndex)
   {
     auto dxFence = static_cast<DX12Fence*>(fence);
-    auto nFence = static_cast<ID3D12Fence*>(fence->GetNativeHandle());
+    auto nFence = static_cast<ID3D12Fence*>(fence->GetNativeHandle(frameIndex));
 
-    HRESULT hr = m_commandQueue->Signal(nFence, dxFence->m_fenceValue);
+    HRESULT hr = m_commandQueue->Signal(nFence, dxFence->m_fenceValue[frameIndex]);
     WKR_CORE_ERROR_COND(FAILED(hr), "Fence Signal Error in Command Queue");
   }
 }

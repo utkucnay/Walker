@@ -14,14 +14,14 @@ namespace wkr::render
     ~DX12Fence() override;
 
   public:
-    void FenceEvent() override final;
-    void* GetNativeHandle() override final { return m_fence; }
+    void FenceEvent(int frameIndex) override final;
+    void* GetNativeHandle(int frameIndex) override final { return m_fence[frameIndex]; }
 
   public:
-    uint64_t      m_fenceValue;
+    std::vector<uint64_t> m_fenceValue;
     HANDLE        m_fenceEvent;
 
   private:
-    ID3D12Fence*  m_fence;
+    std::vector<ID3D12Fence*> m_fence;
   };
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Render/Command/CommandQueue.h>
-
 #include <Platforms/DirectX12/DX12.h>
 
 namespace wkr::render
@@ -18,7 +17,7 @@ namespace wkr::render
     void ExecuteCommandList(
         std::vector<CommandList*> commandLists) override final;
 
-    void Signal(Fence* fence) override final;
+    void Signal(Fence* fence, int frameIndex) override final;
 
   private:
     ID3D12CommandQueue* m_commandQueue;

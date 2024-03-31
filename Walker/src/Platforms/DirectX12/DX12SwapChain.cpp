@@ -47,10 +47,10 @@ namespace wkr::render
 
     FenceBuilder fBuilder;
     fBuilder
-      .SetFenceFlag(Fence::Flag::None);
+      .SetFenceFlag(Fence::Flag::None)
+      .SetFrameCount(GetBufferCount());
 
-    for(uint32_t i = 0; i < GetBufferCount(); i++)
-      m_fence.push_back(fBuilder.BuildScope());
+    m_fence = fBuilder.BuildScope();
 
     m_resizeEvent     = BIND_EVENT_2(DX12SwapChain::WindowSizeEvent);
     m_fullscreenEvent = BIND_EVENT_1(DX12SwapChain::FullscreenEvent);
@@ -81,7 +81,7 @@ namespace wkr::render
   {
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-    m_fence[m_frameIndex]->FenceEvent();
+    m_fence->FenceEvent(m_frameIndex);
   }
 
   void DX12SwapChain::SetupEvents()

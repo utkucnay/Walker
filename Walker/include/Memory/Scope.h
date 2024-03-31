@@ -16,6 +16,11 @@ namespace wkr::mem
       return ptr.get();
     }
 
+    void Release()
+    {
+      ptr.release();
+    }
+
   public:
     template<typename TConv>
     operator Scope<TConv>()

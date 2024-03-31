@@ -36,7 +36,7 @@ namespace wkr::render
     virtual void ExecuteCommandList(
         std::vector<CommandList*> commandLists) = 0;
 
-    virtual void Signal(Fence* fence) = 0;
+    virtual void Signal(Fence* fence, int frameIndex) = 0;
 
     virtual void* GetNativeHandle() = 0;
   };

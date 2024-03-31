@@ -4,10 +4,16 @@
 
 namespace wkr::render
 {
-  FenceBuilder* FenceBuilder::SetFenceFlag(Fence::Flag fenceFlag)
+  FenceBuilder& FenceBuilder::SetFenceFlag(Fence::Flag fenceFlag)
   {
     m_fenceFlag = fenceFlag;
-    return this;
+    return *this;
+  }
+
+  FenceBuilder& FenceBuilder::SetFrameCount(uint8_t frameCount)
+  {
+    m_frameCount = frameCount;
+    return *this;
   }
 
   Fence* FenceBuilder::BuildRaw()

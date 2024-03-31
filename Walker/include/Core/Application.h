@@ -24,6 +24,7 @@ namespace wkr
   {
   public:
     Application(const ApplicationSpecs& applicationSpecs);
+    virtual ~Application();
 
   private:
     void Run();

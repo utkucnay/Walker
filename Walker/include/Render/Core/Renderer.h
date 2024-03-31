@@ -8,21 +8,21 @@ namespace wkr::render
   class Renderer
   {
   public:
-    Renderer();
+    Renderer(Window* window);
     ~Renderer();
 
   public:
-    void Render(Window* window);
+    void Render();
     void CreateSwapChain(Window* window);
 
   private:
     mem::Scope<Device> m_device;
 
-    mem::Scope<CommandAllocator>  m_commandAllocator[3];
+    std::vector<mem::Scope<CommandAllocator>>  m_commandAllocator;
     mem::Scope<CommandList>       m_commandList;
     mem::Scope<CommandQueue>      m_commandQueue;
 
-    std::vector<mem::Ref<SwapChain>> m_swapChain;
+    mem::Ref<SwapChain> m_swapChain;
 
   public:
     static Device* GetDefaultDevice() { return s_defaultDevice.Get(); }

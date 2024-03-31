@@ -79,8 +79,7 @@ namespace wkr::render
     virtual SwapChain::Effect GetSwapEffect() = 0;
     virtual SwapChain::Flag   GetFlag() = 0;
 
-    virtual Fence* GetFence(uint32_t index) { return m_fence[index].Get(); }
-    virtual Fence* GetCurrentFence() { return m_fence[m_frameIndex].Get(); }
+    virtual Fence* GetCurrentFence() { return m_fence.Get(); }
 
     virtual void Present(uint8_t syncInterval, uint8_t flags) = 0;
 
@@ -97,7 +96,7 @@ namespace wkr::render
 
     uint32_t m_frameIndex;
 
-    std::vector<mem::Scope<Fence>> m_fence;
+    mem::Scope<Fence> m_fence;
 
     mem::Scope<DescriptorHeap> m_descripHeap;
   };

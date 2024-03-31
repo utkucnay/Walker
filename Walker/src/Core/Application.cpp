@@ -22,8 +22,13 @@ namespace wkr
       .SetSize(1280, 720);
 
     m_mainWindow = windowBuilder.BuildScope();
-    m_renderer = mem::Scope<render::Renderer>::Create();
-    m_renderer->CreateSwapChain(m_mainWindow.Get());
+    m_renderer = mem::Scope<render::Renderer>::Create(m_mainWindow.Get());
+  }
+
+  Application::~Application()
+  {
+    m_renderer.Release();
+    m_mainWindow.Release();
   }
 
   void Application::Run()
@@ -32,7 +37,7 @@ namespace wkr
     {
       m_mainWindow->PoolEvents();
 
-      m_renderer->Render(m_mainWindow.Get());
+      m_renderer->Render();
       m_mainWindow->SwapBuffers();
     }
   }

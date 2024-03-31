@@ -19,6 +19,11 @@ namespace wkr::mem
       return ptr.get();
     }
 
+    void Reset()
+    {
+      ptr.reset();
+    }
+
   public:
     template<typename TConv>
     operator Ref<TConv>()

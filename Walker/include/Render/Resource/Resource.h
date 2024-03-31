@@ -51,4 +51,10 @@ namespace wkr::render::rsc
 
     virtual std::string GetTypeName() = 0;
   };
+
+  template<typename T>
+  class ResourceBuilder : Builder<T>
+  {
+
+  };
 }
