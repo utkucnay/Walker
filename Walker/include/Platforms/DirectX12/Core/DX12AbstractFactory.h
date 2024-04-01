@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Platforms/DirectX12/ResourceBarrier/DX12TransitionBarrier.h"
-#include "Render/ResourceBarrier/TransitionBarrier.h"
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/Core/AbstractFactory.h>
 
@@ -25,7 +23,8 @@ namespace wkr::render
   //Resource
   namespace rsc
   {
-  //REGISTER_FACTORY(rsc::Buffers,        rsc::DX12Buffers);
+    REGISTER_FACTORY(Heap, DX12Heap, HeapBuilder*);
+    REGISTER_FACTORY(Buffers, DX12Buffers, ResourceBuilder<Buffers>*);
   //REGISTER_FACTORY(rsc::Texture1D,      rsc::DX12Texture1D);
   //REGISTER_FACTORY(rsc::Texture1DArray, rsc::DX12Texture1DArray);
   //REGISTER_FACTORY(Texture2D,      DX12Texture2D);
@@ -69,7 +68,12 @@ namespace wkr::render
       GetDescriptorHeapFactory() { return mem::Scope<DX12DescriptorHeapFactory>::Create(); }
 
     //Resource
-    //mem::Scope<Factory<rsc::Buffers>>   GetBufferFactory();
+    virtual mem::Scope<Factory<rsc::Heap, rsc::HeapBuilder*>>
+      GetHeapFactory()
+    { return mem::Scope<rsc::DX12HeapFactory>::Create(); }
+    mem::Scope<Factory<rsc::Buffers, rsc::ResourceBuilder<rsc::Buffers>*>>
+      GetBuffersFactory()
+    { return mem::Scope<rsc::DX12BuffersFactory>::Create();}
     //mem::Scope<Factory<rsc::Texture1D>> GetTexture1DFactory();
     //mem::Scope<Factory<rsc::Texture2D>> GetTexture2DFactory();
     //mem::Scope<Factory<rsc::Texture3D>> GetTexture3DFactory();

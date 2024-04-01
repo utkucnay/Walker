@@ -39,7 +39,7 @@ namespace wkr::render
     CommandAllocatorBuilder caBuilder;
     caBuilder
       .SetCommandListType(CommandList::Type::Direct);
-    for(int i = 0; i < m_swapChain->GetBufferCount(); i++)
+    for(uint32_t i = 0; i < m_swapChain->GetBufferCount(); i++)
       m_commandAllocator.push_back(caBuilder.BuildScope());
 
     CommandListBuilder clBuilder;
@@ -64,7 +64,7 @@ namespace wkr::render
 
   Renderer::~Renderer()
   {
-    for(int i = 0; i < m_swapChain->GetBufferCount(); i++)
+    for(uint32_t i = 0; i < m_swapChain->GetBufferCount(); i++)
     {
       m_swapChain->GetCurrentFence()->FenceEvent(i);
     }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Render/Resource/ResourceBuilder.h"
 #include <Render/Resource/Resource.h>
 
 namespace wkr::render::rsc
@@ -16,5 +17,23 @@ namespace wkr::render::rsc
 
   public:
     static std::string GetStaticTypeName() { return "Buffers"; }
+  };
+
+  class BuffersBuilder : ResourceBuilder<Buffers>
+  {
+
+  private:
+    virtual Resource::Dimension GetDimension()
+    { return Resource::Dimension::Buffer; }
+    virtual mem::Scope<Factory<Buffers, ResourceBuilder*>> GetFactory();
+  };
+
+  class GenericBuffersBuilder
+  {
+  public:
+    BuffersBuilder* GetBuilder() { return m_buffersBuilder.Get(); }
+
+  private:
+    mem::Scope<BuffersBuilder> m_buffersBuilder;
   };
 }

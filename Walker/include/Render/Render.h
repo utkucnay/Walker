@@ -14,6 +14,9 @@
 #include <Render/Descriptor/DescriptorHeap.h>
 #include <Render/Descriptor/DescriptorTable.h>
 
+#include <Render/Resource/Heap.h>
+#include <Render/Resource/Texture.h>
+#include <Render/Resource/Resource.h>
 #include <Render/Resource/Buffers.h>
 #include <Render/Resource/Texture1D.h>
 #include <Render/Resource/Texture2D.h>

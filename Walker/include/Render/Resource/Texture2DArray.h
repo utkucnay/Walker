@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Render/Resource/Resource.h>
+#include <Render/Resource/Texture.h>
 
 namespace wkr::render::rsc
 {
-  class Texture2DArray : public Resource
+  class Texture2DArray : public Texture
   {
   public:
     virtual ~Texture2DArray() override {}

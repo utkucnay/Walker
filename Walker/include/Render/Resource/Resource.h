@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Render/Core/RendererStructs.h>
+
 namespace wkr::render::rsc
 {
   class Resource
@@ -41,6 +43,29 @@ namespace wkr::render::rsc
       VideoEncodeWrite                = 0x800000,
     };
 
+    enum class Dimension
+    {
+      Unknown   = 0,
+      Buffer    = 1,
+      Texture1D = 2,
+      Texture2D = 3,
+      Texture3D = 4,
+    };
+
+    enum class Flag
+    {
+      None = 0,
+      AllowRenderTarget = 0x1,
+      AllowDepthStencil = 0x2,
+      AllowUnorderedAccess = 0x4,
+      DenyShaderResource = 0x8,
+      AllowCrossAdapter = 0x10,
+      AllowSimultaneousAccess = 0x20,
+      VideoDecodeReferenceOnly = 0x40,
+      VideoEncodeReferenceOnly = 0x80,
+      RaytracingAccelerationStructure = 0x100
+    };
+
   public:
     virtual ~Resource() {}
 
@@ -52,9 +77,4 @@ namespace wkr::render::rsc
     virtual std::string GetTypeName() = 0;
   };
 
-  template<typename T>
-  class ResourceBuilder : Builder<T>
-  {
-
-  };
 }

@@ -24,6 +24,8 @@ set(source_files
   ./src/Platforms/DirectX12/DX12RenderTargetView.cpp
   ./src/Platforms/DirectX12/DX12Texture2D.cpp
   ./src/Platforms/DirectX12/DX12TransitionBarrier.cpp
+  ./src/Platforms/DirectX12/DX12Heap.cpp
+  ./src/Platforms/DirectX12/DX12Buffers.cpp
 
   ./src/Render/Renderer.cpp
   ./src/Render/CommandQueue.cpp
@@ -36,6 +38,7 @@ set(source_files
   ./src/Render/DescriptorHeap.cpp
   ./src/Render/RenderTargetView.cpp
   ./src/Render/TransitionBarrier.cpp
+  ./src/Render/Heap.cpp
   )
 
 set(all_files
