@@ -23,6 +23,8 @@ namespace wkr
 
     m_mainWindow = windowBuilder.BuildScope();
     m_renderer = mem::Scope<render::Renderer>::Create(m_mainWindow.Get());
+    m_renderer->CreateResource();
+    m_renderer->LoadResources();
   }
 
   Application::~Application()

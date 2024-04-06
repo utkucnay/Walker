@@ -198,6 +198,18 @@ namespace wkr::render
   {
     uint32_t count;
     uint32_t quality;
+
+    SampleDesc()
+    {
+      count = 1;
+      quality = 0;
+    }
+
+    SampleDesc(uint32_t count, uint32_t quality)
+    {
+      this->count = count;
+      this->quality = quality;
+    }
   };
 
   struct Luid

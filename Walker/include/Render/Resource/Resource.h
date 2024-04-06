@@ -66,6 +66,22 @@ namespace wkr::render::rsc
       RaytracingAccelerationStructure = 0x100
     };
 
+    struct ClearValue
+    {
+      Format format;
+      union
+      {
+        Color32 color;
+        struct
+        {
+          float depth;
+          uint8_t stencil;
+        } depthStencil;
+      };
+
+      ClearValue() { format = Format::UNKNOWN; color = Color32(0,0,0,0); }
+    };
+
   public:
     virtual ~Resource() {}
 

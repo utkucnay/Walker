@@ -16,6 +16,7 @@ namespace wkr::render
   public:
     void FenceEvent(int frameIndex) override final;
     void* GetNativeHandle(int frameIndex) override final { return m_fence[frameIndex]; }
+    void IncFenceValue(int frameIndex) { m_fenceValue[frameIndex]++; }
 
   public:
     std::vector<uint64_t> m_fenceValue;

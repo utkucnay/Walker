@@ -12,12 +12,14 @@ namespace wkr::render::rsc
     ~DX12Heap() override;
 
   public:
-    virtual uint64_t GetSize() override;
-    virtual Heap::Type GetType() override;
-    virtual Heap::CPUPageProperty GetCPUPageProperty() override;
-    virtual Heap::MemoryPool GetMemoryPool() override;
-    virtual uint64_t GetAlignment() override;
-    virtual Heap::Flag GetFlag() override;
+    void* GetNativeHandle() override { return m_heap; };
+
+    uint64_t GetSize() override;
+    Heap::Type GetType() override;
+    Heap::CPUPageProperty GetCPUPageProperty() override;
+    Heap::MemoryPool GetMemoryPool() override;
+    uint64_t GetAlignment() override;
+    Heap::Flag GetFlag() override;
 
   private:
     ID3D12Heap* m_heap;

@@ -9,11 +9,12 @@ namespace wkr::render::rsc
   {
   public:
     DX12Buffers(ResourceBuilder<Buffers>* rb);
+    ~DX12Buffers() override;
 
   public:
-    virtual void* GetNativeHandle() { return m_resource; }
-    virtual Resource::State GetState() { return Resource::State::Common; };
-    virtual uint64_t GetSize() { return 0; };
+    virtual void* GetNativeHandle() override { return m_resource; }
+    virtual Resource::State GetState() override { return Resource::State::Common; };
+    virtual uint64_t GetSize() override { return 0; };
 
   private:
     ID3D12Resource* m_resource;

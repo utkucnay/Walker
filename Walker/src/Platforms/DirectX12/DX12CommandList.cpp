@@ -79,6 +79,16 @@ namespace wkr::render
     m_commandList->ClearRenderTargetView(*nRtv, nColor, 0, NULL);
   }
 
+  void DX12CommandList::CopyResource(
+        rsc::Resource* dstResource,
+        rsc::Resource* srcResource)
+  {
+    auto nDstResource = static_cast<ID3D12Resource*>(dstResource->GetNativeHandle());
+    auto nSrcResource = static_cast<ID3D12Resource*>(srcResource->GetNativeHandle());
+
+    m_commandList->CopyResource(nDstResource, nSrcResource);
+  }
+
   void DX12CommandList::Close()
   {
     m_commandList->Close();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Render/Resource/Buffers.h"
 #include <Render/Core/PipelineState.h>
 #include <Render/Core/Device.h>
 #include <Render/ResourceView/RenderTargetView.h>
@@ -47,6 +48,15 @@ namespace wkr::render
     virtual void ClearRenderTargetView(
         view::RenderTargetView* rtv,
         Color32 color) = 0;
+
+  //  virtual void CopyBufferRegion(
+  //      rsc::Buffers dstBuffers, uint64_t dstOffset,
+  //      rsc::Buffers srcBuffers, uint64_t srcOffset,
+  //      uint64_t numBytes) = 0;
+
+    virtual void CopyResource(
+        rsc::Resource* dstResource,
+        rsc::Resource* srcResource) = 0;
 
     virtual void Close() = 0;
 

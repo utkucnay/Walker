@@ -60,6 +60,8 @@ namespace wkr::render::rsc
     virtual ~Heap() {}
 
   public:
+    virtual void* GetNativeHandle() = 0;
+
     virtual uint64_t GetSize() = 0;
     virtual Heap::Type GetType() = 0;
     virtual Heap::CPUPageProperty GetCPUPageProperty() = 0;

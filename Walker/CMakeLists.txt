@@ -39,6 +39,7 @@ set(source_files
   ./src/Render/RenderTargetView.cpp
   ./src/Render/TransitionBarrier.cpp
   ./src/Render/Heap.cpp
+  ./src/Render/Buffers.cpp
   )
 
 set(all_files

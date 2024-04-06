@@ -45,6 +45,6 @@ namespace wkr::render
       WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Set Fence Event");
       WaitForSingleObject(m_fenceEvent, INFINITE);
     }
-    m_fenceValue[frameIndex]++;
+    IncFenceValue(frameIndex);
   }
 }

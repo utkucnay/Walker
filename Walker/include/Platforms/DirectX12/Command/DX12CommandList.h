@@ -31,6 +31,10 @@ namespace wkr::render
         view::RenderTargetView* rtv,
         Color32 color) override final;
 
+    void CopyResource(
+        rsc::Resource* dstResource,
+        rsc::Resource* srcResource) override final;
+
     void Close() override final;
 
   private:

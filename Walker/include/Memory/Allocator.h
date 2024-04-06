@@ -7,5 +7,7 @@ namespace wkr::mem
     virtual void* Allocate(int size) = 0;
     virtual void* Reallocate(void* ptr, int newSize) = 0;
     virtual void* Deallocate(void* ptr) = 0;
+
+    static Allocator* GetDefaultAllocator() { return NULL; }
   };
 }
