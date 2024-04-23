@@ -36,7 +36,6 @@ namespace wkr::render::rsc
       .SetAlignment(0)
       .SetFlag(flag);
 
-
     m_buffersBuilder->SetHeapBuilder(hb);
     m_buffersBuilder->SetType(ResourceBuilderType::Committed);
     return *this;

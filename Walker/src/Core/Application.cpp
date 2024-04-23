@@ -16,13 +16,14 @@ namespace wkr
 
     ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
 
-    WindowBuilder windowBuilder;
-    windowBuilder
-      .SetName("Walker Engine")
-      .SetSize(1280, 720);
+    m_mainWindow = mem::Scope<WindowBuilder>::Create()
+      ->SetName("Walker Engine")
+      .SetSize(1280, 720)
+      .BuildScope()
+      ;
 
-    m_mainWindow = windowBuilder.BuildScope();
     m_renderer = mem::Scope<render::Renderer>::Create(m_mainWindow.Get());
+
     m_renderer->CreateResource();
     m_renderer->LoadResources();
   }
