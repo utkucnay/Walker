@@ -5,21 +5,21 @@
 
 namespace wkr::render::rsc
 {
-  class DX12Heap : public Heap
+  class UDX12Heap : public IHeap
   {
   public:
-    DX12Heap(HeapBuilder* hb);
-    ~DX12Heap() override;
+    UDX12Heap(HeapBuilder& hb);
+    ~UDX12Heap() override;
 
   public:
-    void* GetNativeHandle() override { return m_heap; };
+    NativeHandle GetNativeHandle() override { return m_heap; };
 
-    uint64_t GetSize() override;
-    Heap::Type GetType() override;
-    Heap::CPUPageProperty GetCPUPageProperty() override;
-    Heap::MemoryPool GetMemoryPool() override;
-    uint64_t GetAlignment() override;
-    Heap::Flag GetFlag() override;
+    u64 GetSize() override;
+    u64 GetAlignment() override;
+    IHeap::Type GetType() override;
+    IHeap::Flag GetFlag() override;
+    IHeap::MemoryPool GetMemoryPool() override;
+    IHeap::CPUPageProperty GetCPUPageProperty() override;
 
   private:
     ID3D12Heap* m_heap;

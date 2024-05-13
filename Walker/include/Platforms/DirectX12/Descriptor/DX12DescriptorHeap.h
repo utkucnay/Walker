@@ -6,22 +6,22 @@
 
 namespace wkr::render
 {
-  class DX12DescriptorHeap : public DescriptorHeap
+  class UDX12DescriptorHeap : public IDescriptorHeap
   {
   public:
-    DX12DescriptorHeap(
-        DescriptorHeapBuilder* dhb);
-    ~DX12DescriptorHeap() override;
+    UDX12DescriptorHeap(DescriptorHeapBuilder& dhb);
+    ~UDX12DescriptorHeap() override;
 
   public:
-    uint32_t              GetCount() override final;
-    DescriptorHeap::Type  GetType()  override final;
-    DescriptorHeap::Flags GetFlags() override final;
+    u32 GetCount() override final;
+
+    IDescriptorHeap::Type  GetType()  override final;
+    IDescriptorHeap::Flags GetFlags() override final;
     void Bind(
-        std::vector<mem::WeakRef<rsc::Resource>> resources) override final;
+        const std::vector<mem::WeakRef<rsc::IResource>>& resources) override final;
 
   public:
-    void* GetNativeHandle() override { return m_descriptorHeap; }
+    NativeHandle GetNativeHandle() override { return m_descriptorHeap; }
 
   private:
     ID3D12DescriptorHeap* m_descriptorHeap;

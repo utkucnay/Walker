@@ -10,34 +10,34 @@ namespace wkr::render
   }
 
   DescriptorHeapBuilder& DescriptorHeapBuilder::SetType(
-      DescriptorHeap::Type type)
+      IDescriptorHeap::Type type)
   {
     m_type = type;
     return *this;
   }
 
   DescriptorHeapBuilder& DescriptorHeapBuilder::SetFlags(
-      DescriptorHeap::Flags flag)
+      IDescriptorHeap::Flags flag)
   {
     m_flags = flag;
     return *this;
   }
 
-  DescriptorHeap* DescriptorHeapBuilder::BuildRaw()
+  IDescriptorHeap* DescriptorHeapBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
-      CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
+      CreateRaw(*this);
   }
 
-  mem::Ref<DescriptorHeap> DescriptorHeapBuilder::BuildRef()
+  mem::Ref<IDescriptorHeap> DescriptorHeapBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
-      CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
+      CreateRef(*this);
   }
 
-  mem::Scope<DescriptorHeap> DescriptorHeapBuilder::BuildScope()
+  mem::Scope<IDescriptorHeap> DescriptorHeapBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetDescriptorHeapFactory()->
-      CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
+      CreateScope(*this);
   }
 }

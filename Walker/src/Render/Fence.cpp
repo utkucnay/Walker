@@ -4,33 +4,33 @@
 
 namespace wkr::render
 {
-  FenceBuilder& FenceBuilder::SetFenceFlag(Fence::Flag fenceFlag)
+  FenceBuilder& FenceBuilder::SetFenceFlag(IFence::Flag fenceFlag)
   {
     m_fenceFlag = fenceFlag;
     return *this;
   }
 
-  FenceBuilder& FenceBuilder::SetFrameCount(uint8_t frameCount)
+  FenceBuilder& FenceBuilder::SetFrameCount(u8 frameCount)
   {
     m_frameCount = frameCount;
     return *this;
   }
 
-  Fence* FenceBuilder::BuildRaw()
+  IFence* FenceBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetFenceFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<Fence> FenceBuilder::BuildRef()
+  mem::Ref<IFence> FenceBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetFenceFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<Fence> FenceBuilder::BuildScope()
+  mem::Scope<IFence> FenceBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetFenceFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetFenceFactory()
+      ->CreateScope(*this);
   }
 }

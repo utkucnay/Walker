@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Render/Resource/Buffers.h"
 #include <Render/Core/PipelineState.h>
 #include <Render/Core/Device.h>
 #include <Render/ResourceView/RenderTargetView.h>
@@ -10,12 +9,9 @@
 
 namespace wkr::render
 {
-  class Device;
-  class CommandAllocator;
+  class ICommandAllocator;
 
-  class CommandListBuilder;
-
-  class CommandList
+  class ICommandList
   {
   public:
     enum class Type
@@ -31,22 +27,27 @@ namespace wkr::render
     };
 
   public:
-    virtual ~CommandList() {}
+    virtual ~ICommandList() {}
 
   public:
-    virtual CommandList::Type GetType() = 0;
+    virtual ICommandList::Type GetType() = 0;
 
   public:
-    virtual void Reset(CommandAllocator* commandAllocator, PipelineState* pipelineState) = 0;
+    virtual void Reset(
+        ICommandAllocator& commandAllocator) = 0;
+
+    virtual void Reset(
+        ICommandAllocator& commandAllocator,
+        IPipelineState& pipelineState) = 0;
 
     virtual void ResourceBarriers(
-        std::vector<rsc::bar::ResourceBarrier*> barriers) = 0;
+        std::vector<mem::Ref<rsc::bar::IResourceBarrier>> barriers) = 0;
 
     virtual void OMSetRenderTargets(
-        std::vector<view::RenderTargetView*> rtvs) = 0;
+        std::vector<mem::Ref<view::URenderTargetView>> rtvs) = 0;
 
     virtual void ClearRenderTargetView(
-        view::RenderTargetView* rtv,
+        view::URenderTargetView& rtv,
         Color32 color) = 0;
 
   //  virtual void CopyBufferRegion(
@@ -55,30 +56,31 @@ namespace wkr::render
   //      uint64_t numBytes) = 0;
 
     virtual void CopyResource(
-        rsc::Resource* dstResource,
-        rsc::Resource* srcResource) = 0;
+        rsc::IResource& dstResource,
+        rsc::IResource& srcResource) = 0;
 
     virtual void Close() = 0;
 
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
   };
 
-  class CommandListBuilder : Builder<CommandList>
+  class CommandListBuilder : IBuilder<ICommandList>
   {
   public:
-    CommandListBuilder& SetCommandListType(CommandList::Type listType);
-    CommandListBuilder& SetCommandAllocator(CommandAllocator* alloc);
-    CommandListBuilder& SetPiplineState(PipelineState* pipelineState);
+    CommandListBuilder(mem::WeakRef<ICommandAllocator> commandAllocator);
 
   public:
-    CommandList* BuildRaw() override final;
-    mem::Ref<CommandList> BuildRef() override final;
-    mem::Scope<CommandList> BuildScope() override final;
+    CommandListBuilder& SetCommandListType(ICommandList::Type listType);
+    CommandListBuilder& SetPiplineState(mem::WeakRef<IPipelineState> pipelineState);
 
   public:
-    Device*                   m_device;
-    CommandList::Type         m_listType{};
-    CommandAllocator*         m_commandAllocator{};
-    PipelineState*            m_pipelineState{};
+    [[nodiscard]] ICommandList*              BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<ICommandList>     BuildRef()    override final;
+    [[nodiscard]] mem::Scope<ICommandList>   BuildScope()  override final;
+
+  public:
+    ICommandList::Type               m_listType{};
+    mem::WeakRef<ICommandAllocator>  m_commandAllocator{};
+    mem::WeakRef<IPipelineState>     m_pipelineState{};
   };
 }

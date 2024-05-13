@@ -4,14 +4,14 @@
 
 namespace wkr::render
 {
-  DX12CommandQueue::DX12CommandQueue(CommandQueueBuilder* cqb)
+  UDX12CommandQueue::UDX12CommandQueue(CommandQueueBuilder& cqb)
   {
-    ID3D12Device* nDevice = (ID3D12Device*)Renderer::GetDefaultDevice()->GetNativeHandle();
+    ID3D12Device* nDevice = (ID3D12Device*)URenderer::GetDefaultDevice().GetNativeHandle();
     D3D12_COMMAND_QUEUE_DESC nDesc = {};
 
-    nDesc.Type      = static_cast<D3D12_COMMAND_LIST_TYPE>(cqb->m_commandListType);
-    nDesc.Priority  = static_cast<INT>(cqb->m_commandQueuePriority);
-    nDesc.Flags     = static_cast<D3D12_COMMAND_QUEUE_FLAGS>(cqb->m_commandQueueFlags);
+    nDesc.Type      = static_cast<D3D12_COMMAND_LIST_TYPE>(cqb.m_commandListType);
+    nDesc.Priority  = static_cast<INT>(cqb.m_commandQueuePriority);
+    nDesc.Flags     = static_cast<D3D12_COMMAND_QUEUE_FLAGS>(cqb.m_commandQueueFlags);
 
     HRESULT hr = nDevice->CreateCommandQueue(&nDesc, IID_PPV_ARGS(&m_commandQueue));
 
@@ -19,12 +19,13 @@ namespace wkr::render
     WKR_CORE_LOG("Created DX12 Command Queue")
   }
 
-  DX12CommandQueue::~DX12CommandQueue()
+  UDX12CommandQueue::~UDX12CommandQueue()
   {
     m_commandQueue->Release();
   }
 
-  void DX12CommandQueue::ExecuteCommandList(std::vector<CommandList*> commandLists)
+  void UDX12CommandQueue::ExecuteCommandList(
+        const std::vector<mem::Ref<ICommandList>>& commandLists)
   {
     std::vector<ID3D12CommandList*> nCommandLists;
     std::transform(commandLists.begin(), commandLists.end(),
@@ -35,10 +36,10 @@ namespace wkr::render
     m_commandQueue->ExecuteCommandLists(nCommandLists.size(), &nCommandLists[0]);
   }
 
-  void DX12CommandQueue::Signal(Fence* fence, int frameIndex)
+  void UDX12CommandQueue::Signal(IFence& fence, i32 frameIndex)
   {
-    auto dxFence = static_cast<DX12Fence*>(fence);
-    auto nFence = static_cast<ID3D12Fence*>(fence->GetNativeHandle(frameIndex));
+    auto dxFence = static_cast<UDX12Fence*>(&fence);
+    auto nFence = static_cast<ID3D12Fence*>(fence.GetNativeHandle(frameIndex));
 
     HRESULT hr = m_commandQueue->Signal(nFence, dxFence->m_fenceValue[frameIndex]);
     WKR_CORE_ERROR_COND(FAILED(hr), "Fence Signal Error in Command Queue");

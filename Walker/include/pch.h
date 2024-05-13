@@ -20,6 +20,7 @@
 #include <Core/Base.h>
 #include <Core/Event.h>
 #include <Core/Events.h>
+#include <Core/TypeDef.h>
 
 #include <Memory/Ref.h>
 #include <Memory/WeakRef.h>
@@ -29,6 +30,7 @@
 #include <Core/Factory.h>
 
 #include <Core/Events.h>
+#include <Core/Cloneable.h>
 
 #if defined(WKR_PLATFORM_WINDOWS)
   #include <windows.h>

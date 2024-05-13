@@ -6,27 +6,27 @@ namespace wkr::render
 {
   //Builder
   CommandAllocatorBuilder& CommandAllocatorBuilder::SetCommandListType(
-      CommandList::Type listType)
+      ICommandList::Type listType)
   {
     m_listType = listType;
     return *this;
   }
 
-  CommandAllocator* CommandAllocatorBuilder::BuildRaw()
+  ICommandAllocator* CommandAllocatorBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<CommandAllocator> CommandAllocatorBuilder::BuildRef()
+  mem::Ref<ICommandAllocator> CommandAllocatorBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<CommandAllocator> CommandAllocatorBuilder::BuildScope()
+  mem::Scope<ICommandAllocator> CommandAllocatorBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandAllocaterFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
+      ->CreateScope(*this);
   }
 }

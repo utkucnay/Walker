@@ -4,14 +4,14 @@
 
 namespace wkr::render
 {
-  std::vector<mem::Ref<Adapter>> Adapter::GetAllAdapters()
+  std::vector<mem::Ref<IAdapter>> IAdapter::GetAllAdapters()
   {
     BEGIN_RENDERERAPI_CREATE()
     ADD_RENDERERAPI_DIRECTX12_CREATE(
-        DX12Adapter::GetAllAdapters())
+        UDX12Adapter::GetAllAdapters())
     END_RENDERERAPI_CREATE()
 
-    std::vector<mem::Ref<Adapter>> ret;
+    std::vector<mem::Ref<IAdapter>> ret;
     return ret;
   }
 }

@@ -5,25 +5,26 @@
 
 namespace wkr::render::rsc::bar
 {
-  class AliasingBarrier : public ResourceBarrier
+  class IAliasingBarrier : public IResourceBarrier
   {
   public:
-    virtual ~AliasingBarrier() override {}
+    virtual ~IAliasingBarrier() override {}
   };
 
-  class AliasingBarrierBuilder : Builder<AliasingBarrier>
+  class AliasingBarrierBuilder : public BarrierBuilder
   {
   public:
-    AliasingBarrierBuilder& SetResourceBefore(Resource* resource);
-    AliasingBarrierBuilder& SetResourceAfter(Resource* resource);
+    AliasingBarrierBuilder(
+        mem::WeakRef<IResource> beforeResource,
+        mem::WeakRef<IResource> afterResource);
 
   public:
-    AliasingBarrier*             BuildRaw()    override final;
-    mem::Ref<AliasingBarrier>    BuildRef()    override final;
-    mem::Scope<AliasingBarrier>  BuildScope()  override final;
+    [[nodiscard]] IResourceBarrier*             BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<IResourceBarrier>    BuildRef()    override final;
+    [[nodiscard]] mem::Scope<IResourceBarrier>  BuildScope()  override final;
 
   public:
-    Resource* resourceBefore;
-    Resource* resourceAfter;
+    mem::WeakRef<IResource> resourceBefore;
+    mem::WeakRef<IResource> resourceAfter;
   };
 }

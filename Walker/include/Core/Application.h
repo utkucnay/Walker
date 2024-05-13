@@ -7,36 +7,36 @@ int main(int argc, char** argv);
 
 namespace wkr
 {
-  struct ApplicationCommandLineArgs
+  struct FApplicationCommandLineArgs
   {
-    int argc;
     char** argv;
+    i32 argc;
   };
 
-  struct ApplicationSpecs
+  struct FApplicationSpecs
   {
     std::string name;
-    bool showCLI;
-    ApplicationCommandLineArgs ApplicationCommandLineArgs;
+    FApplicationCommandLineArgs ApplicationCommandLineArgs;
+    b32 showCLI;
   };
 
-  class Application
+  class UApplication
   {
   public:
-    Application(const ApplicationSpecs& applicationSpecs);
-    virtual ~Application();
+    UApplication(const FApplicationSpecs& applicationSpecs);
+    virtual ~UApplication();
 
   private:
     void Run();
 
   private:
-    ApplicationSpecs              appSpecs; //?
-    mem::Scope<Window>            m_mainWindow;
-    mem::Scope<render::Renderer>  m_renderer;
+    FApplicationSpecs              appSpecs;
+    mem::Ref<UWindow>            m_mainWindow;
+    mem::Ref<render::URenderer>  m_renderer;
 
     friend int ::main(int argc, char** argv);
   };
 
   //defined in client
-  Application* CreateApplication(const ApplicationCommandLineArgs& args);
+  mem::Scope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args);
 }

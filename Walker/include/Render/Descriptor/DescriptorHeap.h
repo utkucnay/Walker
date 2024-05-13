@@ -9,7 +9,7 @@ namespace wkr::render
 {
   class DescriptorHeapBuilder;
 
-  class DescriptorHeap
+  class IDescriptorHeap
   {
   public:
     enum class Flags
@@ -28,49 +28,52 @@ namespace wkr::render
     };
 
   public:
-    virtual ~DescriptorHeap() {}
+    virtual ~IDescriptorHeap() {}
 
   public:
-    virtual uint32_t              GetCount() = 0;
-    virtual DescriptorHeap::Type  GetType()  = 0;
-    virtual DescriptorHeap::Flags GetFlags() = 0;
+    virtual u32 GetCount() = 0;
+
+    virtual IDescriptorHeap::Type  GetType()  = 0;
+    virtual IDescriptorHeap::Flags GetFlags() = 0;
+
     virtual void Bind(
-        std::vector<mem::WeakRef<rsc::Resource>> resources) = 0;
+        const std::vector<mem::WeakRef<rsc::IResource>>& resources) = 0;
 
    // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
    //     uint32_t offset, uint32_t size);
 
     template<typename T>
-    T* Get(std::size_t index)
+    [[nodiscard]] mem::Ref<T> Get(std::size_t index)
     {
       WKR_CORE_ERROR_COND(
           m_resourceViews[index]->GetTypeName() != T::GetStaticTypeName(),
           "Didn't Match View Type " << m_resourceViews[index]->GetTypeName() << " " << T::GetStaticTypeName());
-      return static_cast<T*>(m_resourceViews[index].Get());
+      return m_resourceViews[index];
     }
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
 
   protected:
-    std::vector<mem::Scope<view::ResourceView>> m_resourceViews;
+    std::vector<mem::Ref<view::UResourceView>> m_resourceViews;
   };
 
-  class DescriptorHeapBuilder : Builder<DescriptorHeap>
+  class DescriptorHeapBuilder : IBuilder<IDescriptorHeap>
   {
   public:
-    DescriptorHeapBuilder& SetCount(uint32_t count);
-    DescriptorHeapBuilder& SetType(DescriptorHeap::Type type);
-    DescriptorHeapBuilder& SetFlags(DescriptorHeap::Flags flags);
+    DescriptorHeapBuilder& SetCount(u32 count);
+    DescriptorHeapBuilder& SetType(IDescriptorHeap::Type type);
+    DescriptorHeapBuilder& SetFlags(IDescriptorHeap::Flags flags);
 
   public:
-    DescriptorHeap*             BuildRaw()    override final;
-    mem::Ref<DescriptorHeap>    BuildRef()    override final;
-    mem::Scope<DescriptorHeap>  BuildScope()  override final;
+    [[nodiscard]] IDescriptorHeap*             BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<IDescriptorHeap>    BuildRef()    override final;
+    [[nodiscard]] mem::Scope<IDescriptorHeap>  BuildScope()  override final;
 
   public:
-    uint32_t              m_count{};
-    DescriptorHeap::Type  m_type{};
-    DescriptorHeap::Flags m_flags{};
+    u32 m_count{};
+
+    IDescriptorHeap::Type   m_type{};
+    IDescriptorHeap::Flags  m_flags{};
   };
 }

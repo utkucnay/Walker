@@ -14,7 +14,12 @@ namespace wkr::mem
     Ref<T>(std::nullptr_t) { }
 
   public:
-    T* Get()
+    [[nodiscard]] T& Get() const
+    {
+      return *ptr.get();
+    }
+
+    [[nodiscard]] T* GetPtr() const
     {
       return ptr.get();
     }
@@ -41,7 +46,7 @@ namespace wkr::mem
       return ret;
     }
 
-    T* operator->()
+    T* operator->() const
     {
       return ptr.get();
     };

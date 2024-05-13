@@ -7,21 +7,18 @@
 
 namespace wkr
 {
-  Window::~Window()
+  UWindow::~UWindow()
   {
 
   }
 
-  mem::Ref<render::SwapChain> Window::SetSwapChain(
-      render::SwapChainBuilder* builder)
+  void UWindow::SetSwapChain(
+      mem::WeakRef<render::USwapChain> swapChain)
   {
-    builder->SetWindow(this);
-    auto swapChain = builder->BuildRef();
     m_swapChain = swapChain;
-    return swapChain;
   }
 
-  void Window::SwapBuffers()
+  void UWindow::SwapBuffers()
   {
     if(m_swapChain.Expired())
     {
@@ -34,37 +31,37 @@ namespace wkr
   //Builder
   WindowBuilder& WindowBuilder::SetName(const std::string& name)
   {
-    m_windowDesc.name = name;
+    m_name = name;
     return *this;
   }
 
   WindowBuilder& WindowBuilder::SetSize(uint32_t width, uint32_t height)
   {
-    m_windowDesc.width = width;
-    m_windowDesc.height = height;
+    m_width = width;
+    m_height = height;
     return *this;
   }
 
-  Window* WindowBuilder::BuildRaw()
+  UWindow* WindowBuilder::BuildRaw()
   {
   #if defined (WKR_PLATFORM_WINDOWS)
-    return new WindowsWindow(m_windowDesc);
+    return new UWindowsWindow(*this);
   #endif
     return NULL;
   }
 
-  mem::Ref<Window> WindowBuilder::BuildRef()
+  mem::Ref<UWindow> WindowBuilder::BuildRef()
   {
   #if defined (WKR_PLATFORM_WINDOWS)
-    return mem::Ref<WindowsWindow>::Create(m_windowDesc);
+    return mem::Ref<UWindowsWindow>::Create(*this);
   #endif
     return NULL;
   }
 
-  mem::Scope<Window> WindowBuilder::BuildScope()
+  mem::Scope<UWindow> WindowBuilder::BuildScope()
   {
   #if defined (WKR_PLATFORM_WINDOWS)
-    return mem::Scope<WindowsWindow>::Create(m_windowDesc);
+    return mem::Scope<UWindowsWindow>::Create(*this);
   #endif
     return NULL;
   }

@@ -2,12 +2,12 @@
 
 namespace wkr::render
 {
-  class RootSignature
+  class IRootSignature
   {
   public:
-    virtual ~RootSignature() {}
+    virtual ~IRootSignature() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
   };
 }

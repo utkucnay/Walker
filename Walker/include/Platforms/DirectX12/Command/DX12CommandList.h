@@ -6,34 +6,37 @@
 
 namespace wkr::render
 {
-  class DX12CommandList : public CommandList
+  class UDX12CommandList : public ICommandList
   {
   public:
-    DX12CommandList(CommandListBuilder*  clb);
-    ~DX12CommandList() override;
+    UDX12CommandList(CommandListBuilder& clb);
+    ~UDX12CommandList() override;
 
   public:
     void Reset(
-        CommandAllocator* commandAllocator,
-        PipelineState* pipelineState) override final;
+        ICommandAllocator& commandAllocator) override final;
 
-    void* GetNativeHandle() override final { return m_commandList; }
+    void Reset(
+        ICommandAllocator& commandAllocator,
+        IPipelineState& pipelineState) override final;
 
-    CommandList::Type GetType() override final;
+    NativeHandle GetNativeHandle() override final { return m_commandList; }
+
+    ICommandList::Type GetType() override final;
 
     void ResourceBarriers(
-        std::vector<rsc::bar::ResourceBarrier*> barriers) override final;
+        std::vector<mem::Ref<rsc::bar::IResourceBarrier>> barriers) override final;
 
     void OMSetRenderTargets(
-        std::vector<view::RenderTargetView*> rtvs) override final;
+        std::vector<mem::Ref<view::URenderTargetView>> rtvs) override final;
 
     void ClearRenderTargetView(
-        view::RenderTargetView* rtv,
+        view::URenderTargetView& rtv,
         Color32 color) override final;
 
     void CopyResource(
-        rsc::Resource* dstResource,
-        rsc::Resource* srcResource) override final;
+        rsc::IResource& dstResource,
+        rsc::IResource& srcResource) override final;
 
     void Close() override final;
 

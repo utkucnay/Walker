@@ -3,66 +3,66 @@
 
 namespace wkr::render::rsc
 {
-  DX12Heap::DX12Heap(HeapBuilder* hb)
+  UDX12Heap::UDX12Heap(HeapBuilder& hb)
   {
     auto nDevice = static_cast<ID3D12Device*>(
-        Renderer::GetDefaultDevice()->GetNativeHandle());
+        URenderer::GetDefaultDevice().GetNativeHandle());
 
     D3D12_HEAP_DESC desc{};
-    desc.SizeInBytes = hb->m_size;
+    desc.SizeInBytes = hb.m_size;
 
-    desc.Properties.Type = static_cast<D3D12_HEAP_TYPE>(hb->m_type);
+    desc.Properties.Type = static_cast<D3D12_HEAP_TYPE>(hb.m_type);
     desc.Properties.CPUPageProperty = static_cast<D3D12_CPU_PAGE_PROPERTY>(
-        hb->m_cpuPageProperty);
+        hb.m_cpuPageProperty);
     desc.Properties.MemoryPoolPreference = static_cast<D3D12_MEMORY_POOL>(
-        hb->m_memoryPool);
+        hb.m_memoryPool);
 
-    desc.Alignment = hb->m_alignment;
-    desc.Flags = static_cast<D3D12_HEAP_FLAGS>(hb->m_flag);
+    desc.Alignment = hb.m_alignment;
+    desc.Flags = static_cast<D3D12_HEAP_FLAGS>(hb.m_flag);
 
     nDevice->CreateHeap(
         &desc,
         IID_PPV_ARGS(&m_heap));
   }
 
-  DX12Heap::~DX12Heap()
+  UDX12Heap::~UDX12Heap()
   {
     m_heap->Release();
   }
 
-  uint64_t DX12Heap::GetSize()
+  u64 UDX12Heap::GetSize()
   {
     auto desc = m_heap->GetDesc();
     return desc.SizeInBytes;
   }
 
-  Heap::Type DX12Heap::GetType()
+  IHeap::Type UDX12Heap::GetType()
   {
     auto desc = m_heap->GetDesc();
-    return static_cast<Heap::Type>(desc.Properties.Type);
+    return static_cast<IHeap::Type>(desc.Properties.Type);
   }
 
-  Heap::CPUPageProperty DX12Heap::GetCPUPageProperty()
+  IHeap::CPUPageProperty UDX12Heap::GetCPUPageProperty()
   {
     auto desc = m_heap->GetDesc();
-    return static_cast<Heap::CPUPageProperty>(desc.Properties.CPUPageProperty);
+    return static_cast<IHeap::CPUPageProperty>(desc.Properties.CPUPageProperty);
   }
 
-  Heap::MemoryPool DX12Heap::GetMemoryPool()
+  IHeap::MemoryPool UDX12Heap::GetMemoryPool()
   {
     auto desc = m_heap->GetDesc();
-    return static_cast<Heap::MemoryPool>(desc.Properties.MemoryPoolPreference);
+    return static_cast<IHeap::MemoryPool>(desc.Properties.MemoryPoolPreference);
   }
 
-  uint64_t DX12Heap::GetAlignment()
+  u64 UDX12Heap::GetAlignment()
   {
     auto desc = m_heap->GetDesc();
     return desc.Alignment;
   }
 
-  Heap::Flag DX12Heap::GetFlag()
+  IHeap::Flag UDX12Heap::GetFlag()
   {
     auto desc = m_heap->GetDesc();
-    return static_cast<Heap::Flag>(desc.Flags);
+    return static_cast<IHeap::Flag>(desc.Flags);
   }
 }

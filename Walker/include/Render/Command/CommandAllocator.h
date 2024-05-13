@@ -9,30 +9,28 @@
 
 namespace wkr::render
 {
-  class Device;
-  class CommandAllocatorBuilder;
-
-  class CommandAllocator
+  class ICommandAllocator : public ICloneable<ICommandAllocator>
   {
   public:
-    virtual ~CommandAllocator() {}
+    virtual ~ICommandAllocator() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
+    virtual ICommandList::Type GetCommandListType() = 0;
     virtual void Reset() = 0;
   };
 
-  class CommandAllocatorBuilder : Builder<CommandAllocator>
+  class CommandAllocatorBuilder : IBuilder<ICommandAllocator>
   {
   public:
-    CommandAllocatorBuilder& SetCommandListType(CommandList::Type listType);
+    CommandAllocatorBuilder& SetCommandListType(ICommandList::Type listType);
 
   public:
-    CommandAllocator*             BuildRaw  () override final;
-    mem::Ref<CommandAllocator>    BuildRef  () override final;
-    mem::Scope<CommandAllocator>  BuildScope() override final;
+    [[nodiscard]] ICommandAllocator*             BuildRaw  () override final;
+    [[nodiscard]] mem::Ref<ICommandAllocator>    BuildRef  () override final;
+    [[nodiscard]] mem::Scope<ICommandAllocator>  BuildScope() override final;
 
   public:
-    CommandList::Type m_listType{};
+    ICommandList::Type m_listType{};
   };
 }

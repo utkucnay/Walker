@@ -4,26 +4,26 @@
 
 namespace wkr::render
 {
-  class Device
+  class IDevice
   {
   public:
-    virtual ~Device() {}
+    virtual ~IDevice() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
   };
 
-  class DeviceBuilder : Builder<Device>
+  class DeviceBuilder : IBuilder<IDevice>
   {
   public:
-    DeviceBuilder& SetAdapter(Adapter* adapter);
+    DeviceBuilder& SetAdapter(mem::WeakRef<IAdapter> adapter);
 
   public:
-    Device*             BuildRaw()    override final;
-    mem::Ref<Device>    BuildRef()    override final;
-    mem::Scope<Device>  BuildScope()  override final;
+    IDevice*             BuildRaw()    override final;
+    mem::Ref<IDevice>    BuildRef()    override final;
+    mem::Scope<IDevice>  BuildScope()  override final;
 
   public:
-    Adapter* m_adapter{};
+    mem::WeakRef<IAdapter> m_adapter;
   };
 }

@@ -2,12 +2,12 @@
 
 namespace wkr::render
 {
-  class PipelineState
+  class IPipelineState
   {
   public:
-    virtual ~PipelineState() = 0;
+    virtual ~IPipelineState() = 0;
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() const = 0;
   };
 }

@@ -3,41 +3,41 @@
 
 namespace wkr::render::rsc::bar
 {
-  TransitionBarrierBuilder& TransitionBarrierBuilder::SetResource(Resource* resource)
+  TransitionBarrierBuilder::TransitionBarrierBuilder(
+      mem::WeakRef<IResource> resource)
   {
     m_resource = resource;
-    return *this;
   }
 
   TransitionBarrierBuilder& TransitionBarrierBuilder::SetBeforeState(
-      Resource::State beforeState)
+      IResource::State beforeState)
   {
     m_beforeState = beforeState;
     return *this;
   }
 
   TransitionBarrierBuilder& TransitionBarrierBuilder::SetAfterState(
-      Resource::State afterState)
+      IResource::State afterState)
   {
     m_afterState = afterState;
     return *this;
   }
 
-  TransitionBarrier* TransitionBarrierBuilder::BuildRaw()
+  IResourceBarrier* TransitionBarrierBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetResourceBarrierTransition()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<TransitionBarrier> TransitionBarrierBuilder::BuildRef()
+  mem::Ref<IResourceBarrier> TransitionBarrierBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetResourceBarrierTransition()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<TransitionBarrier> TransitionBarrierBuilder::BuildScope()
+  mem::Scope<IResourceBarrier> TransitionBarrierBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetResourceBarrierTransition()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
+      ->CreateScope(*this);
   }
 }

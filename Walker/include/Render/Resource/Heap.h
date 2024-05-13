@@ -2,7 +2,7 @@
 
 namespace wkr::render::rsc
 {
-  class Heap
+  class IHeap
   {
   public:
     enum class Type
@@ -29,9 +29,9 @@ namespace wkr::render::rsc
       L1      = 2,
     };
 
-    enum class Alignment : uint64_t
+    enum class Alignment : u64
     {
-      Default = 64 KB,
+      Default     = 64 KB,
       DefaultMSAA = 4 MB,
     };
 
@@ -57,40 +57,40 @@ namespace wkr::render::rsc
     };
 
   public:
-    virtual ~Heap() {}
+    virtual ~IHeap() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
 
-    virtual uint64_t GetSize() = 0;
-    virtual Heap::Type GetType() = 0;
-    virtual Heap::CPUPageProperty GetCPUPageProperty() = 0;
-    virtual Heap::MemoryPool GetMemoryPool() = 0;
-    virtual uint64_t GetAlignment() = 0;
-    virtual Heap::Flag GetFlag() = 0;
+    virtual u64 GetSize()       = 0;
+    virtual u64 GetAlignment()  = 0;
+    virtual IHeap::Type GetType() = 0;
+    virtual IHeap::Flag GetFlag() = 0;
+    virtual IHeap::MemoryPool       GetMemoryPool()       = 0;
+    virtual IHeap::CPUPageProperty  GetCPUPageProperty()  = 0;
   };
 
-  class HeapBuilder : Builder<Heap>
+  class HeapBuilder : IBuilder<IHeap>
   {
   public:
-    HeapBuilder& SetSize(uint64_t size);
-    HeapBuilder& SetType(Heap::Type type);
-    HeapBuilder& SetCPUPageProperty(Heap::CPUPageProperty cpuPageProperty);
-    HeapBuilder& SetMemoryPool(Heap::MemoryPool memoryPool);
-    HeapBuilder& SetAlignment(uint64_t alignment);
-    HeapBuilder& SetFlag(Heap::Flag flag);
+    HeapBuilder& SetSize(u64 size);
+    HeapBuilder& SetAlignment(u64 alignment);
+    HeapBuilder& SetType(IHeap::Type type);
+    HeapBuilder& SetFlag(IHeap::Flag flag);
+    HeapBuilder& SetMemoryPool(IHeap::MemoryPool memoryPool);
+    HeapBuilder& SetCPUPageProperty(IHeap::CPUPageProperty cpuPageProperty);
 
   public:
-    Heap* BuildRaw() override;
-    mem::Ref<Heap> BuildRef() override;
-    mem::Scope<Heap> BuildScope() override;
+    [[nodiscard]] IHeap*            BuildRaw()    override;
+    [[nodiscard]] mem::Ref<IHeap>   BuildRef()    override;
+    [[nodiscard]] mem::Scope<IHeap> BuildScope()  override;
 
   public:
-    uint64_t m_size;
-    Heap::Type m_type;
-    Heap::CPUPageProperty m_cpuPageProperty;
-    Heap::MemoryPool m_memoryPool;
-    uint64_t m_alignment;
-    Heap::Flag m_flag;
+    u64 m_size;
+    u64 m_alignment;
+    IHeap::Type m_type;
+    IHeap::Flag m_flag;
+    IHeap::MemoryPool       m_memoryPool;
+    IHeap::CPUPageProperty  m_cpuPageProperty;
   };
 }

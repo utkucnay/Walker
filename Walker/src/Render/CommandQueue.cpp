@@ -5,41 +5,41 @@ namespace wkr::render
 {
   //Builder
   CommandQueueBuilder& CommandQueueBuilder::SetCommandListType(
-      CommandList::Type listType)
+      ICommandList::Type listType)
   {
     m_commandListType = listType;
     return *this;
   }
 
   CommandQueueBuilder& CommandQueueBuilder::SetCommandQueuePriority(
-      CommandQueue::Priority priority)
+      ICommandQueue::Priority priority)
   {
     m_commandQueuePriority = priority;
     return *this;
   }
 
   CommandQueueBuilder& CommandQueueBuilder::SetCommandQueueFlags(
-      CommandQueue::Flags flags)
+      ICommandQueue::Flags flags)
   {
     m_commandQueueFlags = flags;
     return *this;
   }
 
-  CommandQueue* CommandQueueBuilder::BuildRaw()
+  ICommandQueue* CommandQueueBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandQueueFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<CommandQueue> CommandQueueBuilder::BuildRef()
+  mem::Ref<ICommandQueue> CommandQueueBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandQueueFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<CommandQueue>CommandQueueBuilder::BuildScope()
+  mem::Scope<ICommandQueue>CommandQueueBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandQueueFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
+      ->CreateScope(*this);
   }
 }

@@ -2,20 +2,20 @@
 
 namespace wkr
 {
-  class SandboxApp : public Application
+  class USandboxApp : public UApplication
   {
   public:
-    SandboxApp(const ApplicationSpecs& specs) : Application(specs) {}
-    ~SandboxApp() {}
+    USandboxApp(const FApplicationSpecs& specs) : UApplication(specs) {}
+    ~USandboxApp() {}
   };
 
-  Application* CreateApplication(const ApplicationCommandLineArgs& args)
+  mem::Scope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args)
   {
-    ApplicationSpecs specs;
+    FApplicationSpecs specs;
     specs.name = "Sandbox";
     specs.showCLI = true;
     specs.ApplicationCommandLineArgs = args;
 
-    return new SandboxApp(specs);
+    return mem::Scope<USandboxApp>::Create(specs);
   }
 }

@@ -3,7 +3,7 @@
 
 namespace wkr
 {
-  WindowsWindow::WindowsWindow(const WindowDesc& windowProps)
+  UWindowsWindow::UWindowsWindow(WindowBuilder& windowBuilder)
   {
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -18,12 +18,12 @@ namespace wkr
     window = CreateWindowEx(
       0,
       className.c_str(),
-      windowProps.name.c_str(),
+      windowBuilder.m_name.c_str(),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
-      windowProps.width,
-      windowProps.height,
+      windowBuilder.m_width,
+      windowBuilder.m_height,
       NULL,
       NULL,
       hInstance,
@@ -36,21 +36,21 @@ namespace wkr
   }
 
 
-  WindowsWindow::~WindowsWindow()
+  UWindowsWindow::~UWindowsWindow()
   {
     m_windowMap.erase(window);
   }
 
-  void WindowsWindow::OnUpdate()
+  void UWindowsWindow::OnUpdate()
   {
   }
 
-  bool WindowsWindow::IsShouldClose()
+  b32 UWindowsWindow::IsShouldClose()
   {
     return m_isRunning;
   }
 
-  void WindowsWindow::PoolEvents()
+  void UWindowsWindow::PoolEvents()
   {
     while(PeekMessage(&message, NULL, NULL, NULL, PM_REMOVE))
     {
@@ -61,7 +61,7 @@ namespace wkr
     }
   }
 
-  void WindowsWindow::WindowProc(
+  void UWindowsWindow::WindowProc(
       UINT uMsg,
       WPARAM wParam, LPARAM lParam)
   {
@@ -90,7 +90,7 @@ namespace wkr
     }
   }
 
-  bool WindowsWindow::WindowProcHandle(
+  bool UWindowsWindow::WindowProcHandle(
       HWND hwnd,
       UINT uMsg,
       WPARAM wParam, LPARAM lParam)

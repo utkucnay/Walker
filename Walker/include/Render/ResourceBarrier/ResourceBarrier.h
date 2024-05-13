@@ -4,12 +4,14 @@
 
 namespace wkr::render::rsc::bar
 {
-  class ResourceBarrier
+  class IResourceBarrier
   {
   public:
-    virtual ~ResourceBarrier() {}
+    virtual ~IResourceBarrier() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
   };
+
+  using BarrierBuilder = IBuilder<IResourceBarrier>;
 }

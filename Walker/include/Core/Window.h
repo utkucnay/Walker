@@ -4,68 +4,62 @@
 
 namespace wkr::render
 {
-  class SwapChain;
+  class USwapChain;
   class SwapChainBuilder;
 }
 
 namespace wkr
 {
-
-  struct WindowDesc
-  {
-    std::string name;
-    uint32_t width, height;
-  };
-
-  class Window
+  class UWindow
   {
   public:
-    virtual ~Window() = 0;
+    virtual ~UWindow() = 0;
 
   public:
-    bool GetFullscreen() { return !GetWindowed(); }
-    mem::Ref<render::SwapChain> SetSwapChain(
-          render::SwapChainBuilder* builder);
+    void SetSwapChain(
+          mem::WeakRef<render::USwapChain> swapChain);
+
+    b32 GetFullscreen() { return !GetWindowed(); }
     void SwapBuffers();
 
   public:
-    virtual void OnUpdate() = 0;
-    virtual bool IsShouldClose() = 0;
-    virtual void PoolEvents() = 0;
+    virtual void OnUpdate()       = 0;
+    virtual b32 IsShouldClose()  = 0;
+    virtual void PoolEvents()     = 0;
 
-    virtual int GetWidth() = 0;
-    virtual int GetHeight() = 0;
-    virtual bool GetWindowed() = 0;
+    virtual u32 GetWidth()      = 0;
+    virtual u32 GetHeight()     = 0;
+    virtual b32 GetWindowed()  = 0;
 
-    render::SwapChain* GetSwapChain()
+    [[nodiscard]] mem::WeakRef<render::USwapChain> GetSwapChain()
     {
-      if(!m_swapChain.Expired())
-        return m_swapChain.Lock().Get();
-      return NULL;
+        return m_swapChain;
     }
 
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
 
   public:
     WindowResizeEvent         m_resizeEvent;
     WindowSetFullscreenEvent  m_setFullscreenEvent;
 
   protected:
-    mem::WeakRef<render::SwapChain> m_swapChain;
+    mem::WeakRef<render::USwapChain> m_swapChain;
   };
 
-  class WindowBuilder : Builder<Window>
+  class WindowBuilder : IBuilder<UWindow>
   {
   public:
     WindowBuilder& SetName(const std::string& name);
-    WindowBuilder& SetSize(uint32_t width, uint32_t height);
+    WindowBuilder& SetSize(u32 width, u32 height);
 
   public:
-    Window*             BuildRaw() override;
-    mem::Ref<Window>    BuildRef() override;
-    mem::Scope<Window>  BuildScope() override;
+    [[nodiscard]] UWindow*             BuildRaw() override;
+    [[nodiscard]] mem::Ref<UWindow>    BuildRef() override;
+    [[nodiscard]] mem::Scope<UWindow>  BuildScope() override;
 
   public:
-    WindowDesc m_windowDesc;
+    u32         m_width;
+    u32         m_height;
+    std::string m_name;
   };
 }

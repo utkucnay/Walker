@@ -11,7 +11,12 @@ namespace wkr::mem
     Scope<T>(std::nullptr_t) {}
 
   public:
-    T* Get()
+    [[nodiscard]] T& Get()
+    {
+      return *ptr.get();
+    }
+
+    [[nodiscard]] T* GetPtr()
     {
       return ptr.get();
     }

@@ -1,45 +1,45 @@
 #pragma once
 
-#include "Render/Resource/Buffers.h"
+#include <Render/Resource/Buffers.h>
 #include <Render/Core/SwapChain.h>
 #include <Core/Window.h>
 
 namespace wkr::render
 {
-  class Renderer
+  class URenderer
   {
   public:
-    Renderer(Window* window);
-    ~Renderer();
+    URenderer(mem::WeakRef<UWindow> window);
+    ~URenderer();
 
   public:
     void Render();
-    void CreateSwapChain(Window* window);
+    void CreateSwapChain(mem::WeakRef<UWindow> window);
     void CreateResource();
     void LoadResources();
 
   private:
-    mem::Scope<Device> m_device;
+    mem::Ref<IDevice> m_device;
 
-    std::vector<mem::Scope<CommandAllocator>>  m_commandDirectAllocator;
-    mem::Scope<CommandList>       m_commandDirectList;
-    mem::Scope<CommandQueue>      m_commandDirectQueue;
+    std::vector<mem::Ref<ICommandAllocator>>  m_commandDirectAllocator;
+    mem::Ref<ICommandList>       m_commandDirectList;
+    mem::Ref<ICommandQueue>      m_commandDirectQueue;
 
 
-    std::vector<mem::Scope<CommandAllocator>>  m_commandCopyAllocator;
-    mem::Scope<CommandList>       m_commandCopyList;
-    mem::Scope<CommandQueue>      m_commandCopyQueue;
+    std::vector<mem::Ref<ICommandAllocator>>  m_commandCopyAllocator;
+    mem::Ref<ICommandList>       m_commandCopyList;
+    mem::Ref<ICommandQueue>      m_commandCopyQueue;
 
-    mem::Ref<SwapChain> m_swapChain;
+    mem::Ref<USwapChain> m_swapChain;
 
-    mem::Scope<rsc::Buffers> m_vertexBuffer;
-    mem::Scope<rsc::Buffers> m_vertexUploadBuffer;
+    mem::Ref<rsc::IBuffers> m_vertexBuffer;
+    mem::Ref<rsc::IBuffers> m_vertexUploadBuffer;
 
     //std::queue<ResourceLoadCommand> m_resourceCommandLoad;
   public:
-    static Device* GetDefaultDevice() { return s_defaultDevice.Get(); }
+    [[nodiscard]] static IDevice& GetDefaultDevice() { return s_defaultDevice.Get(); }
 
   private:
-    static inline mem::Scope<Device> s_defaultDevice;
+    static inline mem::Scope<IDevice> s_defaultDevice;
   };
 }

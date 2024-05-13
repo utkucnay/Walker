@@ -3,58 +3,58 @@
 
 namespace wkr::render::rsc
 {
-  HeapBuilder& HeapBuilder::SetSize(uint64_t size)
+  HeapBuilder& HeapBuilder::SetSize(u64 size)
   {
     m_size = size;
     return *this;
   }
 
-  HeapBuilder& HeapBuilder::SetType(Heap::Type type)
+  HeapBuilder& HeapBuilder::SetType(IHeap::Type type)
   {
     m_type = type;
     return *this;
   }
 
   HeapBuilder& HeapBuilder::SetCPUPageProperty(
-      Heap::CPUPageProperty cpuPageProperty)
+      IHeap::CPUPageProperty cpuPageProperty)
   {
     m_cpuPageProperty = cpuPageProperty;
     return *this;
   }
 
-  HeapBuilder& HeapBuilder::SetMemoryPool(Heap::MemoryPool memoryPool)
+  HeapBuilder& HeapBuilder::SetMemoryPool(IHeap::MemoryPool memoryPool)
   {
     m_memoryPool = memoryPool;
     return *this;
   }
 
-  HeapBuilder& HeapBuilder::SetAlignment(uint64_t alignment)
+  HeapBuilder& HeapBuilder::SetAlignment(u64 alignment)
   {
     m_alignment = alignment;
     return *this;
   }
 
-  HeapBuilder& HeapBuilder::SetFlag(Heap::Flag flag)
+  HeapBuilder& HeapBuilder::SetFlag(IHeap::Flag flag)
   {
     m_flag = flag;
     return *this;
   }
 
-  Heap* HeapBuilder::BuildRaw()
+  IHeap* HeapBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetHeapFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetHeapFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<Heap> HeapBuilder::BuildRef()
+  mem::Ref<IHeap> HeapBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetHeapFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetHeapFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<Heap> HeapBuilder::BuildScope()
+  mem::Scope<IHeap> HeapBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetHeapFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetHeapFactory()
+      ->CreateScope(*this);
   }
 }

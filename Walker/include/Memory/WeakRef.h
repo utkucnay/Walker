@@ -19,12 +19,12 @@ namespace wkr::mem
       m_ptr(ref.ptr());
     }
 
-    bool Expired()
+    b32 Expired() const
     {
       return m_ptr.expired();
     }
 
-    Ref<T> Lock()
+    Ref<T> Lock() const
     {
       Ref<T> ret;
       ret.ptr = m_ptr.lock();
@@ -33,7 +33,7 @@ namespace wkr::mem
 
   public:
     template<typename TConv>
-    operator WeakRef<TConv>()
+    explicit operator WeakRef<TConv>()
     {
       WeakRef<TConv> ret;
       ret.m_ptr = std::static_pointer_cast<TConv>(this->m_ptr.lock());
@@ -45,11 +45,6 @@ namespace wkr::mem
     {
       m_ptr = other.ptr;
       return *this;
-    };
-
-    bool operator==(void* comp) const
-    {
-      return m_ptr.get() == comp;
     };
 
   public:

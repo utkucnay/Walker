@@ -5,14 +5,14 @@
 
 namespace wkr::render::rsc::bar
 {
-  class DX12TransitionBarrier : public TransitionBarrier
+  class UDX12TransitionBarrier : public ITransitionBarrier
   {
   public:
-    DX12TransitionBarrier(TransitionBarrierBuilder* tbb);
-    ~DX12TransitionBarrier();
+    UDX12TransitionBarrier(TransitionBarrierBuilder& tbb);
+    ~UDX12TransitionBarrier();
 
   public:
-    void* GetNativeHandle() override final { return &m_resourceBarrier; }
+    NativeHandle GetNativeHandle() override final { return &m_resourceBarrier; }
 
   private:
     D3D12_RESOURCE_BARRIER m_resourceBarrier{};

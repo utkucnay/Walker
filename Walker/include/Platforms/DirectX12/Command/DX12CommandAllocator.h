@@ -6,18 +6,22 @@
 
 namespace wkr::render
 {
-  class DX12CommandAllocator : public CommandAllocator
+  class UDX12CommandAllocator : public ICommandAllocator
   {
   public:
-    DX12CommandAllocator(
-        CommandAllocatorBuilder* cab);
-    ~DX12CommandAllocator() override;
+    UDX12CommandAllocator(CommandAllocatorBuilder& cab);
+    ~UDX12CommandAllocator() override;
 
   public:
-    void* GetNativeHandle() override { return m_commandAllocator; }
+    NativeHandle GetNativeHandle() override { return m_commandAllocator; }
+    ICommandList::Type GetCommandListType() override final;
     void Reset() override final;
+
+  protected:
+    void Clone(ICommandAllocator& commandAllocator) override final;
 
   private:
     ID3D12CommandAllocator* m_commandAllocator;
+    ICommandList::Type      m_listType;
   };
 }

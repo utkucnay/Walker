@@ -6,42 +6,43 @@
 namespace wkr::render
 {
   //Builder
+
+  CommandListBuilder::CommandListBuilder(
+      mem::WeakRef<ICommandAllocator> commandAllocator)
+  {
+    m_commandAllocator = commandAllocator;
+  }
+
   CommandListBuilder& CommandListBuilder::SetCommandListType(
-      CommandList::Type listType)
+      ICommandList::Type listType)
   {
     m_listType = listType;
     return *this;
   }
 
-  CommandListBuilder& CommandListBuilder::SetCommandAllocator(
-      CommandAllocator* allocator)
-  {
-    m_commandAllocator = allocator;
-    return *this;
-  }
-
   CommandListBuilder& CommandListBuilder::SetPiplineState(
-      PipelineState* pipelineState)
+      mem::WeakRef<IPipelineState> pipelineState)
   {
-    m_pipelineState = pipelineState;
+    //TODO
+    //m_pipelineState = pipelineState;
     return *this;
   }
 
-  CommandList* CommandListBuilder::BuildRaw()
+  ICommandList* CommandListBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<CommandList> CommandListBuilder::BuildRef()
+  mem::Ref<ICommandList> CommandListBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<CommandList> CommandListBuilder::BuildScope()
+  mem::Scope<ICommandList> CommandListBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetCommandListFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
+      ->CreateScope(*this);
   }
 }

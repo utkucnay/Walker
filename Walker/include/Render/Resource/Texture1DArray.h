@@ -4,10 +4,10 @@
 
 namespace wkr::render::rsc
 {
-  class Texture1DArray : public Texture
+  class ITexture1DArray : public ITexture
   {
   public:
-    virtual ~Texture1DArray() override {}
+    virtual ~ITexture1DArray() override {}
 
   public:
     std::string GetTypeName() override final { return "Texture1DArray"; }

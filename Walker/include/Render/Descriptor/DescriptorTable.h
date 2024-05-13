@@ -2,7 +2,7 @@
 
 namespace wkr::render
 {
-  class DescriptorTable
+  class IDescriptorTable
   {
   public:
     virtual void* GetNativeHandle() = 0;

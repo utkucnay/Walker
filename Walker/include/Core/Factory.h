@@ -2,18 +2,18 @@
 
 #define REGISTER_FACTORY(Type, SubType, ...)                          \
   template<typename... Args>                                          \
-  class SubType##FactoryTemp : public Factory<Type, Args...>          \
+  class SubType##FactoryTemp : public IFactory<Type, Args...>         \
   {                                                                   \
   public:                                                             \
-    Type*              CreateFactoryRaw  (Args... args)               \
+    Type*              CreateRaw  (Args... args)                      \
     {                                                                 \
       return new SubType(args...);                                    \
     }                                                                 \
-    mem::Ref<Type>     CreateFactoryRef  (Args... args)               \
+    mem::Ref<Type>     CreateRef  (Args... args)                      \
     {                                                                 \
       return mem::Ref<SubType>::Create(args...);                      \
     }                                                                 \
-    mem::Scope<Type>   CreateFactoryScope(Args... args)               \
+    mem::Scope<Type>   CreateScope(Args... args)                      \
     {                                                                 \
       return mem::Scope<SubType>::Create(args...);                    \
     }                                                                 \
@@ -24,11 +24,11 @@
 namespace wkr
 {
   template <typename T,typename... Args>
-  class Factory
+  class IFactory
   {
   public:
-    virtual T*              CreateFactoryRaw  (Args... args) = 0;
-    virtual mem::Ref<T>     CreateFactoryRef  (Args... args) = 0;
-    virtual mem::Scope<T>   CreateFactoryScope(Args... args) = 0;
+    virtual T*              CreateRaw  (Args... args) = 0;
+    virtual mem::Ref<T>     CreateRef  (Args... args) = 0;
+    virtual mem::Scope<T>   CreateScope(Args... args) = 0;
   };
 }

@@ -4,15 +4,15 @@
 
 namespace wkr::render
 {
-  DX12DescriptorHeap::DX12DescriptorHeap(DescriptorHeapBuilder* dhb)
+  UDX12DescriptorHeap::UDX12DescriptorHeap(DescriptorHeapBuilder& dhb)
   {
-    ID3D12Device* nDevice = static_cast<ID3D12Device*>(Renderer::GetDefaultDevice()
-        ->GetNativeHandle());
+    ID3D12Device* nDevice = static_cast<ID3D12Device*>(URenderer::GetDefaultDevice()
+        .GetNativeHandle());
 
     D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{};
-    nDHeapDesc.NumDescriptors = dhb->m_count;
-    nDHeapDesc.Type   = static_cast<D3D12_DESCRIPTOR_HEAP_TYPE>(dhb->m_type);
-    nDHeapDesc.Flags  = static_cast<D3D12_DESCRIPTOR_HEAP_FLAGS>(dhb->m_flags);
+    nDHeapDesc.NumDescriptors = dhb.m_count;
+    nDHeapDesc.Type   = static_cast<D3D12_DESCRIPTOR_HEAP_TYPE>(dhb.m_type);
+    nDHeapDesc.Flags  = static_cast<D3D12_DESCRIPTOR_HEAP_FLAGS>(dhb.m_flags);
 
     HRESULT hr = nDevice->CreateDescriptorHeap(&nDHeapDesc,
         IID_PPV_ARGS(&m_descriptorHeap));
@@ -21,12 +21,12 @@ namespace wkr::render
     WKR_CORE_LOG("Created Descriptor Heap")
   }
 
-  DX12DescriptorHeap::~DX12DescriptorHeap()
+  UDX12DescriptorHeap::~UDX12DescriptorHeap()
   {
     m_descriptorHeap->Release();
   }
 
-  uint32_t DX12DescriptorHeap::GetCount()
+  u32 UDX12DescriptorHeap::GetCount()
   {
     D3D12_DESCRIPTOR_HEAP_DESC desc;
 
@@ -34,27 +34,27 @@ namespace wkr::render
     return desc.NumDescriptors;
   }
 
-  DescriptorHeap::Type DX12DescriptorHeap::GetType()
+  IDescriptorHeap::Type UDX12DescriptorHeap::GetType()
   {
     D3D12_DESCRIPTOR_HEAP_DESC desc;
 
     desc = m_descriptorHeap->GetDesc();
-    return static_cast<DescriptorHeap::Type>(desc.Type);
+    return static_cast<IDescriptorHeap::Type>(desc.Type);
   }
 
-  DescriptorHeap::Flags DX12DescriptorHeap::GetFlags()
+  IDescriptorHeap::Flags UDX12DescriptorHeap::GetFlags()
   {
     D3D12_DESCRIPTOR_HEAP_DESC desc;
 
     desc = m_descriptorHeap->GetDesc();
-    return static_cast<DescriptorHeap::Flags>(desc.Flags);
+    return static_cast<IDescriptorHeap::Flags>(desc.Flags);
   }
 
-  void DX12DescriptorHeap::Bind(
-      std::vector<mem::WeakRef<rsc::Resource>> resources)
+  void UDX12DescriptorHeap::Bind(
+      const std::vector<mem::WeakRef<rsc::IResource>>& resources)
   {
-    auto nDevice = static_cast<ID3D12Device*>(Renderer::GetDefaultDevice()
-        ->GetNativeHandle());
+    auto nDevice = static_cast<ID3D12Device*>(URenderer::GetDefaultDevice()
+        .GetNativeHandle());
     auto rtvSize = nDevice->
       GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
@@ -69,9 +69,9 @@ namespace wkr::render
       WKR_CORE_LOG("Binding Render Texture on Descriptor Heap")
         switch (GetType())
         {
-          case DescriptorHeap::Type::RTV:
+          case IDescriptorHeap::Type::RTV:
             {
-              m_resourceViews.push_back(mem::Scope<view::DX12RenderTargetView>
+              m_resourceViews.push_back(mem::Ref<view::UDX12RenderTargetView>
                   ::Create(rtvHandle, resources[i]));
             } break;
 

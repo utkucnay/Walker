@@ -5,19 +5,19 @@
 
 namespace wkr::render
 {
-  class DX12CommandQueue : public CommandQueue
+  class UDX12CommandQueue : public ICommandQueue
   {
   public:
-    DX12CommandQueue(CommandQueueBuilder* cqb);
-    ~DX12CommandQueue() override;
+    UDX12CommandQueue(CommandQueueBuilder& cqb);
+    ~UDX12CommandQueue() override;
 
   public:
-    void* GetNativeHandle() override { return m_commandQueue; }
+    NativeHandle GetNativeHandle() override { return m_commandQueue; }
 
     void ExecuteCommandList(
-        std::vector<CommandList*> commandLists) override final;
+        const std::vector<mem::Ref<ICommandList>>& commandLists) override final;
 
-    void Signal(Fence* fence, int frameIndex) override final;
+    void Signal(IFence& fence, i32 frameIndex) override final;
 
   private:
     ID3D12CommandQueue* m_commandQueue;

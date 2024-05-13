@@ -7,22 +7,30 @@
 
 namespace wkr::render
 {
-  class DX12Fence : public Fence
+  class UDX12Fence : public IFence
   {
   public:
-    DX12Fence(FenceBuilder* fb);
-    ~DX12Fence() override;
+    UDX12Fence(FenceBuilder& fb);
+    ~UDX12Fence() override;
 
   public:
     void FenceEvent(int frameIndex) override final;
-    void* GetNativeHandle(int frameIndex) override final { return m_fence[frameIndex]; }
     void IncFenceValue(int frameIndex) { m_fenceValue[frameIndex]++; }
 
-  public:
-    std::vector<uint64_t> m_fenceValue;
-    HANDLE        m_fenceEvent;
+    NativeHandle GetNativeHandle(int frameIndex) override final { return m_fence[frameIndex]; }
+
+  protected:
+    void Clone(IFence& fence)     override final;
 
   private:
+    static void CreateWithBuilder(UDX12Fence& fence, FenceBuilder& fb);
+
+  public:
+    std::vector<u64>  m_fenceValue;
+    HANDLE            m_fenceEvent;
+
+  private:
+    IFence::Flag m_flag;
     std::vector<ID3D12Fence*> m_fence;
   };
 }

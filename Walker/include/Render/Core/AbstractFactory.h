@@ -8,31 +8,31 @@ namespace wkr::render
   {
   public:
     //Core
-    virtual mem::Scope<Factory<Device, DeviceBuilder*>>
+    virtual mem::Scope<IFactory<IDevice, DeviceBuilder&>>
       GetDeviceFactory()        = 0;
-    virtual mem::Scope<Factory<Fence, FenceBuilder*>>
+    virtual mem::Scope<IFactory<IFence, FenceBuilder&>>
       GetFenceFactory()         = 0;
-    virtual mem::Scope<Factory<SwapChain, SwapChainBuilder*>>
+    virtual mem::Scope<IFactory<USwapChain, SwapChainBuilder&>>
       GetSwapChainFactory()     = 0;
     //virtual mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory() = 0;
     //virtual mem::Scope<Factory<RootSignature>>  GetRootSignatureFactory() = 0;
 
     //Command
-    virtual mem::Scope<Factory<CommandQueue, CommandQueueBuilder*>>
+    virtual mem::Scope<IFactory<ICommandQueue, CommandQueueBuilder&>>
       GetCommandQueueFactory()    = 0;
-    virtual mem::Scope<Factory<CommandList, CommandListBuilder*>>
+    virtual mem::Scope<IFactory<ICommandList, CommandListBuilder&>>
       GetCommandListFactory()     = 0;
-    virtual mem::Scope<Factory<CommandAllocator, CommandAllocatorBuilder*>>
+    virtual mem::Scope<IFactory<ICommandAllocator, CommandAllocatorBuilder&>>
       GetCommandAllocaterFactory()= 0;
 
     //Descriptor
-    virtual mem::Scope<Factory<DescriptorHeap, DescriptorHeapBuilder*>>
+    virtual mem::Scope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
       GetDescriptorHeapFactory() = 0;
 
     //Resource
-    virtual mem::Scope<Factory<rsc::Heap, rsc::HeapBuilder*>>
+    virtual mem::Scope<IFactory<rsc::IHeap, rsc::HeapBuilder&>>
       GetHeapFactory()    = 0;
-    virtual mem::Scope<Factory<rsc::Buffers, rsc::ResourceBuilder<rsc::Buffers>*>>
+    virtual mem::Scope<IFactory<rsc::IBuffers, rsc::ResourceBuilder<rsc::IBuffers>&>>
       GetBuffersFactory() = 0;
     //virtual mem::Scope<Factory<rsc::Texture1D>> GetTexture1DFactory() = 0;
     //virtual mem::Scope<Factory<rsc::Texture2D>> GetTexture2DFactory() = 0;
@@ -41,7 +41,7 @@ namespace wkr::render
     //virtual mem::Scope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory() = 0;
 
     //Barriers
-    virtual mem::Scope<Factory<rsc::bar::TransitionBarrier, rsc::bar::TransitionBarrierBuilder*>>
+    virtual mem::Scope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
       GetResourceBarrierTransition() = 0;
   };
 }

@@ -4,17 +4,17 @@
 
 namespace wkr::render::rsc
 {
-  class Texture2DArray : public Texture
+  class ITexture2DArray : public ITexture
   {
   public:
-    virtual ~Texture2DArray() override {}
+    virtual ~ITexture2DArray() override {}
 
   public:
     std::string GetTypeName() override final { return "Texture2DArray"; }
 
     virtual uint64_t    GetWidth()  = 0;
     virtual uint64_t    GetHeight() = 0;
-    virtual SampleDesc  GetMSAA()   = 0;
+    virtual FSample  GetMSAA()   = 0;
     virtual uint64_t    GetArraySize() = 0;
 
   public:

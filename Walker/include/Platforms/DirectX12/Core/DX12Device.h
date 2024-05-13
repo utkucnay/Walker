@@ -7,16 +7,16 @@
 
 namespace wkr::render
 {
-  class DX12Device : public Device
+  class UDX12Device : public IDevice
   {
   public:
-    DX12Device(DeviceBuilder* db);
-    ~DX12Device() override;
+    UDX12Device(DeviceBuilder& db);
+    ~UDX12Device() override;
 
   public:
-    void* GetNativeHandle() override { return device; }
+    NativeHandle GetNativeHandle() override { return m_device; }
 
   private:
-    ID3D12Device* device;
+    ID3D12Device* m_device;
   };
 }

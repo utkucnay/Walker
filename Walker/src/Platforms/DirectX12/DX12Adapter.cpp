@@ -2,39 +2,38 @@
 
 namespace wkr::render
 {
-  DX12Adapter::~DX12Adapter()
+  UDX12Adapter::~UDX12Adapter()
   {
-    m_adapter->Release();
   }
 
-  std::vector<mem::Ref<Adapter>> DX12Adapter::GetAllAdapters()
+  std::vector<mem::Ref<IAdapter>> UDX12Adapter::GetAllAdapters()
   {
-    std::vector<mem::Ref<Adapter>> ret;
+    std::vector<mem::Ref<IAdapter>> ret;
     IDXGIAdapter1* nAdapter;
     int adapterIndex = 0;
 
-    while(DX12Factory::GetFactory()->EnumAdapters1(
+    while(UDX12Factory::GetFactory()->EnumAdapters1(
           adapterIndex,
           &nAdapter) != DXGI_ERROR_NOT_FOUND)
     {
-      mem::Ref<DX12Adapter> adapter = mem::Ref<DX12Adapter>::Create(nAdapter);
+      mem::Ref<UDX12Adapter> adapter = mem::Ref<UDX12Adapter>::Create(nAdapter);
       ret.push_back(adapter);
       adapterIndex++;
     }
     return ret;
   }
 
-  mem::Scope<char> DX12Adapter::GetName()
+  mem::Scope<char> UDX12Adapter::GetName()
   {
     auto ret = mem::Scope<char>::Create(128);
     DXGI_ADAPTER_DESC desc;
 
     m_adapter->GetDesc(&desc);
-    wcstombs_s(NULL, ret.Get(), 128, desc.Description, 128);
+    wcstombs_s(NULL, ret.GetPtr(), 128, desc.Description, 128);
     return ret;
   }
 
-  uint32_t DX12Adapter::GetVendorID()
+  u32 UDX12Adapter::GetVendorID()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -42,7 +41,7 @@ namespace wkr::render
     return desc.VendorId;
   }
 
-  uint32_t DX12Adapter::GetDeviceID()
+  u32 UDX12Adapter::GetDeviceID()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -50,7 +49,7 @@ namespace wkr::render
     return desc.DeviceId;
   }
 
-  uint32_t DX12Adapter::GetSubSysID()
+  u32 UDX12Adapter::GetSubSysID()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -58,7 +57,7 @@ namespace wkr::render
     return desc.SubSysId;
   }
 
-  uint32_t DX12Adapter::GetRevision()
+  u32 UDX12Adapter::GetRevision()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -66,7 +65,7 @@ namespace wkr::render
     return desc.Revision;
   }
 
-  uint64_t DX12Adapter::GetDedicatedVideoMemory()
+  u64 UDX12Adapter::GetDedicatedVideoMemory()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -74,7 +73,7 @@ namespace wkr::render
     return desc.DedicatedVideoMemory;
   }
 
-  uint64_t DX12Adapter::GetDedicatedSystemMemory()
+  u64 UDX12Adapter::GetDedicatedSystemMemory()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -82,7 +81,7 @@ namespace wkr::render
     return desc.DedicatedSystemMemory;
   }
 
-  uint64_t DX12Adapter::GetSharedSystemMemory()
+  u64 UDX12Adapter::GetSharedSystemMemory()
   {
     DXGI_ADAPTER_DESC desc;
 
@@ -90,7 +89,7 @@ namespace wkr::render
     return desc.SharedSystemMemory;
   }
 
-  Luid DX12Adapter::GetAdapterLuid()
+  Luid UDX12Adapter::GetAdapterLuid()
   {
     DXGI_ADAPTER_DESC desc;
     Luid ret;
@@ -99,5 +98,10 @@ namespace wkr::render
     ret.lowPart = desc.AdapterLuid.LowPart;
     ret.highPart = desc.AdapterLuid.HighPart;
     return ret;
+  }
+
+  void UDX12Adapter::Clone(IAdapter& adapter)
+  {
+    static_cast<UDX12Adapter&>(adapter).m_adapter = this->m_adapter;
   }
 }

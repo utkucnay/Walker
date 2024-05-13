@@ -10,10 +10,7 @@
 
 namespace wkr::render
 {
-  class Device;
-  class CommandQueueBuilder;
-
-  class CommandQueue
+  class ICommandQueue
   {
   public:
     enum class Flags
@@ -30,34 +27,35 @@ namespace wkr::render
     };
 
   public:
-    virtual ~CommandQueue() {}
+    virtual ~ICommandQueue() {}
 
   public:
     virtual void ExecuteCommandList(
-        std::vector<CommandList*> commandLists) = 0;
+        const std::vector<mem::Ref<ICommandList>>& commandLists) = 0;
 
-    virtual void Signal(Fence* fence, int frameIndex) = 0;
+    virtual void Signal(IFence& fence, int frameIndex) = 0;
 
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeHandle GetNativeHandle() = 0;
   };
 
-  class CommandQueueBuilder : Builder<CommandQueue>
+  class CommandQueueBuilder : IBuilder<ICommandQueue>
   {
   public:
-    CommandQueueBuilder& SetCommandListType(CommandList::Type listType);
+    CommandQueueBuilder& SetCommandListType(
+        ICommandList::Type listType);
     CommandQueueBuilder& SetCommandQueuePriority(
-        CommandQueue::Priority priority);
+        ICommandQueue::Priority priority);
     CommandQueueBuilder& SetCommandQueueFlags(
-        CommandQueue::Flags    flags);
+        ICommandQueue::Flags    flags);
 
   public:
-    CommandQueue*             BuildRaw  () override;
-    mem::Ref<CommandQueue>    BuildRef  () override;
-    mem::Scope<CommandQueue>  BuildScope() override;
+    [[nodiscard]] ICommandQueue*             BuildRaw  () override;
+    [[nodiscard]] mem::Ref<ICommandQueue>    BuildRef  () override;
+    [[nodiscard]] mem::Scope<ICommandQueue>  BuildScope() override;
 
   public:
-    CommandList::Type       m_commandListType{};
-    CommandQueue::Priority  m_commandQueuePriority{};
-    CommandQueue::Flags     m_commandQueueFlags{};
+    ICommandList::Type       m_commandListType{};
+    ICommandQueue::Priority  m_commandQueuePriority{};
+    ICommandQueue::Flags     m_commandQueueFlags{};
   };
 }

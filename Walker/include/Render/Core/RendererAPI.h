@@ -40,7 +40,7 @@ namespace wkr::render
     }
 
     static APIType GetAPI() { return s_Api; }
-    static AbstractFactory* GetAbstractFactory()
+    [[nodiscard]] static AbstractFactory& GetAbstractFactory()
     { return s_abstractFactory.Get(); }
     //TODO(utku): ChangeAPI at Runtime
     static void ChangeAPI(APIType type) { s_Api = type; }

@@ -2,7 +2,7 @@
 
 namespace wkr::render::view
 {
-  DX12RenderTargetView::~DX12RenderTargetView()
+  UDX12RenderTargetView::~UDX12RenderTargetView()
   {
   }
 }

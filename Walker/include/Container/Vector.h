@@ -9,7 +9,7 @@ namespace wkr::ctnr
   {
 
   private:
-    mem::Scope<mem::Allocator> m_allocator;
+    mem::Scope<mem::IAllocator> m_allocator;
     T* ptr;
   };
 }

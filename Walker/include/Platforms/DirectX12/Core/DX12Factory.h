@@ -4,7 +4,7 @@
 
 namespace wkr::render
 {
-  class DX12Factory
+  class UDX12Factory
   {
     public:
       static void Init()

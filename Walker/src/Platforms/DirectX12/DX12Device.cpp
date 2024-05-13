@@ -2,18 +2,20 @@
 
 namespace wkr::render
 {
-  DX12Device::DX12Device(DeviceBuilder* db)
+  UDX12Device::UDX12Device(DeviceBuilder& db)
   {
+    auto lAdapter = db.m_adapter.Lock();
+
     HRESULT hr = D3D12CreateDevice(
-        db->m_adapter == NULL ? NULL : (IDXGIAdapter1*)db->m_adapter->GetNativeHandle(),
+        lAdapter == NULL ? NULL : (IDXGIAdapter1*)lAdapter->GetNativeHandle(),
         D3D_FEATURE_LEVEL_12_2,
-        IID_PPV_ARGS(&device));
+        IID_PPV_ARGS(&m_device));
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Device");
 
   }
 
-  DX12Device::~DX12Device()
+  UDX12Device::~UDX12Device()
   {
-    device->Release();
+    m_device->Release();
   }
 }

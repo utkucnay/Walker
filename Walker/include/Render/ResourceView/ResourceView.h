@@ -4,28 +4,35 @@
 
 namespace wkr::render::view
 {
-  class ResourceView
+  class UResourceView
   {
   public:
-    virtual ~ResourceView() {}
+    virtual ~UResourceView() {}
 
   public:
-    template<typename T>
-    T* GetResource()
+    b32 IsResourceExpired()
     {
-      if(m_resource.Expired()) return NULL;
+      return m_resource.Expired();
+    }
 
-      WKR_CORE_ERROR_COND(T::GetStaticTypeName() != m_resource.Lock()->GetTypeName()
-          , "Resource Didn't Match " << T::GetStaticTypeName() << " " << m_resource.Lock()->GetTypeName());
+    template<typename T>
+    mem::WeakRef<T> GetResource()
+    {
+      WKR_CORE_ERROR_COND(
+          T::GetStaticTypeName() != m_resource.Lock()->GetTypeName(),
+          "Resource Didn't Match "
+            << T::GetStaticTypeName()
+            << " "
+            << m_resource.Lock()->GetTypeName());
 
-      return static_cast<T*>(m_resource.Lock().Get());
+      return static_cast<mem::WeakRef<T>>(m_resource);
     }
 
   public:
-    virtual void*       GetNativeHandle() = 0;
-    virtual std::string GetTypeName()     = 0;
+    virtual NativeHandle  GetNativeHandle() = 0;
+    virtual std::string   GetTypeName()     = 0;
 
   protected:
-    mem::WeakRef<rsc::Resource> m_resource;
+    mem::WeakRef<rsc::IResource> m_resource;
   };
 }

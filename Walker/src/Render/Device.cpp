@@ -3,27 +3,28 @@
 
 namespace wkr::render
 {
-  DeviceBuilder& DeviceBuilder::SetAdapter(Adapter* adapter)
+  DeviceBuilder& DeviceBuilder::SetAdapter(
+      mem::WeakRef<IAdapter> adapter)
   {
     m_adapter = adapter;
     return *this;
   }
 
-  Device* DeviceBuilder::BuildRaw()
+  IDevice* DeviceBuilder::BuildRaw()
   {
-    return RendererAPI::GetAbstractFactory()->GetDeviceFactory()
-      ->CreateFactoryRaw(this);
+    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
+      ->CreateRaw(*this);
   }
 
-  mem::Ref<Device> DeviceBuilder::BuildRef()
+  mem::Ref<IDevice> DeviceBuilder::BuildRef()
   {
-    return RendererAPI::GetAbstractFactory()->GetDeviceFactory()
-      ->CreateFactoryRef(this);
+    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
+      ->CreateRef(*this);
   }
 
-  mem::Scope<Device> DeviceBuilder::BuildScope()
+  mem::Scope<IDevice> DeviceBuilder::BuildScope()
   {
-    return RendererAPI::GetAbstractFactory()->GetDeviceFactory()
-      ->CreateFactoryScope(this);
+    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
+      ->CreateScope(*this);
   }
 }

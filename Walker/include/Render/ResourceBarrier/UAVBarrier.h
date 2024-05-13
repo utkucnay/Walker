@@ -5,23 +5,23 @@
 
 namespace wkr::render::rsc::bar
 {
-  class UAVBarrier : public ResourceBarrier
+  class IUAVBarrier : public IResourceBarrier
   {
   public:
-    virtual ~UAVBarrier() {}
+    virtual ~IUAVBarrier() {}
   };
 
-  class UAVBarrierBuilder : Builder<UAVBarrier>
+  class UAVBarrierBuilder : IBuilder<IUAVBarrier>
   {
   public:
-    UAVBarrierBuilder& SetResource(Resource* resource);
+    UAVBarrierBuilder(mem::WeakRef<IResource> resource);
 
   public:
-    UAVBarrier*             BuildRaw()    override final;
-    mem::Ref<UAVBarrier>    BuildRef()    override final;
-    mem::Scope<UAVBarrier>  BuildScope()  override final;
+    [[nodiscard]] IUAVBarrier*             BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<IUAVBarrier>    BuildRef()    override final;
+    [[nodiscard]] mem::Scope<IUAVBarrier>  BuildScope()  override final;
 
   public:
-    Resource* m_resource;
+    mem::WeakRef<IResource> m_resource;
   };
 }

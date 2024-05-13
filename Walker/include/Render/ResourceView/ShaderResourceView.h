@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class ShaderResourceView : public ResourceView
+  class UShaderResourceView : public UResourceView
   {
   public:
-    virtual ~ShaderResourceView() override {}
+    virtual ~UShaderResourceView() override {}
 
   public:
     std::string GetTypeName() override final { return "ShaderResourceView"; }

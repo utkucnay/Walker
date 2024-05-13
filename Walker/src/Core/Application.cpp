@@ -8,33 +8,32 @@
 
 namespace wkr
 {
-  Application::Application(
-      const ApplicationSpecs& applicationSpecs)
+  UApplication::UApplication(
+      const FApplicationSpecs& applicationSpecs)
   {
     WKR_CORE_LOG("Application Starting");
     appSpecs = applicationSpecs;
 
     ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
 
-    m_mainWindow = mem::Scope<WindowBuilder>::Create()
-      ->SetName("Walker Engine")
+    m_mainWindow = mem::Scope<WindowBuilder>::Create().Get()
+      .SetName("Walker Engine")
       .SetSize(1280, 720)
-      .BuildScope()
-      ;
+      .BuildRef();
 
-    m_renderer = mem::Scope<render::Renderer>::Create(m_mainWindow.Get());
+    m_renderer = mem::Ref<render::URenderer>::Create(m_mainWindow);
 
     m_renderer->CreateResource();
     m_renderer->LoadResources();
   }
 
-  Application::~Application()
+  UApplication::~UApplication()
   {
-    m_renderer.Release();
-    m_mainWindow.Release();
+    m_renderer.Reset();
+    m_mainWindow.Reset();
   }
 
-  void Application::Run()
+  void UApplication::Run()
   {
     while (m_mainWindow->IsShouldClose())
     {

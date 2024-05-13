@@ -5,37 +5,37 @@
 
 namespace wkr::render
 {
-  class DX12SwapChain : public SwapChain
+  class UDX12SwapChain : public USwapChain
   {
   public:
-    DX12SwapChain(SwapChainBuilder* scb);
-    ~DX12SwapChain() override;
+    UDX12SwapChain(SwapChainBuilder& scb);
+    ~UDX12SwapChain() override;
 
   public:
-    void WindowSizeEvent(int width, int height) override final;
-    void FullscreenEvent(bool isTrue) override final;
+    void WindowSizeEvent(u32 width, u32 height) override final;
+    void FullscreenEvent(b64 isTrue) override final;
 
     void SwapBuffers() override final;
 
-    void* GetNativeHandle() override final { return m_swapChain; }
+    NativeHandle GetNativeHandle() override final { return m_swapChain; }
 
-    ModeDesc          GetBufferDesc()   override final;
-    SampleDesc        GetSampleDesc()   override final;
-    Usage             GetBufferUsage()  override final;
-    uint32_t          GetBufferCount()  override final;
-    SwapChain::Effect GetSwapEffect()   override final;
-    SwapChain::Flag   GetFlag()         override final;
+    u32                   GetBufferCount()  override final;
+    FSample            GetSampleDesc()   override final;
+    USwapChain::Flag      GetFlag()         override final;
+    USwapChain::Effect    GetSwapEffect()   override final;
+    UDisplay::FModeDesc   GetBufferDesc()   override final;
+    rsc::IResource::Usage GetBufferUsage()  override final;
 
-    void Present(uint8_t syncInterval, uint8_t flags) override final;
+    void Present(u8 syncInterval, u8 flags) override final;
 
   private:
-    mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(SwapChainBuilder* scb);
+    mem::Scope<DXGI_SWAP_CHAIN_DESC> TranslateDesc(SwapChainBuilder& scb);
     void SetupEvents();
     void DestroyEvents();
 
   private:
     IDXGISwapChain3*  m_swapChain;
 
-    std::vector<mem::Ref<rsc::Texture2D>> m_textures;
+    std::vector<mem::Ref<rsc::ITexture2D>> m_textures;
   };
 }

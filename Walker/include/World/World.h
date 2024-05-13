@@ -2,7 +2,7 @@
 
 namespace wkr
 {
-  class World
+  class UWorld
   {
 
   };

@@ -5,16 +5,16 @@
 
 namespace wkr::render::rsc
 {
-  class DX12Buffers : public Buffers
+  class UDX12Buffers : public IBuffers
   {
   public:
-    DX12Buffers(ResourceBuilder<Buffers>* rb);
-    ~DX12Buffers() override;
+    UDX12Buffers(ResourceBuilder<IBuffers>& rb);
+    ~UDX12Buffers() override;
 
   public:
-    virtual void* GetNativeHandle() override { return m_resource; }
-    virtual Resource::State GetState() override { return Resource::State::Common; };
-    virtual uint64_t GetSize() override { return 0; };
+    virtual NativeHandle GetNativeHandle() override { return m_resource; }
+    virtual IResource::State GetState() override { return IResource::State::Common; };
+    virtual u64 GetSize() override { return 0; };
 
   private:
     ID3D12Resource* m_resource;

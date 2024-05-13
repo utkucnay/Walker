@@ -3,18 +3,21 @@
 #include <Core/Window.h>
 
 #include <Render/Core/Fence.h>
+#include <Render/Core/Display.h>
 #include <Render/Core/RendererStructs.h>
 
 #include <Render/Command/Command.h>
 
-#include <Render/Descriptor/DescriptorHeap.h>
+#include <Render/Resource/Resource.h>
 #include <Render/Resource/Texture2D.h>
+
+#include <Render/Descriptor/DescriptorHeap.h>
 
 #include <Render/ResourceView/RenderTargetView.h>
 
 namespace wkr
 {
-  class Window;
+  class UWindow;
 }
 
 namespace wkr::render
@@ -23,10 +26,10 @@ namespace wkr::render
 
   namespace view
   {
-    class RenderTargetView;
+    class URenderTargetView;
   }
 
-  class SwapChain
+  class USwapChain
   {
   public:
     enum class Effect
@@ -37,7 +40,7 @@ namespace wkr::render
       FlipDiscard     = 4,
     };
 
-    enum class Flag : uint32_t
+    enum class Flag : u32
     {
       Nonprerotated                         = 1,
       AllowModeSwitch                       = 2,
@@ -54,7 +57,7 @@ namespace wkr::render
       RestrictedToAllHolographicDisplays    = 4096,
     };
 
-    enum class VsyncDesc : uint8_t
+    enum class VsyncDesc : u8
     {
       None            = 0,
       DoubleBuffering = 1,
@@ -62,73 +65,68 @@ namespace wkr::render
     };
 
   public:
-    virtual ~SwapChain() {}
+    virtual ~USwapChain() {}
 
   public:
-    virtual void WindowSizeEvent(int width, int height) = 0;
-    virtual void FullscreenEvent(bool isTrue) = 0;
+    virtual void WindowSizeEvent(u32 width, u32 height) = 0;
+    virtual void FullscreenEvent(b64 isTrue) = 0;
 
     virtual void SwapBuffers() = 0;
 
     virtual void* GetNativeHandle() = 0;
 
-    virtual ModeDesc          GetBufferDesc() = 0;
-    virtual SampleDesc        GetSampleDesc() = 0;
-    virtual Usage             GetBufferUsage() = 0;
-    virtual uint32_t          GetBufferCount() = 0;
-    virtual SwapChain::Effect GetSwapEffect() = 0;
-    virtual SwapChain::Flag   GetFlag() = 0;
+    virtual u32                   GetBufferCount()  = 0;
+    virtual FSample            GetSampleDesc()   = 0;
+    virtual USwapChain::Flag      GetFlag()         = 0;
+    virtual USwapChain::Effect    GetSwapEffect()   = 0;
+    virtual UDisplay::FModeDesc   GetBufferDesc()   = 0;
+    virtual rsc::IResource::Usage GetBufferUsage()  = 0;
 
-    virtual Fence* GetCurrentFence() { return m_fence.Get(); }
+    [[nodiscard]] virtual IFence& GetCurrentFence() { return m_fence.Get(); }
 
-    virtual void Present(uint8_t syncInterval, uint8_t flags) = 0;
+    virtual void Present(u8 syncInterval, u8 flags) = 0;
 
   public:
-    virtual uint32_t GetFrameIndex() { return m_frameIndex; }
-    view::RenderTargetView* GetCurrentRenderTarget()
+    virtual u32 GetFrameIndex() { return m_frameIndex; }
+    [[nodiscard]] mem::Ref<view::URenderTargetView> GetCurrentRenderTarget()
     {
-      return m_descripHeap->Get<view::RenderTargetView>(GetFrameIndex());
+      return m_descripHeap->Get<view::URenderTargetView>(GetFrameIndex());
     }
 
   protected:
     WindowResizeEvent::Event        m_resizeEvent;
     WindowSetFullscreenEvent::Event m_fullscreenEvent;
 
-    uint32_t m_frameIndex;
+    u32 m_frameIndex;
 
-    mem::Scope<Fence> m_fence;
-
-    mem::Scope<DescriptorHeap> m_descripHeap;
+    mem::Scope<IFence> m_fence;
+    mem::Ref<IDescriptorHeap> m_descripHeap;
   };
 
-  class SwapChainBuilder : Builder<SwapChain>
+  class SwapChainBuilder : IBuilder<USwapChain>
   {
   public:
-    SwapChainBuilder();
+    SwapChainBuilder(
+        mem::WeakRef<UWindow> window,
+        mem::WeakRef<ICommandQueue> commandQueue);
 
   public:
-    SwapChainBuilder& SetCommandQueue(CommandQueue* commandQueue);
-    SwapChainBuilder& SetVsync(SwapChain::VsyncDesc desc);
-    SwapChainBuilder& SetMSAA(uint32_t count, uint32_t quality);
-    SwapChainBuilder& SetDevice(Device* device);
-    SwapChainBuilder& SetWindow(Window* window);
+    SwapChainBuilder& SetVsync(USwapChain::VsyncDesc desc);
+    SwapChainBuilder& SetMSAA(u32 count, u32 quality);
 
   public:
-    SwapChain*            BuildRaw() override;
-    mem::Ref<SwapChain>   BuildRef() override;
-    mem::Scope<SwapChain> BuildScope() override;
+    [[nodiscard]] USwapChain*            BuildRaw() override;
+    [[nodiscard]] mem::Ref<USwapChain>   BuildRef() override;
+    [[nodiscard]] mem::Scope<USwapChain> BuildScope() override;
 
   public:
-    Device*           m_device{};
-    CommandQueue*     m_commandQueue{};
-    ModeDesc          m_bufferDesc{};
-    SampleDesc        m_sampleDesc{};
-    Usage             m_bufferUsage{};
-    uint32_t          m_bufferCount{};
-    Window*           m_window{};
-    SwapChain::Effect m_swapEffect{};
-    SwapChain::Flag   m_flag{};
-
-    friend class SwapChain;
+    u32                         m_bufferCount{};
+    FSample                  m_sampleDesc{};
+    USwapChain::Flag            m_flag{};
+    USwapChain::Effect          m_swapEffect{};
+    mem::WeakRef<UWindow>       m_window{};
+    UDisplay::FModeDesc         m_bufferDesc{};
+    rsc::IResource::Usage       m_bufferUsage{};
+    mem::WeakRef<ICommandQueue> m_commandQueue{};
   };
 }

@@ -3,7 +3,7 @@
 namespace wkr
 {
   template<typename T, typename... Args>
-  class Builder
+  class IBuilder
   {
   public:
     virtual T*              BuildRaw  (Args... args) = 0;

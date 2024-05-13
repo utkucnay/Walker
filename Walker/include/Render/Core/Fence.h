@@ -4,11 +4,13 @@
 
 namespace wkr::render
 {
-  class Device;
-  class FenceBuilder;
+  class IDevice;
 
-  class Fence
+  class IFence : public ICloneable<IFence>
   {
+  protected:
+    IFence() {}
+
   public:
     enum class Flag
     {
@@ -19,26 +21,25 @@ namespace wkr::render
     };
 
   public:
-    virtual ~Fence() {}
+    virtual ~IFence() {}
 
   public:
     virtual void FenceEvent(int frameIndex) = 0;
-    virtual void* GetNativeHandle(int frameIndex) = 0;
+    virtual NativeHandle GetNativeHandle(int frameIndex) = 0;
   };
 
-  class FenceBuilder : Builder<Fence>
+  class FenceBuilder : IBuilder<IFence>
   {
   public:
-    FenceBuilder& SetFenceFlag(Fence::Flag fenceFlag);
-    FenceBuilder& SetFrameCount(uint8_t frameCount);
+    FenceBuilder& SetFenceFlag(IFence::Flag fenceFlag);
+    FenceBuilder& SetFrameCount(u8 frameCount);
 
-    Fence*            BuildRaw  () override final;
-    mem::Ref<Fence>   BuildRef  () override final;
-    mem::Scope<Fence> BuildScope() override final;
+    IFence*            BuildRaw  () override final;
+    mem::Ref<IFence>   BuildRef  () override final;
+    mem::Scope<IFence> BuildScope() override final;
 
   public:
-    Device*     m_device;
-    Fence::Flag m_fenceFlag{};
-    uint8_t m_frameCount;
+    u8            m_frameCount;
+    IFence::Flag  m_fenceFlag{};
   };
 }

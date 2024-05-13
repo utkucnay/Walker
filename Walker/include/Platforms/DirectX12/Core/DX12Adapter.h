@@ -6,32 +6,37 @@
 
 namespace wkr::render
 {
-  class DX12Adapter : public Adapter
+  class UDX12Adapter : public IAdapter
   {
   public:
-    DX12Adapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
-    ~DX12Adapter() override;
+    UDX12Adapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
+    ~UDX12Adapter() override;
+
+  private:
+    UDX12Adapter() {}
 
   public:
-    void* GetNativeHandle() override { return m_adapter; }
+    NativeHandle GetNativeHandle() override { return m_adapter; }
 
     mem::Scope<char> GetName() override final;
 
-    uint32_t GetVendorID() override final;
-    uint32_t GetDeviceID() override final;
-    uint32_t GetSubSysID() override final;
-    uint32_t GetRevision() override final;
+    u32 GetVendorID() override final;
+    u32 GetDeviceID() override final;
+    u32 GetSubSysID() override final;
+    u32 GetRevision() override final;
 
-    uint64_t GetDedicatedVideoMemory()  override final;
-    uint64_t GetDedicatedSystemMemory() override final;
-    uint64_t GetSharedSystemMemory()    override final;
+    u64 GetDedicatedVideoMemory()  override final;
+    u64 GetDedicatedSystemMemory() override final;
+    u64 GetSharedSystemMemory()    override final;
 
     Luid GetAdapterLuid() override final;
+
+    void Clone(IAdapter& adapter) override final;
 
   private:
     IDXGIAdapter1* m_adapter;
 
   public:
-    static std::vector<mem::Ref<Adapter>> GetAllAdapters();
+    static std::vector<mem::Ref<IAdapter>> GetAllAdapters();
   };
 }
