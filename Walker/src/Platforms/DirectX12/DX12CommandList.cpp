@@ -53,7 +53,7 @@ namespace wkr::render
   }
 
   void UDX12CommandList::ResourceBarriers(
-        std::vector<mem::Ref<rsc::bar::IResourceBarrier>> barriers)
+        const std::vector<mem::Ref<rsc::bar::IResourceBarrier>>& barriers)
   {
     std::vector<D3D12_RESOURCE_BARRIER> nBarriers;
     std::transform(barriers.begin(), barriers.end(),
@@ -65,7 +65,7 @@ namespace wkr::render
   }
 
   void UDX12CommandList::OMSetRenderTargets(
-        std::vector<mem::Ref<view::URenderTargetView>> rtvs)
+        const std::vector<mem::Ref<view::URenderTargetView>>& rtvs)
   {
     std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> nRtvs;
     std::transform(rtvs.begin(), rtvs.end(),

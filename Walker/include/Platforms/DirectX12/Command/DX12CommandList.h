@@ -25,10 +25,10 @@ namespace wkr::render
     ICommandList::Type GetType() override final;
 
     void ResourceBarriers(
-        std::vector<mem::Ref<rsc::bar::IResourceBarrier>> barriers) override final;
+        const std::vector<mem::Ref<rsc::bar::IResourceBarrier>>& barriers) override final;
 
     void OMSetRenderTargets(
-        std::vector<mem::Ref<view::URenderTargetView>> rtvs) override final;
+        const std::vector<mem::Ref<view::URenderTargetView>>& rtvs) override final;
 
     void ClearRenderTargetView(
         view::URenderTargetView& rtv,

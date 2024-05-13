@@ -41,10 +41,10 @@ namespace wkr::render
         IPipelineState& pipelineState) = 0;
 
     virtual void ResourceBarriers(
-        std::vector<mem::Ref<rsc::bar::IResourceBarrier>> barriers) = 0;
+        const std::vector<mem::Ref<rsc::bar::IResourceBarrier>>& barriers) = 0;
 
     virtual void OMSetRenderTargets(
-        std::vector<mem::Ref<view::URenderTargetView>> rtvs) = 0;
+        const std::vector<mem::Ref<view::URenderTargetView>>& rtvs) = 0;
 
     virtual void ClearRenderTargetView(
         view::URenderTargetView& rtv,
