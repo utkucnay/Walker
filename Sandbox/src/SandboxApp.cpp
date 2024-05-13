@@ -6,7 +6,7 @@ namespace wkr
   {
   public:
     USandboxApp(const FApplicationSpecs& specs) : UApplication(specs) {}
-    ~USandboxApp() {}
+    ~USandboxApp() override { }
   };
 
   mem::Scope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args)

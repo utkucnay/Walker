@@ -11,5 +11,7 @@ int main(int argc, char** argv)
 
   app->Run();
 
+  app.Release();
+
   return 0;
 };

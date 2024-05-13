@@ -30,9 +30,9 @@ namespace wkr
     void Run();
 
   private:
-    FApplicationSpecs              appSpecs;
-    mem::Ref<UWindow>            m_mainWindow;
-    mem::Ref<render::URenderer>  m_renderer;
+    FApplicationSpecs             appSpecs;
+    mem::Ref<UWindow>             m_mainWindow;
+    mem::Ref<render::URenderer>   m_renderer;
 
     friend int ::main(int argc, char** argv);
   };

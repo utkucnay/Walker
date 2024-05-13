@@ -23,9 +23,11 @@ namespace wkr::render
       }
     }
 
-    s_defaultDevice = mem::Scope<DeviceBuilder>::Create().Get()
+    m_device = mem::Scope<DeviceBuilder>::Create().Get()
       .SetAdapter(findedAdapter)
-      .BuildScope();
+      .BuildRef();
+
+    s_defaultDevice = m_device;
 
     m_commandDirectQueue = mem::Scope<CommandQueueBuilder>::Create().Get()
       .SetCommandListType(ICommandList::Type::Direct)
@@ -101,6 +103,7 @@ namespace wkr::render
     }
 
     m_device.Reset();
+    s_defaultDevice.Reset();
     m_swapChain.Reset();
     m_commandDirectQueue.Reset();
     m_commandDirectList.Reset();
