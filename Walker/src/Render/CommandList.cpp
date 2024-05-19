@@ -28,21 +28,5 @@ namespace wkr::render
     return *this;
   }
 
-  ICommandList* CommandListBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<ICommandList> CommandListBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<ICommandList> CommandListBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandListFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, CommandList);
 }

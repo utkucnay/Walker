@@ -25,21 +25,5 @@ namespace wkr::render
     return *this;
   }
 
-  ICommandQueue* CommandQueueBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<ICommandQueue> CommandQueueBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<ICommandQueue>CommandQueueBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandQueueFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, CommandQueue);
 }

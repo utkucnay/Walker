@@ -1,3 +1,4 @@
+#include "Render/Core/RootSignature.h"
 #include <Render/Resource/Heap.h>
 #include <Render/Core/Device.h>
 #include <Render/Core/Renderer.h>
@@ -79,15 +80,17 @@ namespace wkr::render
 
   void URenderer::CreateResource()
   {
-    m_vertexBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create()
-      ->SetCommittedType(rsc::IHeap::Type::Default, rsc::IHeap::Flag::None)
+    m_vertexBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create().Get()
+      .SetCommittedType(rsc::IHeap::Type::Default, rsc::IHeap::Flag::None)
       .SetSize(2 MB)
       .BuildRef();
 
-    m_vertexUploadBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create()
-      ->SetCommittedType(rsc::IHeap::Type::Upload, rsc::IHeap::Flag::None)
+    m_vertexUploadBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create().Get()
+      .SetCommittedType(rsc::IHeap::Type::Upload, rsc::IHeap::Flag::None)
       .SetSize(2 MB)
       .BuildRef();
+
+    m_rootSignature = mem::Scope<RootSignatureBuilder>()->BuildRef();
   }
 
   void URenderer::LoadResources()
@@ -136,7 +139,7 @@ namespace wkr::render
         });
 
     m_commandDirectList->ClearRenderTargetView(renderTarget.Get(),
-        Color32(0, 255, 0, 255));
+        FColor32(0, 255, 0, 255));
 
     m_commandDirectList->ResourceBarriers(
         {

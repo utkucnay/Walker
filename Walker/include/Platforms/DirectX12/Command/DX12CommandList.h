@@ -32,7 +32,7 @@ namespace wkr::render
 
     void ClearRenderTargetView(
         view::URenderTargetView& rtv,
-        Color32 color) override final;
+        FColor32 color) override final;
 
     void CopyResource(
         rsc::IResource& dstResource,

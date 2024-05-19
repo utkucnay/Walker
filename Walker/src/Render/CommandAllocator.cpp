@@ -12,21 +12,5 @@ namespace wkr::render
     return *this;
   }
 
-  ICommandAllocator* CommandAllocatorBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<ICommandAllocator> CommandAllocatorBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<ICommandAllocator> CommandAllocatorBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetCommandAllocaterFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, CommandAllocator);
 }

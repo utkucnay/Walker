@@ -29,7 +29,7 @@ namespace wkr::render
     u64 GetDedicatedSystemMemory() override final;
     u64 GetSharedSystemMemory()    override final;
 
-    Luid GetAdapterLuid() override final;
+    FLuid GetAdapterLuid() override final;
 
     void Clone(IAdapter& adapter) override final;
 

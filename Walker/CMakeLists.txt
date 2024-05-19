@@ -26,6 +26,7 @@ set(source_files
   ./src/Platforms/DirectX12/DX12TransitionBarrier.cpp
   ./src/Platforms/DirectX12/DX12Heap.cpp
   ./src/Platforms/DirectX12/DX12Buffers.cpp
+  ./src/Platforms/DirectX12/DX12RootSignature.cpp
 
   ./src/Render/Renderer.cpp
   ./src/Render/CommandQueue.cpp
@@ -40,6 +41,7 @@ set(source_files
   ./src/Render/TransitionBarrier.cpp
   ./src/Render/Heap.cpp
   ./src/Render/Buffers.cpp
+  ./src/Render/RootSignature.cpp
   )
 
 set(all_files

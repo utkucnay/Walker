@@ -29,7 +29,6 @@
 #include <Core/Builder.h>
 #include <Core/Factory.h>
 
-#include <Core/Events.h>
 #include <Core/Cloneable.h>
 
 #if defined(WKR_PLATFORM_WINDOWS)

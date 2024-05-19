@@ -78,7 +78,7 @@ namespace wkr::render
 
   void UDX12CommandList::ClearRenderTargetView(
         view::URenderTargetView& rtv,
-        Color32 color)
+        FColor32 color)
   {
     auto nRtv = static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(rtv.GetNativeHandle());
     float nColor[] =

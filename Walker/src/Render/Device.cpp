@@ -10,21 +10,5 @@ namespace wkr::render
     return *this;
   }
 
-  IDevice* DeviceBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<IDevice> DeviceBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<IDevice> DeviceBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetDeviceFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, Device);
 }

@@ -11,7 +11,7 @@ namespace wkr::render::rsc::bar
     virtual ~IAliasingBarrier() override {}
   };
 
-  class AliasingBarrierBuilder : public BarrierBuilder
+  class AliasingBarrierBuilder : IBuilder<IAliasingBarrier>
   {
   public:
     AliasingBarrierBuilder(
@@ -19,9 +19,9 @@ namespace wkr::render::rsc::bar
         mem::WeakRef<IResource> afterResource);
 
   public:
-    [[nodiscard]] IResourceBarrier*             BuildRaw()    override final;
-    [[nodiscard]] mem::Ref<IResourceBarrier>    BuildRef()    override final;
-    [[nodiscard]] mem::Scope<IResourceBarrier>  BuildScope()  override final;
+    [[nodiscard]] IAliasingBarrier*             BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<IAliasingBarrier>    BuildRef()    override final;
+    [[nodiscard]] mem::Scope<IAliasingBarrier>  BuildScope()  override final;
 
   public:
     mem::WeakRef<IResource> resourceBefore;

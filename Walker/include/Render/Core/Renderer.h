@@ -2,6 +2,7 @@
 
 #include <Core/Window.h>
 #include <Render/Core/SwapChain.h>
+#include <Render/Core/RootSignature.h>
 #include <Render/Resource/Buffers.h>
 
 namespace wkr::render {
@@ -31,6 +32,8 @@ private:
 
   mem::Ref<rsc::IBuffers> m_vertexBuffer;
   mem::Ref<rsc::IBuffers> m_vertexUploadBuffer;
+
+  mem::Ref<IRootSignature> m_rootSignature;
 
   // std::queue<ResourceLoadCommand> m_resourceCommandLoad;
 public:

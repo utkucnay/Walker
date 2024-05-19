@@ -53,21 +53,5 @@ namespace wkr::render
     return *this;
   }
 
-  USwapChain* SwapChainBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetSwapChainFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<USwapChain> SwapChainBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetSwapChainFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<USwapChain> SwapChainBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetSwapChainFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(U, SwapChain);
 }

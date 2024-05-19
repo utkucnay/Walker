@@ -10,7 +10,7 @@ namespace wkr::render
   REGISTER_FACTORY(IFence,         UDX12Fence,      FenceBuilder&);
   REGISTER_FACTORY(USwapChain,     UDX12SwapChain,  SwapChainBuilder&);
   //REGISTER_FACTORY(PipelineState, DX12PipelineState);
-  //REGISTER_FACTORY(RootSignature, DX12RootSignature);
+  REGISTER_FACTORY(IRootSignature, UDX12RootSignature, RootSignatureBuilder&);
 
   //Command
   REGISTER_FACTORY(ICommandQueue,      UDX12CommandQueue,     CommandQueueBuilder&);
@@ -53,7 +53,8 @@ namespace wkr::render
     mem::Scope<IFactory<USwapChain, SwapChainBuilder&>>
       GetSwapChainFactory() { return mem::Scope<UDX12SwapChainFactory>::Create(); }
     //mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory();
-    //mem::Scope<Factory<RootSignature>>  GetRootSignatureFactory();
+    mem::Scope<IFactory<IRootSignature, RootSignatureBuilder&>>
+      GetRootSignatureFactory() { return mem::Scope<UDX12RootSignatureFactory>::Create(); };
 
     //Command
     mem::Scope<IFactory<ICommandQueue, CommandQueueBuilder&>>
@@ -61,7 +62,7 @@ namespace wkr::render
     mem::Scope<IFactory<ICommandList, CommandListBuilder&>>
       GetCommandListFactory() { return mem::Scope<UDX12CommandListFactory>::Create(); }
     mem::Scope<IFactory<ICommandAllocator, CommandAllocatorBuilder&>>
-      GetCommandAllocaterFactory() { return mem::Scope<UDX12CommandAllocatorFactory>::Create(); }
+      GetCommandAllocatorFactory() { return mem::Scope<UDX12CommandAllocatorFactory>::Create(); }
 
     //Descriptor
     mem::Scope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
@@ -83,7 +84,7 @@ namespace wkr::render
 
     //Resource Barrier
     virtual mem::Scope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
-      GetResourceBarrierTransition() {
+      GetTransitionBarrierFactory() {
         return mem::Scope<rsc::bar::UDX12TransitionBarrierFactory>::Create();}
   };
 }

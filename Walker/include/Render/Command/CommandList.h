@@ -48,7 +48,7 @@ namespace wkr::render
 
     virtual void ClearRenderTargetView(
         view::URenderTargetView& rtv,
-        Color32 color) = 0;
+        FColor32 color) = 0;
 
   //  virtual void CopyBufferRegion(
   //      rsc::Buffers dstBuffers, uint64_t dstOffset,

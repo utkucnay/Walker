@@ -14,8 +14,9 @@ namespace wkr::render
       GetFenceFactory()         = 0;
     virtual mem::Scope<IFactory<USwapChain, SwapChainBuilder&>>
       GetSwapChainFactory()     = 0;
+    virtual mem::Scope<IFactory<IRootSignature, RootSignatureBuilder&>>
+      GetRootSignatureFactory() = 0;
     //virtual mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory() = 0;
-    //virtual mem::Scope<Factory<RootSignature>>  GetRootSignatureFactory() = 0;
 
     //Command
     virtual mem::Scope<IFactory<ICommandQueue, CommandQueueBuilder&>>
@@ -23,7 +24,7 @@ namespace wkr::render
     virtual mem::Scope<IFactory<ICommandList, CommandListBuilder&>>
       GetCommandListFactory()     = 0;
     virtual mem::Scope<IFactory<ICommandAllocator, CommandAllocatorBuilder&>>
-      GetCommandAllocaterFactory()= 0;
+      GetCommandAllocatorFactory()= 0;
 
     //Descriptor
     virtual mem::Scope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
@@ -42,6 +43,6 @@ namespace wkr::render
 
     //Barriers
     virtual mem::Scope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
-      GetResourceBarrierTransition() = 0;
+      GetTransitionBarrierFactory() = 0;
   };
 }

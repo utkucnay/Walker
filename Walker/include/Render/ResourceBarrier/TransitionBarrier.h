@@ -11,7 +11,7 @@ namespace wkr::render::rsc::bar
     virtual ~ITransitionBarrier() override {}
   };
 
-  class TransitionBarrierBuilder : public BarrierBuilder
+  class TransitionBarrierBuilder : IBuilder<ITransitionBarrier>
   {
   public:
     TransitionBarrierBuilder(mem::WeakRef<IResource> resource);
@@ -21,9 +21,9 @@ namespace wkr::render::rsc::bar
     TransitionBarrierBuilder& SetAfterState(IResource::State afterState);
 
   public:
-    [[nodiscard]] IResourceBarrier*             BuildRaw()    override final;
-    [[nodiscard]] mem::Ref<IResourceBarrier>    BuildRef()    override final;
-    [[nodiscard]] mem::Scope<IResourceBarrier>  BuildScope()  override final;
+    [[nodiscard]] ITransitionBarrier*             BuildRaw()    override final;
+    [[nodiscard]] mem::Ref<ITransitionBarrier>    BuildRef()    override final;
+    [[nodiscard]] mem::Scope<ITransitionBarrier>  BuildScope()  override final;
 
   public:
     mem::WeakRef<IResource> m_resource;

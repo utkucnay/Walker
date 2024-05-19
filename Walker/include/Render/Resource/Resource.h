@@ -219,7 +219,7 @@ namespace wkr::render::rsc
       IResource::Format format;
       union
       {
-        Color32 color;
+        FColor32 color;
         struct
         {
           float depth;
@@ -227,7 +227,7 @@ namespace wkr::render::rsc
         } depthStencil;
       };
 
-      ClearValue() { format = IResource::Format::UNKNOWN; color = Color32(0,0,0,0); }
+      ClearValue() { format = IResource::Format::UNKNOWN; color = FColor32(0,0,0,0); }
     };
 
   public:

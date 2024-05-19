@@ -40,21 +40,5 @@ namespace wkr::render::rsc
     return *this;
   }
 
-  IHeap* HeapBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetHeapFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<IHeap> HeapBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetHeapFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<IHeap> HeapBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetHeapFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, Heap);
 }

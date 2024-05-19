@@ -2,10 +2,10 @@
 
 namespace wkr::render
 {
-  struct Color32
+  struct FColor32
   {
-    Color32() : m_r(0), m_g(0), m_b(0), m_a(0) {}
-    Color32(
+    FColor32() : m_r(0), m_g(0), m_b(0), m_a(0) {}
+    FColor32(
         u8 r,
         u8 g,
         u8 b,
@@ -39,7 +39,7 @@ namespace wkr::render
     }
   };
 
-  struct Luid
+  struct FLuid
   {
     u64 lowPart;
     i64 highPart;

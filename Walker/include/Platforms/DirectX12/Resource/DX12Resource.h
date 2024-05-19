@@ -1,6 +1,6 @@
 #pragma once
 
-#define CREATE_RESOURCE(Builder, Resource, Device)                                  \
+#define CREATE_RESOURCE(Builder, Resource, Device, hr)                              \
     D3D12_HEAP_PROPERTIES heapProperties{};                                         \
     D3D12_RESOURCE_DESC resourceDesc{};                                             \
                                                                                     \
@@ -28,7 +28,7 @@
     {                                                                               \
       case ResourceBuilderType::Committed:                                          \
         {                                                                           \
-          Device->CreateCommittedResource(                                          \
+          hr = Device->CreateCommittedResource(                                     \
               &heapProperties,                                                      \
               static_cast<D3D12_HEAP_FLAGS>(Builder.m_heapBuilder.m_flag),          \
               &resourceDesc,                                                        \
@@ -38,7 +38,7 @@
         } break;                                                                    \
       case ResourceBuilderType::Reserved:                                           \
         {                                                                           \
-          Device->CreateReservedResource(                                           \
+          hr = Device->CreateReservedResource(                                      \
               &resourceDesc,                                                        \
               static_cast<D3D12_RESOURCE_STATES>(Builder.m_state),                  \
               NULL,                                                                 \
@@ -46,7 +46,7 @@
         } break;                                                                    \
       case ResourceBuilderType::Placed:                                             \
         {                                                                           \
-          Device->CreatePlacedResource(                                             \
+          hr = Device->CreatePlacedResource(                                        \
               static_cast<ID3D12Heap*>(Builder.m_heap.Lock()->GetNativeHandle()),   \
               Builder.m_heapOffset,                                                 \
               &resourceDesc,                                                        \

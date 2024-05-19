@@ -18,7 +18,7 @@ namespace wkr::render
         IID_PPV_ARGS(&m_descriptorHeap));
 
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create Descriptor Heap")
-    WKR_CORE_LOG("Created Descriptor Heap")
+    WKR_CORE_LOG("Created DX12 Descriptor Heap")
   }
 
   UDX12DescriptorHeap::~UDX12DescriptorHeap()

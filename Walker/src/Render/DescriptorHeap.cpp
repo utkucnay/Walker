@@ -23,21 +23,5 @@ namespace wkr::render
     return *this;
   }
 
-  IDescriptorHeap* DescriptorHeapBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
-      CreateRaw(*this);
-  }
-
-  mem::Ref<IDescriptorHeap> DescriptorHeapBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
-      CreateRef(*this);
-  }
-
-  mem::Scope<IDescriptorHeap> DescriptorHeapBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetDescriptorHeapFactory()->
-      CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, DescriptorHeap);
 }

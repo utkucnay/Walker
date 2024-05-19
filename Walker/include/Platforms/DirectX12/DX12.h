@@ -16,6 +16,7 @@
   #include <Platforms/DirectX12/Core/DX12Adapter.h>
   #include <Platforms/DirectX12/Core/DX12SwapChain.h>
   #include <Platforms/DirectX12/Core/DX12Fence.h>
+  #include <Platforms/DirectX12/Core/DX12RootSignature.h>
 
   #include <Platforms/DirectX12/Command/DX12CommandList.h>
   #include <Platforms/DirectX12/Command/DX12CommandAllocator.h>

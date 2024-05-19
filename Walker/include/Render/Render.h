@@ -36,3 +36,6 @@
 #include <Render/ResourceBarrier/TransitionBarrier.h>
 #include <Render/ResourceBarrier/AliasingBarrier.h>
 #include <Render/ResourceBarrier/UAVBarrier.h>
+
+#include <Render/Shader/Shader.h>
+#include <Render/Shader/VertexShader.h>

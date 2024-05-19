@@ -19,7 +19,7 @@ namespace wkr::render
     virtual u32 GetSubSysID() = 0;
     virtual u32 GetRevision() = 0;
 
-    virtual Luid GetAdapterLuid() = 0;
+    virtual FLuid GetAdapterLuid() = 0;
 
     virtual u64 GetDedicatedVideoMemory()  = 0;
     virtual u64 GetDedicatedSystemMemory() = 0;

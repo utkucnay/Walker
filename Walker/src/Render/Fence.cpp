@@ -16,21 +16,5 @@ namespace wkr::render
     return *this;
   }
 
-  IFence* FenceBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetFenceFactory()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<IFence> FenceBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetFenceFactory()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<IFence> FenceBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetFenceFactory()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, Fence);
 }

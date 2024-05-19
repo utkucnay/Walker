@@ -1,5 +1,5 @@
-#include "Render/Core/RendererAPI.h"
 #include <Render/ResourceBarrier/TransitionBarrier.h>
+#include <Render/Core/RendererAPI.h>
 
 namespace wkr::render::rsc::bar
 {
@@ -23,21 +23,5 @@ namespace wkr::render::rsc::bar
     return *this;
   }
 
-  IResourceBarrier* TransitionBarrierBuilder::BuildRaw()
-  {
-    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
-      ->CreateRaw(*this);
-  }
-
-  mem::Ref<IResourceBarrier> TransitionBarrierBuilder::BuildRef()
-  {
-    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
-      ->CreateRef(*this);
-  }
-
-  mem::Scope<IResourceBarrier> TransitionBarrierBuilder::BuildScope()
-  {
-    return RendererAPI::GetAbstractFactory().GetResourceBarrierTransition()
-      ->CreateScope(*this);
-  }
+  REGISTER_BUILDER(I, TransitionBarrier);
 }

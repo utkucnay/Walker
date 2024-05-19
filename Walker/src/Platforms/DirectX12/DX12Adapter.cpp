@@ -89,10 +89,10 @@ namespace wkr::render
     return desc.SharedSystemMemory;
   }
 
-  Luid UDX12Adapter::GetAdapterLuid()
+  FLuid UDX12Adapter::GetAdapterLuid()
   {
     DXGI_ADAPTER_DESC desc;
-    Luid ret;
+    FLuid ret;
 
     m_adapter->GetDesc(&desc);
     ret.lowPart = desc.AdapterLuid.LowPart;

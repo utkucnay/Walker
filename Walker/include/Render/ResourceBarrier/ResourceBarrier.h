@@ -12,6 +12,4 @@ namespace wkr::render::rsc::bar
   public:
     virtual NativeHandle GetNativeHandle() = 0;
   };
-
-  using BarrierBuilder = IBuilder<IResourceBarrier>;
 }
