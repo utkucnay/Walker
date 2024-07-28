@@ -27,8 +27,8 @@ namespace wkr
   class IFactory
   {
   public:
-    virtual T*              CreateRaw  (Args... args) = 0;
-    virtual mem::Ref<T>     CreateRef  (Args... args) = 0;
-    virtual mem::Scope<T>   CreateScope(Args... args) = 0;
+    [[nodiscard]] virtual T*  CreateRaw  (Args... args) = 0;
+    virtual mem::TRef<T>      CreateRef  (Args... args) = 0;
+    virtual mem::TScope<T>    CreateScope(Args... args) = 0;
   };
 }

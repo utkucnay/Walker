@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Core/PlatformDetection.h>
-
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -26,13 +24,9 @@
 #include <Memory/WeakRef.h>
 #include <Memory/Scope.h>
 
-#include <Core/Builder.h>
 #include <Core/Factory.h>
 
-#include <Core/Cloneable.h>
-
-#if defined(WKR_PLATFORM_WINDOWS)
-  #include <windows.h>
-#endif
+#include <Platforms/Windows/WindowsPCH.h>
+#include <Platforms/DirectX12/DX12PCH.h>
 
 #include <Render/RenderPCH.h>

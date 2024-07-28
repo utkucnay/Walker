@@ -4,44 +4,42 @@
 #include <Render/Core/SwapChain.h>
 #include <Render/Core/RootSignature.h>
 #include <Render/Resource/Buffers.h>
+#include <Render/Command/CommandList.h>
+#include <Render/Command/CommandQueue.h>
+#include <Render/Command/CommandAllocator.h>
 
 namespace wkr::render {
-class URenderer {
-public:
-  URenderer(mem::WeakRef<UWindow> window);
-  ~URenderer();
+  class URenderer {
+  public:
+    URenderer(mem::TWeakRef<UWindow> window);
+    ~URenderer();
 
-public:
-  void Render();
-  void CreateSwapChain(mem::WeakRef<UWindow> window);
-  void CreateResource();
-  void LoadResources();
+  public:
+    void Render();
+    void CreateSwapChain(mem::TWeakRef<UWindow> window);
+    void CreateResource();
+    void LoadResources();
 
-private:
-  mem::Ref<IDevice> m_device;
+  private:
+    DeviceHandle m_device;
 
-  std::vector<mem::Ref<ICommandAllocator>> m_commandDirectAllocator;
-  mem::Ref<ICommandList> m_commandDirectList;
-  mem::Ref<ICommandQueue> m_commandDirectQueue;
+    std::vector<ICommandAllocatorHandle> m_commandDirectAllocator;
+    ICommandListHandle                   m_commandDirectList;
+    ICommandQueueHandle                  m_commandDirectQueue;
 
-  std::vector<mem::Ref<ICommandAllocator>> m_commandCopyAllocator;
-  mem::Ref<ICommandList> m_commandCopyList;
-  mem::Ref<ICommandQueue> m_commandCopyQueue;
+    USwapChainHandle m_swapChain;
 
-  mem::Ref<USwapChain> m_swapChain;
+    rsc::BuffersHandle m_vertexBuffer;
+    rsc::BuffersHandle m_vertexUploadBuffer;
 
-  mem::Ref<rsc::IBuffers> m_vertexBuffer;
-  mem::Ref<rsc::IBuffers> m_vertexUploadBuffer;
+    RootSignatureHandle m_rootSignature;
 
-  mem::Ref<IRootSignature> m_rootSignature;
+  public:
+    [[nodiscard]] static IDevice& GetDefaultDevice() {
+      return s_defaultDevice.Get();
+    }
 
-  // std::queue<ResourceLoadCommand> m_resourceCommandLoad;
-public:
-  [[nodiscard]] static IDevice &GetDefaultDevice() {
-    return s_defaultDevice.Get();
-  }
-
-private:
-  static inline mem::Ref<IDevice> s_defaultDevice;
-};
-} // namespace wkr::render
+  private:
+    static inline DeviceHandle s_defaultDevice;
+  };
+}

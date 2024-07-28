@@ -12,10 +12,10 @@
 namespace wkr
 {
   template<typename... Args>
-  class EventDispatcher
+  class TEventDispatcher
   {
   public:
-    using Event = std::function<void(Args...)>;
+    using FEvent = std::function<void(Args...)>;
 
   public:
     void operator()(Args... args)
@@ -26,17 +26,17 @@ namespace wkr
       }
     }
 
-    void operator+=(Event func)
+    void operator+=(FEvent func)
     {
       m_eventListeners.push_back(func);
     }
 
-    void operator-=(Event func)
+    void operator-=(FEvent func)
     {
       m_eventListeners.remove(func);
     }
 
   private:
-    std::list<Event> m_eventListeners;
+    std::list<FEvent> m_eventListeners;
   };
 }

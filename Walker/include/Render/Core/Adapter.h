@@ -4,15 +4,15 @@
 
 namespace wkr::render
 {
-  class IAdapter : public ICloneable<IAdapter>
+  class IAdapter
   {
   public:
     virtual ~IAdapter() {}
 
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual NativeObject GetNativeObject() = 0;
 
-    virtual mem::Scope<char> GetName() = 0;
+    virtual std::string GetName() = 0;
 
     virtual u32 GetVendorID() = 0;
     virtual u32 GetDeviceID() = 0;
@@ -26,6 +26,8 @@ namespace wkr::render
     virtual u64 GetSharedSystemMemory()    = 0;
 
   public:
-    static std::vector<mem::Ref<IAdapter>> GetAllAdapters();
+    static std::vector<mem::TRef<IAdapter>> GetAllAdapters();
   };
+
+  using IAdapterHandle = mem::TRef<IAdapter>;
 }
