@@ -9,13 +9,13 @@ namespace wkr
     ~USandboxApp() override { }
   };
 
-  mem::Scope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args)
+  mem::TScope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args)
   {
     FApplicationSpecs specs;
     specs.name = "Sandbox";
     specs.showCLI = true;
     specs.ApplicationCommandLineArgs = args;
 
-    return mem::Scope<USandboxApp>::Create(specs);
+    return mem::TScope<USandboxApp>::Create(specs);
   }
 }

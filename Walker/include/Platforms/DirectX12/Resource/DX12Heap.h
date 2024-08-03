@@ -3,23 +3,23 @@
 #include <Render/Resource/Heap.h>
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render::rsc
+namespace wkr::render::dx12
 {
-  class UDX12Heap : public IHeap
+  class UHeap : public IHeap
   {
   public:
-    UDX12Heap(HeapBuilder& hb);
-    ~UDX12Heap() override;
+    UHeap(FHeapDesc& desc);
+    ~UHeap() override;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_heap; };
+    NativeObject GetNativeObject() override { return m_heap; };
 
     u64 GetSize() override;
     u64 GetAlignment() override;
-    IHeap::Type GetType() override;
-    IHeap::Flag GetFlag() override;
-    IHeap::MemoryPool GetMemoryPool() override;
-    IHeap::CPUPageProperty GetCPUPageProperty() override;
+    EHeapType GetType() override;
+    EHeapFlag GetFlag() override;
+    EMemoryPool GetMemoryPool() override;
+    ECPUPageProperty GetCPUPageProperty() override;
 
   private:
     ID3D12Heap* m_heap;

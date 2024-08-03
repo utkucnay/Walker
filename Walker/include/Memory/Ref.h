@@ -33,7 +33,7 @@ namespace wkr::mem
     template<typename TConv>
     operator TRef<TConv>()
     {
-      Ref<TConv> ret;
+      TRef<TConv> ret;
       ret.ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }
@@ -41,7 +41,7 @@ namespace wkr::mem
     template<typename TConv>
     operator TWeakRef<TConv>()
     {
-      WeakRef<TConv> ret;
+      TWeakRef<TConv> ret;
       ret.m_ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }
@@ -66,7 +66,7 @@ namespace wkr::mem
     template<typename... Args>
     static TRef<T> Create(Args&&... args)
     {
-      Ref<T> ret;
+      TRef<T> ret;
       ret.ptr = std::make_shared<T>(std::forward<Args>(args)...);
       return ret;
     }

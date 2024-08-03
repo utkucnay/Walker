@@ -1,27 +1,26 @@
 #pragma once
 
 #include <Core/Window.h>
-#include <Render/Core/SwapChain.h>
-#include <Render/Core/RootSignature.h>
-#include <Render/Resource/Buffers.h>
-#include <Render/Command/CommandList.h>
-#include <Render/Command/CommandQueue.h>
-#include <Render/Command/CommandAllocator.h>
+#include <Render/Core/Device.h>
 
 namespace wkr::render {
+  struct FRendererDesc
+  {
+    UWindowHandle window;
+  };
+
   class URenderer {
   public:
-    URenderer(mem::TWeakRef<UWindow> window);
+    URenderer(FRendererDesc& rendererDesc);
     ~URenderer();
 
   public:
     void Render();
-    void CreateSwapChain(mem::TWeakRef<UWindow> window);
     void CreateResource();
     void LoadResources();
 
   private:
-    DeviceHandle m_device;
+    IDeviceHandle m_device;
 
     std::vector<ICommandAllocatorHandle> m_commandDirectAllocator;
     ICommandListHandle                   m_commandDirectList;
@@ -29,17 +28,14 @@ namespace wkr::render {
 
     USwapChainHandle m_swapChain;
 
-    rsc::BuffersHandle m_vertexBuffer;
-    rsc::BuffersHandle m_vertexUploadBuffer;
-
-    RootSignatureHandle m_rootSignature;
-
   public:
     [[nodiscard]] static IDevice& GetDefaultDevice() {
       return s_defaultDevice.Get();
     }
 
   private:
-    static inline DeviceHandle s_defaultDevice;
+    static inline IDeviceHandle s_defaultDevice;
   };
+
+  using URendererHandle = mem::TRef<URenderer>;
 }

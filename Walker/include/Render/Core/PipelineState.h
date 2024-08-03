@@ -10,7 +10,7 @@ namespace wkr::render
   class IPipelineState
   {
   public:
-    virtual ~IPipelineState() = 0;
+    virtual ~IPipelineState() = default;
 
   public:
     virtual NativeObject GetNativeObject() const = 0;

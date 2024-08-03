@@ -2,14 +2,16 @@
 
 #include <Render/Resource/Resource.h>
 
-namespace wkr::render::rsc::bar
+namespace wkr::render
 {
   class IResourceBarrier
   {
   public:
-    virtual ~IResourceBarrier() {}
+    virtual ~IResourceBarrier() = default;
 
   public:
-    virtual NativeHandle GetNativeHandle() = 0;
+    virtual NativeObject GetNativeObject() = 0;
   };
+
+  using IResourceBarrierHandle = mem::TRef<IResourceBarrier>;
 }

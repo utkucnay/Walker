@@ -1,10 +1,8 @@
 #pragma once
 
-#include <Render/Core/Fence.h>
-#include <Render/Command/CommandType.h>
-#include <Render/Core/Device.h>
+#include <Render/Command/CommandTypes.h>
 #include <Render/Command/CommandList.h>
-
+#include <Render/Core/Fence.h>
 
 namespace wkr::render
 {
@@ -22,7 +20,7 @@ namespace wkr::render
 
   public:
     virtual void ExecuteCommandList(
-        const std::vector<ICommandListHandle>& commandLists) = 0;
+        const std::vector<ICommandList*>& commandLists) = 0;
 
     virtual void Signal(IFence& fence, i32 frameIndex) = 0;
 

@@ -4,7 +4,7 @@
 
 namespace wkr::render
 {
-  class AbstractFactory
+  class IAbstractFactory
   {
   public:
     //Core
@@ -12,7 +12,7 @@ namespace wkr::render
       GetDeviceFactory()        = 0;
     virtual mem::TScope<IFactory<IFence, FFenceDesc&>>
       GetFenceFactory()         = 0;
-    virtual mem::TScope<IFactory<USwapChain, SwapChainBuilder&>>
+    virtual mem::TScope<IFactory<USwapChain, FSwapChainDesc&>>
       GetSwapChainFactory()     = 0;
     virtual mem::TScope<IFactory<IRootSignature, FRootSignatureDesc&>>
       GetRootSignatureFactory() = 0;
@@ -27,13 +27,13 @@ namespace wkr::render
       GetCommandAllocatorFactory()= 0;
 
     //Descriptor
-    virtual mem::TScope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
+    virtual mem::TScope<IFactory<IDescriptorHeap, FDescriptorHeapDesc&>>
       GetDescriptorHeapFactory() = 0;
 
     //Resource
-    virtual mem::TScope<IFactory<rsc::IHeap, rsc::HeapBuilder&>>
+    virtual mem::TScope<IFactory<IHeap, FHeapDesc&>>
       GetHeapFactory()    = 0;
-    virtual mem::TScope<IFactory<rsc::IBuffers, rsc::ResourceBuilder<rsc::IBuffers>&>>
+    virtual mem::TScope<IFactory<IBuffers, FBuffersDesc&>>
       GetBuffersFactory() = 0;
     //virtual mem::TScope<Factory<rsc::Texture1D>> GetTexture1DFactory() = 0;
     //virtual mem::TScope<Factory<rsc::Texture2D>> GetTexture2DFactory() = 0;
@@ -42,7 +42,7 @@ namespace wkr::render
     //virtual mem::TScope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory() = 0;
 
     //Barriers
-    virtual mem::TScope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
+    virtual mem::TScope<IFactory<ITransitionBarrier, FTransitionBarrierDesc&>>
       GetTransitionBarrierFactory() = 0;
   };
 }

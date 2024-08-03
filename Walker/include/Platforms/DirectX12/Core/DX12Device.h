@@ -1,20 +1,19 @@
 #pragma once
 
 #include <Render/Core/Device.h>
-#include <Render/Core/Adapter.h>
 
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12Device : public IDevice
+  class UDevice : public IDevice
   {
   public:
-    UDX12Device(DeviceBuilder& db);
-    ~UDX12Device() override;
+    UDevice(FDeviceDesc& db);
+    ~UDevice() override;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_device; }
+    NativeObject GetNativeObject() override { return m_device; }
 
   private:
     ID3D12Device* m_device;

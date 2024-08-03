@@ -6,17 +6,17 @@ namespace wkr::render
 {
   struct FDeviceDesc
   {
-    mem::WeakRef<IAdapter> adapter;
+    IAdapter* adapter;
   };
 
   class IDevice
   {
   public:
-    virtual ~IDevice() {}
+    virtual ~IDevice() = default;
 
   public:
     virtual NativeObject GetNativeObject() = 0;
   };
 
-  using DeviceHandle = mem::Ref<IDevice>;
+  using IDeviceHandle = mem::TRef<IDevice>;
 }

@@ -27,6 +27,11 @@ struct NativeObject
     u64   adr;
     void* ptr;
   };
+
+  NativeObject(u64 i) : adr(i) {}
+  NativeObject(void* p) : ptr(p) { }
+
+  template<typename T> operator T* () const { return static_cast<T*>(ptr); }
 };
 
 using CPUMemoryAddress = u64;

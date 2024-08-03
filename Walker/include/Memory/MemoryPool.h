@@ -7,7 +7,12 @@ namespace wkr::mem
   class UMemoryPool
   {
   public:
-    UMemoryPool(i32 size, PageAllocatorHandle pageAllocator);
+    UMemoryPool(u32 initialSize);
+
+  public:
+
+  private:
+    PageAllocatorHandle m_pageAllocator;
   };
 }
 

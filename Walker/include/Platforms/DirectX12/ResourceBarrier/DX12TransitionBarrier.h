@@ -3,18 +3,18 @@
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/ResourceBarrier/TransitionBarrier.h>
 
-namespace wkr::render::rsc::bar
+namespace wkr::render::dx12
 {
-  class UDX12TransitionBarrier : public ITransitionBarrier
+  class UTransitionBarrier : public ITransitionBarrier
   {
   public:
-    UDX12TransitionBarrier(TransitionBarrierBuilder& tbb);
-    ~UDX12TransitionBarrier();
+    UTransitionBarrier(FTransitionBarrierDesc& desc);
+    ~UTransitionBarrier();
 
   public:
-    NativeHandle GetNativeHandle() override final { return &m_resourceBarrier; }
+    NativeObject GetNativeObject() override final { return &m_resourceBarrier; }
 
   private:
-    D3D12_RESOURCE_BARRIER m_resourceBarrier{};
+    D3D12_RESOURCE_BARRIER m_resourceBarrier;
   };
 }

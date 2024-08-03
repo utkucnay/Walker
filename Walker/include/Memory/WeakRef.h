@@ -34,7 +34,7 @@ namespace wkr::mem
     }
 
     template<typename TO>
-    TWeakRef<T>& operator=(Ref<TO> other)
+    TWeakRef<T>& operator=(TRef<TO> other)
     {
       m_ptr = other.ptr;
       return *this;

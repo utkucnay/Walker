@@ -1,27 +1,11 @@
 #pragma once
 
-#include <Render/Descriptor/DescriptorTable.h>
+#include <Render/Resource/Resource.h>
 #include <Render/ResourceView/ResourceView.h>
-#include <Render/Core/Device.h>
-#include <Render/Resource/Texture2D.h>
+#include <Render/Descriptor/DescriptorTypes.h>
 
 namespace wkr::render
 {
-  enum class EDescriptorHeapFlags
-  {
-    None = 0,
-    ShaderVisable = 0x1,
-  };
-
-  enum class EDescriptorHeapType
-  {
-    CBV_SRV_UAV = 0,
-    Sampler,
-    RTV,
-    DSV,
-    NumTypes,
-  };
-
   struct FDescriptorHeapDesc
   {
     u32                   m_count;
@@ -32,16 +16,16 @@ namespace wkr::render
   class IDescriptorHeap
   {
   public:
-    virtual ~IDescriptorHeap() {}
+    virtual ~IDescriptorHeap() = default;
 
   public:
     virtual u32 GetCount() = 0;
 
-    virtual IDescriptorHeap::Type  GetType()  = 0;
-    virtual IDescriptorHeap::Flags GetFlags() = 0;
+    virtual EDescriptorHeapType  GetType()  = 0;
+    virtual EDescriptorHeapFlags GetFlags() = 0;
 
     virtual void Bind(
-        const std::vector<mem::TWeakRef<rsc::IResource>>& resources) = 0;
+        const std::vector<IResourceHandle>& resources) = 0;
 
    // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
    //     uint32_t offset, uint32_t size);
@@ -59,6 +43,8 @@ namespace wkr::render
     virtual NativeObject GetNativeObject() = 0;
 
   protected:
-    std::vector<view::UResourceViewHandle> m_resourceViews;
+    std::vector<UResourceViewHandle> m_resourceViews;
   };
+
+  using IDescriptorHeapHandle = mem::TRef<IDescriptorHeap>;
 }

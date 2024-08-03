@@ -2,30 +2,20 @@
 #include <Platforms/DirectX12/Command/DX12CommandQueue.h>
 #include <Render/Core/Renderer.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  UDX12CommandQueue::UDX12CommandQueue(CommandQueueBuilder& cqb)
+  UCommandQueue::UCommandQueue(FCommandQueueDesc& desc)
   {
     ID3D12Device* nDevice = (ID3D12Device*)URenderer::GetDefaultDevice().GetNativeHandle();
-    D3D12_COMMAND_QUEUE_DESC nDesc = {};
-
-    nDesc.Type      = static_cast<D3D12_COMMAND_LIST_TYPE>(cqb.m_commandListType);
-    nDesc.Priority  = static_cast<INT>(cqb.m_commandQueuePriority);
-    nDesc.Flags     = static_cast<D3D12_COMMAND_QUEUE_FLAGS>(cqb.m_commandQueueFlags);
-
-    HRESULT hr = nDevice->CreateCommandQueue(&nDesc, IID_PPV_ARGS(&m_commandQueue));
-
-    WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command Queue")
-    WKR_CORE_LOG("Created DX12 Command Queue")
   }
 
-  UDX12CommandQueue::~UDX12CommandQueue()
+  UCommandQueue::~UCommandQueue()
   {
     m_commandQueue->Release();
   }
 
-  void UDX12CommandQueue::ExecuteCommandList(
-        const std::vector<mem::Ref<ICommandList>>& commandLists)
+  void UCommandQueue::ExecuteCommandList(
+        const std::vector<ICommandList*>& commandLists)
   {
     std::vector<ID3D12CommandList*> nCommandLists;
     std::transform(commandLists.begin(), commandLists.end(),
@@ -36,9 +26,9 @@ namespace wkr::render
     m_commandQueue->ExecuteCommandLists(nCommandLists.size(), &nCommandLists[0]);
   }
 
-  void UDX12CommandQueue::Signal(IFence& fence, i32 frameIndex)
+  void UCommandQueue::Signal(IFence& fence, i32 frameIndex)
   {
-    auto dxFence = static_cast<UDX12Fence*>(&fence);
+    auto dxFence = static_cast<UFence*>(&fence);
     auto nFence = static_cast<ID3D12Fence*>(fence.GetNativeHandle(frameIndex));
 
     HRESULT hr = m_commandQueue->Signal(nFence, dxFence->m_fenceValue[frameIndex]);

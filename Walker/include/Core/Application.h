@@ -9,8 +9,8 @@ namespace wkr
 {
   struct FApplicationCommandLineArgs
   {
-    std::vector<std::string> argv;
-    i32 argc;
+    char** argv;
+    int argc;
   };
 
   struct FApplicationSpecs
@@ -32,7 +32,7 @@ namespace wkr
   private:
     UWindowHandle             m_mainWindow;
     FApplicationSpecs         appSpecs;
-    render::IRendererHandle   m_renderer;
+    render::URendererHandle   m_renderer;
 
     friend int ::main(int argc, char** argv);
   };

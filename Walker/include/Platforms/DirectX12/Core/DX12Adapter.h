@@ -4,21 +4,19 @@
 
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12Adapter : public IAdapter
+  class UAdapter : public IAdapter
   {
   public:
-    UDX12Adapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
-    ~UDX12Adapter() override;
-
-  private:
-    UDX12Adapter() {}
+    UAdapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
+    ~UAdapter() override;
+    UAdapter() = delete;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_adapter; }
+    NativeObject GetNativeObject() override { return m_adapter; }
 
-    mem::Scope<char> GetName() override final;
+    std::string GetName() override final;
 
     u32 GetVendorID() override final;
     u32 GetDeviceID() override final;
@@ -31,12 +29,7 @@ namespace wkr::render
 
     FLuid GetAdapterLuid() override final;
 
-    void Clone(IAdapter& adapter) override final;
-
   private:
     IDXGIAdapter1* m_adapter;
-
-  public:
-    static std::vector<mem::Ref<IAdapter>> GetAllAdapters();
   };
 }

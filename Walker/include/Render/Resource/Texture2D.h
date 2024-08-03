@@ -2,12 +2,17 @@
 
 #include <Render/Resource/Texture.h>
 
-namespace wkr::render::rsc
+namespace wkr::render
 {
+  struct FTexture2DDesc
+  {
+
+  };
+
   class ITexture2D : public ITexture
   {
   public:
-    virtual ~ITexture2D() override {}
+    virtual ~ITexture2D() override = default;
 
   public:
     std::string GetTypeName() override final { return "Texture2D"; }
@@ -19,4 +24,6 @@ namespace wkr::render::rsc
   public:
     static std::string GetStaticTypeName() { return "Texture2D"; }
   };
+
+  using ITexture2DHandle = mem::TRef<ITexture2D>;
 }

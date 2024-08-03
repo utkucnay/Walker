@@ -14,6 +14,9 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <list>
+
+#include <Core/PlatformDetection.h>
 
 #include <Core/Base.h>
 #include <Core/Event.h>

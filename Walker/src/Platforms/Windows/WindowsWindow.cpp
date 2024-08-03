@@ -1,9 +1,9 @@
 #include <Platforms/Windows/WindowsWindow.h>
 #include <Platforms/Windows/WindowProc.h>
 
-namespace wkr
+namespace wkr::windows
 {
-  UWindowsWindow::UWindowsWindow(WindowBuilder& windowBuilder)
+  UWindow::UWindow(FWindowDesc& desc)
   {
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -13,17 +13,19 @@ namespace wkr
     wc.lpfnWndProc = ::WindowProcNative;
     wc.lpszClassName = className.c_str();
 
+    ShowWindow(GetConsoleWindow(), desc.showCLI);
+
     RegisterClass(&wc);
 
     window = CreateWindowEx(
       0,
       className.c_str(),
-      windowBuilder.m_name.c_str(),
+      desc.m_name.c_str(),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
-      windowBuilder.m_width,
-      windowBuilder.m_height,
+      desc.m_width,
+      desc.m_height,
       NULL,
       NULL,
       hInstance,
@@ -36,21 +38,21 @@ namespace wkr
   }
 
 
-  UWindowsWindow::~UWindowsWindow()
+  UWindow::~UWindow()
   {
     m_windowMap.erase(window);
   }
 
-  void UWindowsWindow::OnUpdate()
+  void UWindow::OnUpdate()
   {
   }
 
-  b32 UWindowsWindow::IsShouldClose()
+  b32 UWindow::IsShouldClose()
   {
     return m_isRunning;
   }
 
-  void UWindowsWindow::PoolEvents()
+  void UWindow::PoolEvents()
   {
     while(PeekMessage(&message, NULL, NULL, NULL, PM_REMOVE))
     {
@@ -61,7 +63,7 @@ namespace wkr
     }
   }
 
-  void UWindowsWindow::WindowProc(
+  void UWindow::WindowProc(
       UINT uMsg,
       WPARAM wParam, LPARAM lParam)
   {
@@ -90,7 +92,7 @@ namespace wkr
     }
   }
 
-  bool UWindowsWindow::WindowProcHandle(
+  bool UWindow::WindowProcHandle(
       HWND hwnd,
       UINT uMsg,
       WPARAM wParam, LPARAM lParam)

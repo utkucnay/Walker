@@ -1,14 +1,14 @@
 #include <Platforms/DirectX12/ResourceBarrier/DX12TransitionBarrier.h>
 
-namespace wkr::render::rsc::bar
+namespace wkr::render::dx12
 {
-  UDX12TransitionBarrier::UDX12TransitionBarrier(TransitionBarrierBuilder& tbb)
+  UTransitionBarrier::UTransitionBarrier(FTransitionBarrierDesc& desc)
   {
-    auto nResource = static_cast<ID3D12Resource*>(tbb.m_resource.Lock()->GetNativeHandle());
-    auto nBeforeState = static_cast<D3D12_RESOURCE_STATES>(tbb.m_beforeState);
-    auto nAfterState = static_cast<D3D12_RESOURCE_STATES>(tbb.m_afterState);
-    m_resourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(nResource, nBeforeState, nAfterState);
+    auto nResource = static_cast<ID3D12Resource*>(desc.m_resource->GetNativeObject());
+    auto nBeforeState = static_cast<D3D12_RESOURCE_STATES>(desc.m_beforeState);
+    auto nAfterState = static_cast<D3D12_RESOURCE_STATES>(desc.m_afterState);
+    m_resourceBarrier = CD3_RESOURCE_BARRIER::Transition(nResource, nBeforeState, nAfterState);
   }
 
-  UDX12TransitionBarrier::~UDX12TransitionBarrier() {}
+  UTransitionBarrier::~UTransitionBarrier() {}
 }

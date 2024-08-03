@@ -5,17 +5,17 @@
   class SubType##FactoryTemp : public IFactory<Type, Args...>         \
   {                                                                   \
   public:                                                             \
-    Type*              CreateRaw  (Args... args)                      \
+    Type*               CreateRaw  (Args... args) override                     \
     {                                                                 \
       return new SubType(args...);                                    \
     }                                                                 \
-    mem::Ref<Type>     CreateRef  (Args... args)                      \
+    mem::TRef<Type>     CreateRef  (Args... args) override                      \
     {                                                                 \
-      return mem::Ref<SubType>::Create(args...);                      \
+      return mem::TRef<SubType>::Create(args...);                      \
     }                                                                 \
-    mem::Scope<Type>   CreateScope(Args... args)                      \
+    mem::TScope<Type>   CreateScope(Args... args) override                      \
     {                                                                 \
-      return mem::Scope<SubType>::Create(args...);                    \
+      return mem::TScope<SubType>::Create(args...);                    \
     }                                                                 \
   };                                                                  \
   class SubType##Factory : public SubType##FactoryTemp<__VA_ARGS__> {};

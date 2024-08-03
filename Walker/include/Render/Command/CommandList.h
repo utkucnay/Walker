@@ -1,46 +1,42 @@
 #pragma once
 
-#include <Render/Core/PipelineState.h>
-#include <Render/Core/Device.h>
-#include <Render/ResourceView/RenderTargetView.h>
+#include <Render/Command/CommandTypes.h>
+#include <Render/Command/commandAllocator.h>
+#include <Render/Resource/Resource.h>
 #include <Render/ResourceBarrier/ResourceBarrier.h>
-#include <Render/Command/CommandType.h>
+#include <Render/Core/PipelineState.h>
+#include <Render/ResourceView/RenderTargetView.h>
 
 namespace wkr::render
 {
-  class ICommandAllocator;
-
   struct FCommandListDesc
   {
-    ECommandType                        m_commandType;
-    mem::TWeakRef<ICommandAllocator>    m_commandAllocator;
-    mem::TWeakRef<IPipelineState>       m_pipelineState;
+    ECommandType            m_commandType;
+    IPipelineState*         m_pipelineState;
+    ICommandAllocatorHandle m_commandAllocator;
   };
 
   class ICommandList
   {
   public:
-    virtual ~ICommandList() {}
+    virtual ~ICommandList() = default;
 
   public:
     virtual ECommandType GetType() = 0;
 
   public:
     virtual void Reset(
-        ICommandAllocator& commandAllocator) = 0;
-
-    virtual void Reset(
         ICommandAllocator& commandAllocator,
-        IPipelineState& pipelineState) = 0;
+        IPipelineState* pipelineState) = 0;
 
     virtual void ResourceBarriers(
-        const std::vector<mem::TRef<rsc::bar::IResourceBarrier>>& barriers) = 0;
+        const std::vector<IResourceBarrier*>& barriers) = 0;
 
     virtual void OMSetRenderTargets(
-        const std::vector<mem::TRef<view::URenderTargetView>>& rtvs) = 0;
+        const std::vector<URenderTargetView*>& rtvs) = 0;
 
     virtual void ClearRenderTargetView(
-        view::URenderTargetView& rtv,
+        URenderTargetView& rtv,
         FColor32 color) = 0;
 
   //  virtual void CopyBufferRegion(
@@ -49,8 +45,8 @@ namespace wkr::render
   //      uint64_t numBytes) = 0;
 
     virtual void CopyResource(
-        rsc::IResource& dstResource,
-        rsc::IResource& srcResource) = 0;
+        IResource& dstResource,
+        IResource& srcResource) = 0;
 
     virtual void Close() = 0;
 

@@ -2,12 +2,12 @@
 
 #include <Render/Resource/Resource.h>
 
-namespace wkr::render::view
+namespace wkr::render
 {
   class UResourceView
   {
   public:
-    virtual ~UResourceView() {}
+    virtual ~UResourceView() = default;
 
   public:
     b32 IsResourceExpired()
@@ -16,7 +16,7 @@ namespace wkr::render::view
     }
 
     template<typename T>
-    mem::WeakRef<T> GetResource()
+    mem::TWeakRef<T> GetResource()
     {
       WKR_CORE_ERROR_COND(
           T::GetStaticTypeName() != m_resource.Lock()->GetTypeName(),
@@ -25,14 +25,16 @@ namespace wkr::render::view
             << " "
             << m_resource.Lock()->GetTypeName());
 
-      return static_cast<mem::WeakRef<T>>(m_resource);
+      return static_cast<mem::TWeakRef<T>>(m_resource);
     }
 
   public:
-    virtual NativeHandle  GetNativeHandle() = 0;
+    virtual NativeObject  GetNativeObject() = 0;
     virtual std::string   GetTypeName()     = 0;
 
-  protected:
-    mem::WeakRef<rsc::IResource> m_resource;
+  public:
+    mem::TWeakRef<IResource> m_resource;
   };
+
+  using UResourceViewHandle = mem::TRef<UResourceView>;
 }

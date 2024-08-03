@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Command/CommandType.h>
+#include <Render/Command/CommandTypes.h>
 
 namespace wkr::render
 {
@@ -12,7 +12,7 @@ namespace wkr::render
   class ICommandAllocator
   {
   public:
-    virtual ~ICommandAllocator() {}
+    virtual ~ICommandAllocator() = default;
 
   public:
     virtual NativeObject GetNativeObject() = 0;

@@ -30,7 +30,7 @@ namespace wkr::mem
     template<typename TConv>
     operator TScope<TConv>()
     {
-      Scope<TConv> ret;
+      TScope<TConv> ret;
       ret.ptr = std::move(this->ptr);
       return ret;
     }
@@ -40,7 +40,7 @@ namespace wkr::mem
       return ptr.get();
     };
 
-    Scope<T>& operator=(std::nullptr_t)
+    TScope<T>& operator=(std::nullptr_t)
     {
       ptr = NULL;
       return *this;
@@ -53,9 +53,9 @@ namespace wkr::mem
 
   public:
     template<typename... Args>
-    static Scope<T> Create(Args&&... args) noexcept
+    static TScope<T> Create(Args&&... args) noexcept
     {
-      Scope<T> ret;
+      TScope<T> ret;
       ret.ptr = std::make_unique<T>(std::forward<Args>(args)...);
       return ret;
     }

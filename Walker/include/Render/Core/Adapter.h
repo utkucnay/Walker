@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Render/Core/RendererStructs.h>
+#include <Render/Core/CoreTypes.h>
 
 namespace wkr::render
 {
   class IAdapter
   {
   public:
-    virtual ~IAdapter() {}
+    virtual ~IAdapter() = default;
 
   public:
     virtual NativeObject GetNativeObject() = 0;
@@ -24,9 +24,6 @@ namespace wkr::render
     virtual u64 GetDedicatedVideoMemory()  = 0;
     virtual u64 GetDedicatedSystemMemory() = 0;
     virtual u64 GetSharedSystemMemory()    = 0;
-
-  public:
-    static std::vector<mem::TRef<IAdapter>> GetAllAdapters();
   };
 
   using IAdapterHandle = mem::TRef<IAdapter>;

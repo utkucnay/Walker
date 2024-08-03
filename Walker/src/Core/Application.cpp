@@ -1,10 +1,6 @@
 #include <Core/Application.h>
 
-#include <Core/PlatformDetection.h>
-
-#if defined (WKR_PLATFORM_WINDOWS)
-  #include <Platforms/Windows/WindowsWindow.h>
-#endif
+#include <Platforms/Windows/WindowsWindow.h>
 
 namespace wkr
 {
@@ -14,14 +10,15 @@ namespace wkr
     WKR_CORE_LOG("Application Starting");
     appSpecs = applicationSpecs;
 
-    ShowWindow(GetConsoleWindow(), applicationSpecs.showCLI);
 
-    m_mainWindow = mem::Scope<WindowBuilder>::Create().Get()
-      .SetName("Walker Engine")
-      .SetSize(1280, 720)
-      .BuildRef();
+    FWindowDesc windowDesc = {};
+    windowDesc.m_name = "Walker Engine";
+    windowDesc.m_width = 1280;
+    windowDesc.m_height = 720;
+    m_mainWindow = static_cast<wkr::UWindowHandle>(
+      wkr::windows::UWindowHandle::Create(windowDesc));
 
-    m_renderer = mem::Ref<render::URenderer>::Create(m_mainWindow);
+    m_renderer = render::URendererHandle::Create(m_mainWindow);
 
     m_renderer->CreateResource();
     m_renderer->LoadResources();

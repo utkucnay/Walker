@@ -1,29 +1,31 @@
 #pragma once
 
+#include <Render/Core/AbstractFactory.h>
+
 namespace wkr::render
 {
-  class RendererAPI
+  class URendererAPI
   {
   public:
-    enum class APIType
+    enum class EType
     {
       None      = 0,
-      DirectX12 = 1
+      DirectX12 = 1,
     };
 
   public:
-    static void Init(APIType apiType);
+    static void Init(EType apiType);
 
-    static APIType GetAPI() { return s_Api; }
+    static EType GetAPIType() { return s_Api; }
 
-    [[nodiscard]] static AbstractFactory& GetAbstractFactory()
+    static IAbstractFactory& GetAbstractFactory()
     { return s_abstractFactory.Get(); }
 
     //TODO(utku): ChangeAPI at Runtime
-    static void ChangeAPI(APIType type) { s_Api = type; }
+    static void ChangeAPI(EType type);
 
   private:
-    static inline APIType s_Api;
-    static inline mem::Scope<AbstractFactory> s_abstractFactory;
+    static inline EType s_Api;
+    static inline mem::TScope<IAbstractFactory> s_abstractFactory;
   };
 }
