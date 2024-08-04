@@ -9,8 +9,8 @@
 
 namespace wkr
 {
-  class UWindow;
-  using UWindowHandle = mem::TRef<UWindow>;
+  class AWindow;
+  using AWindowHandle = mem::TRef<AWindow>;
 }
 
 namespace wkr::render
@@ -21,16 +21,16 @@ namespace wkr::render
     FSample                       m_sampleDesc;
     ESwapChainFlag                m_flag;
     ESwapChainEffect              m_swapEffect;
-    UWindowHandle                 m_window;
+    AWindowHandle                 m_window;
     FModeDesc                     m_bufferDesc;
-    EResourceUsage                m_bufferUsage;
-    mem::TWeakRef<ICommandQueue>  m_commandQueue;
+    EResourceUsageFlag                m_bufferUsage;
+    ICommandQueueHandle           m_commandQueue;
   };
 
-  class USwapChain
+  class ASwapChain
   {
   public:
-    virtual ~USwapChain() = default;
+    virtual ~ASwapChain() = default;
 
   public:
     virtual void WindowSizeEvent(u32 width, u32 height) = 0;
@@ -45,7 +45,7 @@ namespace wkr::render
     virtual FModeDesc           GetBufferDesc()   = 0;
     virtual ESwapChainFlag      GetFlag()         = 0;
     virtual ESwapChainEffect    GetSwapEffect()   = 0;
-    virtual EResourceUsage      GetBufferUsage()  = 0;
+    virtual EResourceUsageFlag      GetBufferUsage()  = 0;
 
     [[nodiscard]] virtual IFence& GetCurrentFence() { return m_fence.Get(); }
 
@@ -53,9 +53,9 @@ namespace wkr::render
 
   public:
     virtual u32 GetFrameIndex() { return m_frameIndex; }
-    [[nodiscard]] URenderTargetViewHandle GetCurrentRenderTarget()
+    [[nodiscard]] ARenderTargetViewHandle GetCurrentRenderTarget()
     {
-      return m_descripHeap->Get<URenderTargetView>(GetFrameIndex());
+      return m_descripHeap->Get<ARenderTargetView>(GetFrameIndex());
     }
 
   protected:
@@ -68,5 +68,5 @@ namespace wkr::render
     IDescriptorHeapHandle m_descripHeap;
   };
 
-  using USwapChainHandle = mem::TRef<USwapChain>;
+  using ASwapChainHandle = mem::TRef<ASwapChain>;
 }

@@ -25,10 +25,10 @@ namespace wkr::render::dx12
         const std::vector<IResourceBarrier*>& barriers) override final;
 
     void OMSetRenderTargets(
-        const std::vector<URenderTargetView*>& rtvs) override final;
+        const std::vector<wkr::render::ARenderTargetView*>& rtvs) override final;
 
     void ClearRenderTargetView(
-        URenderTargetView& rtv,
+        wkr::render::ARenderTargetView& rtv,
         FColor32 color) override final;
 
     void CopyResource(

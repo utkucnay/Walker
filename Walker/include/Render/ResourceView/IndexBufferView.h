@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class UIndexBufferView : public UResourceView
+  class AIndexBufferView : public AResourceView
   {
   public:
-    virtual ~UIndexBufferView() override {}
+    virtual ~AIndexBufferView() override {}
 
   public:
     std::string GetTypeName() override final { return "IndexBufferView"; }

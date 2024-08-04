@@ -5,8 +5,7 @@ namespace wkr::render::dx12
 {
   URootSignature::URootSignature(FRootSignatureDesc& desc)
   {
-    auto nDevice = static_cast<ID3D12Device*>(
-        URenderer::GetDefaultDevice().GetNativeHandle());
+    auto nDevice = URenderer::GetDefaultDevice().GetNativeObject();
   }
 
   URootSignature::~URootSignature()

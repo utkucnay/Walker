@@ -30,15 +30,12 @@ namespace wkr
     void Run();
 
   private:
-    UWindowHandle             m_mainWindow;
+    AWindowHandle             m_mainWindow;
     FApplicationSpecs         appSpecs;
     render::URendererHandle   m_renderer;
 
     friend int ::main(int argc, char** argv);
   };
 
-  using UApplicationHandle = mem::TRef<UApplication>;
-
-  //defined in client
   mem::TScope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args);
 }

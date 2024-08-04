@@ -5,7 +5,7 @@ namespace wkr::render::dx12
 {
   UBuffers::UBuffers(FBuffersDesc& desc)
   {
-    auto nDevice = URenderer::GetDefaultDevice().GetNativeObject();
+    ID3D12Device* nDevice = URenderer::GetDefaultDevice().GetNativeObject();
   }
 
   UBuffers::~UBuffers()

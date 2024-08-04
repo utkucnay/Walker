@@ -15,10 +15,12 @@ namespace wkr
     windowDesc.m_name = "Walker Engine";
     windowDesc.m_width = 1280;
     windowDesc.m_height = 720;
-    m_mainWindow = static_cast<wkr::UWindowHandle>(
+    m_mainWindow = static_cast<wkr::AWindowHandle>(
       wkr::windows::UWindowHandle::Create(windowDesc));
 
-    m_renderer = render::URendererHandle::Create(m_mainWindow);
+    render::FRendererDesc rendererDesc;
+    rendererDesc.window = m_mainWindow;
+    m_renderer = render::URendererHandle::Create(rendererDesc);
 
     m_renderer->CreateResource();
     m_renderer->LoadResources();

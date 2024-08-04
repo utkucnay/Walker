@@ -33,10 +33,10 @@ namespace wkr::render
         const std::vector<IResourceBarrier*>& barriers) = 0;
 
     virtual void OMSetRenderTargets(
-        const std::vector<URenderTargetView*>& rtvs) = 0;
+        const std::vector<ARenderTargetView*>& rtvs) = 0;
 
     virtual void ClearRenderTargetView(
-        URenderTargetView& rtv,
+        ARenderTargetView& rtv,
         FColor32 color) = 0;
 
   //  virtual void CopyBufferRegion(

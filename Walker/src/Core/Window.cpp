@@ -2,7 +2,7 @@
 
 namespace wkr
 {
-  void UWindow::SwapBuffers()
+  void AWindow::SwapBuffers()
   {
     if(m_swapChain.Expired())
     {

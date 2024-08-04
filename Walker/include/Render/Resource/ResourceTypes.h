@@ -148,7 +148,6 @@ namespace wkr::render
     NV12 = 103,
     P010 = 104,
     P016 = 105,
-    t420_OPAQUE = 106,
     YUY2 = 107,
     Y210 = 108,
     Y216 = 109,
@@ -197,7 +196,7 @@ namespace wkr::render
     RaytracingAccelerationStructure = 0x100
   };
 
-  enum class EResourceUsage
+  enum class EResourceUsageFlag
   {
     CPU_ACCESS_NONE                = 0,
     CPU_ACCESS_DYNAMIC             = 1,

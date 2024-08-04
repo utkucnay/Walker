@@ -4,10 +4,10 @@
 
 namespace wkr::render
 {
-  class UResourceView
+  class AResourceView
   {
   public:
-    virtual ~UResourceView() = default;
+    virtual ~AResourceView() = default;
 
   public:
     b32 IsResourceExpired()
@@ -36,5 +36,5 @@ namespace wkr::render
     mem::TWeakRef<IResource> m_resource;
   };
 
-  using UResourceViewHandle = mem::TRef<UResourceView>;
+  using AResourceViewHandle = mem::TRef<AResourceView>;
 }

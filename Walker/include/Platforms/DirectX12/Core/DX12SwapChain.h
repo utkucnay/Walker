@@ -5,7 +5,7 @@
 
 namespace wkr::render::dx12
 {
-  class USwapChain : public wkr::render::USwapChain
+  class USwapChain : public ASwapChain
   {
   public:
     USwapChain(FSwapChainDesc& desc);
@@ -24,11 +24,11 @@ namespace wkr::render::dx12
     ESwapChainFlag      GetFlag()         override final;
     ESwapChainEffect    GetSwapEffect()   override final;
     FModeDesc   GetBufferDesc()   override final;
-    EResourceUsage GetBufferUsage()  override final;
+    EResourceUsageFlag GetBufferUsage()  override final;
 
     void Present(u8 syncInterval, u8 flags) override final;
 
-    void SetupEvents();
+    void SetupEvents(AWindowHandle window);
     void DestroyEvents();
 
   private:

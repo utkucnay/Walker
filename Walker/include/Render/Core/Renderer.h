@@ -6,7 +6,7 @@
 namespace wkr::render {
   struct FRendererDesc
   {
-    UWindowHandle window;
+    AWindowHandle window;
   };
 
   class URenderer {
@@ -26,7 +26,7 @@ namespace wkr::render {
     ICommandListHandle                   m_commandDirectList;
     ICommandQueueHandle                  m_commandDirectQueue;
 
-    USwapChainHandle m_swapChain;
+    ASwapChainHandle m_swapChain;
 
   public:
     [[nodiscard]] static IDevice& GetDefaultDevice() {

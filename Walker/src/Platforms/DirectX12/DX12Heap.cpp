@@ -5,8 +5,7 @@ namespace wkr::render::dx12
 {
   UHeap::UHeap(FHeapDesc& desc)
   {
-    auto nDevice = static_cast<ID3D12Device*>(
-        URenderer::GetDefaultDevice().GetNativeHandle());
+    auto nDevice = URenderer::GetDefaultDevice().GetNativeObject();
   }
 
   UHeap::~UHeap()

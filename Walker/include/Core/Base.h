@@ -26,5 +26,10 @@
   #define WKR_CORE_ERROR_COND(cond, ...)
 #endif
 
+#define SAFE_GET_NATIVE_OBJECT(obj, ...) nullptr == obj ? nullptr : obj->GetNativeObject(__VA_ARGS__)
+
+#define HAS_FLAG(flag1, flag2) \
+  (static_cast<u64>(flag1) & static_cast<u64>(flag2)) != 0
+
 #define KB * 1024
 #define MB * 1024 * 1024

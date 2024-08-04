@@ -5,11 +5,11 @@
 
 namespace wkr::render::dx12
 {
-  class URenderTargetView : public wkr::render::URenderTargetView
+  class URenderTargetView : public ARenderTargetView
   {
   public:
     URenderTargetView(
-        CD3_CPU_DESCRIPTOR_HANDLE handle,
+        CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
         IResourceHandle res)
       : m_resourveViewHandle(handle) { m_resource = res; }
 

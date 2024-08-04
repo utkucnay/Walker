@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class UUnorderedAccessView : public UResourceView
+  class AUnorderedAccessView : public AResourceView
   {
   public:
-    virtual ~UUnorderedAccessView() override {}
+    virtual ~AUnorderedAccessView() override {}
 
   public:
     std::string GetTypeName() override final { return "UnorderedAccessView"; }

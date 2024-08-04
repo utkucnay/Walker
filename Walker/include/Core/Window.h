@@ -4,8 +4,8 @@
 
 namespace wkr::render
 {
-  class USwapChain;
-  using USwapChainHandle = mem::TRef<USwapChain>;
+  class ASwapChain;
+  using ASwapChainHandle = mem::TRef<ASwapChain>;
 }
 
 namespace wkr
@@ -18,13 +18,13 @@ namespace wkr
     b32         showCLI;
   };
 
-  class UWindow
+  class AWindow
   {
   public:
-    virtual ~UWindow() = default;
+    virtual ~AWindow() = default;
 
   public:
-    void SetSwapChain(render::USwapChainHandle swapChain)
+    void SetSwapChain(render::ASwapChainHandle swapChain)
     { m_swapChain = swapChain; }
 
     b32 GetFullscreen() { return !GetWindowed(); }
@@ -39,7 +39,7 @@ namespace wkr
     virtual u32 GetHeight()     = 0;
     virtual b32 GetWindowed()   = 0;
 
-    mem::TWeakRef<render::USwapChain> GetSwapChain()
+    mem::TWeakRef<render::ASwapChain> GetSwapChain()
     {
         return m_swapChain;
     }
@@ -51,8 +51,8 @@ namespace wkr
     WindowSetFullscreenEvent  m_setFullscreenEvent;
 
   protected:
-    mem::TWeakRef<render::USwapChain> m_swapChain;
+    mem::TWeakRef<render::ASwapChain> m_swapChain;
   };
 
-  using UWindowHandle = mem::TRef<UWindow>;
+  using AWindowHandle = mem::TRef<AWindow>;
 }

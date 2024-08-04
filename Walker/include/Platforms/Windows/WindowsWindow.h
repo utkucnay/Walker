@@ -6,7 +6,7 @@ LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 namespace wkr::windows
 {
-  class UWindow : public wkr::UWindow
+  class UWindow : public wkr::AWindow
   {
   public:
     UWindow(FWindowDesc& desc);
@@ -64,11 +64,11 @@ namespace wkr::windows
 
   private:
     bool m_isRunning;
-    static inline std::unordered_map<HWND, UWindowsWindow*> m_windowMap{};
+    static inline std::unordered_map<HWND, UWindow*> m_windowMap{};
 
     friend :: LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     friend bool WindowProcHandle(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   };
 
-  using UWindowHandle = mem::Ref<UWindow>;
+  using UWindowHandle = mem::TRef<UWindow>;
 }
