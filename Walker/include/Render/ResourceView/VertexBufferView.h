@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class UVertexBufferView : public UResourceView
+  class AVertexBufferView : public AResourceView
   {
   public:
-    virtual ~UVertexBufferView() override {}
+    virtual ~AVertexBufferView() override {}
 
   public:
     std::string GetTypeName() override final { return "VertexBufferView"; }

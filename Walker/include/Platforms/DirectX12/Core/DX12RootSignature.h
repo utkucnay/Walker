@@ -3,16 +3,16 @@
 #include <Render/Core/RootSignature.h>
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12RootSignature : public IRootSignature
+  class URootSignature : public IRootSignature
   {
   public:
-    UDX12RootSignature(RootSignatureBuilder& rootSignatureBuilder);
-    ~UDX12RootSignature() override;
+    URootSignature(FRootSignatureDesc& desc);
+    ~URootSignature() override;
 
   public:
-    NativeHandle GetNativeHandle() override final { return m_rootSignature; }
+    NativeObject GetNativeObject() override final { return m_rootSignature; }
 
   private:
     ID3D12RootSignature* m_rootSignature;

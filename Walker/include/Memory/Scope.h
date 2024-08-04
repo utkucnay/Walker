@@ -3,12 +3,12 @@
 namespace wkr::mem
 {
   template<typename T>
-  class Scope
+  class TScope
   {
   public:
-    Scope<T>() {}
-
-    Scope<T>(std::nullptr_t) {}
+    TScope<T>() {}
+    TScope<T>(T* obj) { ptr = std::unique_ptr<T>(obj); }
+    TScope<T>(std::nullptr_t) { ptr = nullptr; }
 
   public:
     [[nodiscard]] T& Get()
@@ -28,9 +28,9 @@ namespace wkr::mem
 
   public:
     template<typename TConv>
-    operator Scope<TConv>()
+    operator TScope<TConv>()
     {
-      Scope<TConv> ret;
+      TScope<TConv> ret;
       ret.ptr = std::move(this->ptr);
       return ret;
     }
@@ -40,7 +40,7 @@ namespace wkr::mem
       return ptr.get();
     };
 
-    Scope<T>& operator=(std::nullptr_t)
+    TScope<T>& operator=(std::nullptr_t)
     {
       ptr = NULL;
       return *this;
@@ -53,9 +53,9 @@ namespace wkr::mem
 
   public:
     template<typename... Args>
-    static Scope<T> Create(Args&&... args) noexcept
+    static TScope<T> Create(Args&&... args) noexcept
     {
-      Scope<T> ret;
+      TScope<T> ret;
       ret.ptr = std::make_unique<T>(std::forward<Args>(args)...);
       return ret;
     }

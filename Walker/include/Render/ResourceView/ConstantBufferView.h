@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class UConstantBufferView : public UResourceView
+  class AConstantBufferView : public AResourceView
   {
   public:
-    virtual ~UConstantBufferView() override {}
+    virtual ~AConstantBufferView() override {}
 
   public:
     std::string GetTypeName() override final { return "ConstantBufferView"; }

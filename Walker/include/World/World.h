@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wkr
+namespace wkr::scene
 {
   class UWorld
   {

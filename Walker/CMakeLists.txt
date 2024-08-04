@@ -10,6 +10,7 @@ set(header_files
 set(source_files
   ./src/Core/Application.cpp
   ./src/Core/Window.cpp
+  ./src/Core/RendererAPI.cpp
 
   ./src/Platforms/Windows/WindowsWindow.cpp
 
@@ -29,19 +30,6 @@ set(source_files
   ./src/Platforms/DirectX12/DX12RootSignature.cpp
 
   ./src/Render/Renderer.cpp
-  ./src/Render/CommandQueue.cpp
-  ./src/Render/CommandList.cpp
-  ./src/Render/CommandAllocator.cpp
-  ./src/Render/Adapter.cpp
-  ./src/Render/Fence.cpp
-  ./src/Render/Device.cpp
-  ./src/Render/SwapChain.cpp
-  ./src/Render/DescriptorHeap.cpp
-  ./src/Render/RenderTargetView.cpp
-  ./src/Render/TransitionBarrier.cpp
-  ./src/Render/Heap.cpp
-  ./src/Render/Buffers.cpp
-  ./src/Render/RootSignature.cpp
   )
 
 set(all_files

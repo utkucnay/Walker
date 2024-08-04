@@ -3,19 +3,19 @@
 #include <Render/Command/CommandQueue.h>
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12CommandQueue : public ICommandQueue
+  class UCommandQueue : public ICommandQueue
   {
   public:
-    UDX12CommandQueue(CommandQueueBuilder& cqb);
-    ~UDX12CommandQueue() override;
+    UCommandQueue(FCommandQueueDesc& desc);
+    ~UCommandQueue() override;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_commandQueue; }
+    NativeObject GetNativeObject() override { return m_commandQueue; }
 
     void ExecuteCommandList(
-        const std::vector<mem::Ref<ICommandList>>& commandLists) override final;
+        const std::vector<ICommandList*>& commandLists) override final;
 
     void Signal(IFence& fence, i32 frameIndex) override final;
 

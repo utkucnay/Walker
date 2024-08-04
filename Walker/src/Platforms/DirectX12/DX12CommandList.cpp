@@ -1,106 +1,94 @@
+#include <Platforms/DirectX12/Core/DX12TypeMap.h>
 #include <Platforms/DirectX12/Command/DX12CommandList.h>
 #include <Render/Core/Renderer.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-
-  UDX12CommandList::UDX12CommandList(CommandListBuilder& clb)
+  UCommandList::UCommandList(FCommandListDesc& desc)
   {
-    ID3D12Device* nDevice = (ID3D12Device*)URenderer::GetDefaultDevice().GetNativeHandle();
-    auto lPipelineState = clb.m_pipelineState.Lock();
+    ID3D12Device* nDevice = URenderer::GetDefaultDevice().GetNativeObject();
 
     HRESULT hr = nDevice->CreateCommandList(
         NULL,
-        static_cast<D3D12_COMMAND_LIST_TYPE>(clb.m_listType),
-        static_cast<ID3D12CommandAllocator*>(
-          clb.m_commandAllocator.Lock().Get().GetNativeHandle()),
-        NULL == lPipelineState ?
-        NULL :
-        static_cast<ID3D12PipelineState*>(lPipelineState->GetNativeHandle()),
+        ConvertECommandType(desc.m_commandType),
+        desc.m_commandAllocator->GetNativeObject(),
+        SAFE_GET_NATIVE_OBJECT(desc.m_pipelineState),
         IID_PPV_ARGS(&m_commandList));
 
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command List");
     WKR_CORE_LOG("Created DX12 Command List");
   }
 
-  UDX12CommandList::~UDX12CommandList()
+  UCommandList::~UCommandList()
   {
     m_commandList->Release();
   }
 
-  ICommandList::Type UDX12CommandList::GetType()
+  ECommandType UCommandList::GetType()
   {
-    return static_cast<ICommandList::Type>(m_commandList->GetType());
+    return static_cast<ECommandType>(m_commandList->GetType());
   }
 
-  void UDX12CommandList::Reset(
-      ICommandAllocator& commandAllocator)
-  {
-    auto nCommandAllocator = static_cast<ID3D12CommandAllocator*>(
-        commandAllocator.GetNativeHandle());
-    m_commandList->Reset(nCommandAllocator, NULL);
-  }
-
-  void UDX12CommandList::Reset(
+  void UCommandList::Reset(
       ICommandAllocator& commandAllocator,
-      IPipelineState& pipelineState)
+      IPipelineState* pipelineState)
   {
-    auto nCommandAllocator = static_cast<ID3D12CommandAllocator*>(
-        commandAllocator.GetNativeHandle());
-    auto nPipelineState = static_cast<ID3D12PipelineState*>(
-        pipelineState.GetNativeHandle());
-    m_commandList->Reset(nCommandAllocator, nPipelineState);
+    m_commandList->Reset(
+        commandAllocator.GetNativeObject(),
+        SAFE_GET_NATIVE_OBJECT(pipelineState));
   }
 
-  void UDX12CommandList::ResourceBarriers(
-        const std::vector<mem::Ref<rsc::bar::IResourceBarrier>>& barriers)
+  void UCommandList::ResourceBarriers(
+        const std::vector<IResourceBarrier*>& barriers)
   {
     std::vector<D3D12_RESOURCE_BARRIER> nBarriers;
     std::transform(barriers.begin(), barriers.end(),
         std::back_inserter(nBarriers), [] (auto barrier)
         {
-          return *static_cast<D3D12_RESOURCE_BARRIER*>(barrier->GetNativeHandle());
+          return *static_cast<D3D12_RESOURCE_BARRIER*>(barrier->GetNativeObject());
         });
+
     m_commandList->ResourceBarrier(nBarriers.size(), &nBarriers[0]);
   }
 
-  void UDX12CommandList::OMSetRenderTargets(
-        const std::vector<mem::Ref<view::URenderTargetView>>& rtvs)
+  void UCommandList::OMSetRenderTargets(
+        const std::vector<wkr::render::ARenderTargetView*>& rtvs)
   {
     std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> nRtvs;
     std::transform(rtvs.begin(), rtvs.end(),
         std::back_inserter(nRtvs), [] (auto rtv)
         {
-          return *static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(rtv->GetNativeHandle());
+          return *static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(rtv->GetNativeObject());
         });
-    m_commandList->OMSetRenderTargets(nRtvs.size(), &nRtvs[0], false, NULL);
+
+    m_commandList->OMSetRenderTargets(nRtvs.size(), &nRtvs[0], false, nullptr);
   }
 
-  void UDX12CommandList::ClearRenderTargetView(
-        view::URenderTargetView& rtv,
+  void UCommandList::ClearRenderTargetView(
+        wkr::render::ARenderTargetView& rtv,
         FColor32 color)
   {
-    auto nRtv = static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(rtv.GetNativeHandle());
+    D3D12_CPU_DESCRIPTOR_HANDLE* nRtv = rtv.GetNativeObject();
     float nColor[] =
     {
       (float)color.m_r / 255,
       (float)color.m_g / 255,
       (float)color.m_b / 255,
       (float)color.m_a / 255};
-    m_commandList->ClearRenderTargetView(*nRtv, nColor, 0, NULL);
+
+    m_commandList->ClearRenderTargetView(*nRtv, nColor, 0, nullptr);
   }
 
-  void UDX12CommandList::CopyResource(
-        rsc::IResource& dstResource,
-        rsc::IResource& srcResource)
+  void UCommandList::CopyResource(
+        IResource& dstResource,
+        IResource& srcResource)
   {
-    auto nDstResource = static_cast<ID3D12Resource*>(dstResource.GetNativeHandle());
-    auto nSrcResource = static_cast<ID3D12Resource*>(srcResource.GetNativeHandle());
-
-    m_commandList->CopyResource(nDstResource, nSrcResource);
+    m_commandList->CopyResource(
+        dstResource.GetNativeObject(),
+        srcResource.GetNativeObject());
   }
 
-  void UDX12CommandList::Close()
+  void UCommandList::Close()
   {
     m_commandList->Close();
   }

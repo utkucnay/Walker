@@ -5,6 +5,9 @@ namespace wkr::render
   class IDescriptorTable
   {
   public:
-    virtual void* GetNativeHandle() = 0;
+    virtual ~IDescriptorTable() = default;
+
+  public:
+    virtual NativeObject GetNativeObject() = 0;
   };
 }

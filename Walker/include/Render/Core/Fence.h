@@ -1,45 +1,24 @@
 #pragma once
 
-#include <Render/Core/Device.h>
+#include <Render/Core/CoreTypes.h>
 
 namespace wkr::render
 {
-  class IDevice;
-
-  class IFence : public ICloneable<IFence>
+  struct FFenceDesc
   {
-  protected:
-    IFence() {}
+    u8          m_frameCount;
+    EFenceFlag  m_flag;
+  };
 
+  class IFence
+  {
   public:
-    enum class Flag
-    {
-      None                = 0,
-      Shared              = 0x1,
-      SharedCrossAdapter  = 0x2,
-      NonMonitored        = 0x4
-    };
-
-  public:
-    virtual ~IFence() {}
+    virtual ~IFence() = default;
 
   public:
     virtual void FenceEvent(int frameIndex) = 0;
-    virtual NativeHandle GetNativeHandle(int frameIndex) = 0;
+    virtual NativeObject GetNativeObject(int frameIndex) = 0;
   };
 
-  class FenceBuilder : IBuilder<IFence>
-  {
-  public:
-    FenceBuilder& SetFenceFlag(IFence::Flag fenceFlag);
-    FenceBuilder& SetFrameCount(u8 frameCount);
-
-    IFence*            BuildRaw  () override final;
-    mem::Ref<IFence>   BuildRef  () override final;
-    mem::Scope<IFence> BuildScope() override final;
-
-  public:
-    u8            m_frameCount;
-    IFence::Flag  m_fenceFlag{};
-  };
+  using IFenceHandle = mem::TRef<IFence>;
 }

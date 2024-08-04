@@ -1,6 +1,6 @@
 @echo off
 mkdir .out
-cmake -S . -O .out -G Ninja
+cmake -S . -O .out -G Ninja -DCMAKE_BUILD_TYPE=Debug
 ninja -C %cd%\.out
 
 mkdir .\.out\Sandbox\D3D12

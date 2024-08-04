@@ -7,7 +7,7 @@
 	branch = docking
 [submodule "Walker/vendor/DIContainer"]
 	path = Walker/vendor/DIContainer
-	url = git@github.com:utkucnay/DIContainer.git
+	url = https://github.com/utkucnay/DIContainer.git
 [submodule "Walker/vendor/Streamline"]
 	path = Walker/vendor/Streamline
 	url = https://github.com/NVIDIAGameWorks/Streamline

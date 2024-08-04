@@ -1,19 +1,20 @@
 #pragma once
 
 #include <Render/Shader/Shader.h>
-#include <Render/Core/RendererAPI.h>
 
 namespace wkr::render
 {
+  struct FVertexShaderDesc
+  {
+
+  };
+
   class IVertexShader : public IShader
   {
   public:
-    virtual ~IVertexShader() {}
+    virtual ~IVertexShader() = default;
 
   };
 
-  class VertexShaderBuilder : IBuilder<IVertexShader>
-  {
-    //REGISTER_BUILDER(I, VertexShader);
-  };
+  using IVertexShaderHandle = mem::TRef<IVertexShader>;
 }

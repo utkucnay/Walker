@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class USamplers : public UResourceView
+  class ASamplers : public AResourceView
   {
   public:
-    virtual ~USamplers() override {}
+    virtual ~ASamplers() override {}
 
   public:
     std::string GetTypeName() override final { return "Samplers"; }

@@ -3,20 +3,20 @@
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/ResourceView/RenderTargetView.h>
 
-namespace wkr::render::view
+namespace wkr::render::dx12
 {
-  class UDX12RenderTargetView : public URenderTargetView
+  class URenderTargetView : public ARenderTargetView
   {
   public:
-    UDX12RenderTargetView(
+    URenderTargetView(
         CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
-        mem::WeakRef<rsc::IResource> res)
+        IResourceHandle res)
       : m_resourveViewHandle(handle) { m_resource = res; }
 
-    ~UDX12RenderTargetView() override;
+    ~URenderTargetView() override;
 
   public:
-    NativeHandle GetNativeHandle() override final { return &m_resourveViewHandle; }
+    NativeObject GetNativeObject() override final { return &m_resourveViewHandle; }
 
   protected:
     CD3DX12_CPU_DESCRIPTOR_HANDLE m_resourveViewHandle;

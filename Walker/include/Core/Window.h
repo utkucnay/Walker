@@ -4,62 +4,55 @@
 
 namespace wkr::render
 {
-  class USwapChain;
-  class SwapChainBuilder;
+  class ASwapChain;
+  using ASwapChainHandle = mem::TRef<ASwapChain>;
 }
 
 namespace wkr
 {
-  class UWindow
+  struct FWindowDesc
+  {
+    u32         m_width;
+    u32         m_height;
+    std::string m_name;
+    b32         showCLI;
+  };
+
+  class AWindow
   {
   public:
-    virtual ~UWindow() = 0;
+    virtual ~AWindow() = default;
 
   public:
-    void SetSwapChain(
-          mem::WeakRef<render::USwapChain> swapChain);
+    void SetSwapChain(render::ASwapChainHandle swapChain)
+    { m_swapChain = swapChain; }
 
     b32 GetFullscreen() { return !GetWindowed(); }
     void SwapBuffers();
 
   public:
-    virtual void OnUpdate()       = 0;
-    virtual b32 IsShouldClose()   = 0;
-    virtual void PoolEvents()     = 0;
+    virtual void  OnUpdate()        = 0;
+    virtual b32   IsShouldClose()   = 0;
+    virtual void  PoolEvents()      = 0;
 
     virtual u32 GetWidth()      = 0;
     virtual u32 GetHeight()     = 0;
     virtual b32 GetWindowed()   = 0;
 
-    [[nodiscard]] mem::WeakRef<render::USwapChain> GetSwapChain()
+    mem::TWeakRef<render::ASwapChain> GetSwapChain()
     {
         return m_swapChain;
     }
 
-    virtual NativeHandle GetNativeHandle() = 0;
+    virtual NativeObject GetNativeObject() = 0;
 
   public:
     WindowResizeEvent         m_resizeEvent;
     WindowSetFullscreenEvent  m_setFullscreenEvent;
 
   protected:
-    mem::WeakRef<render::USwapChain> m_swapChain;
+    mem::TWeakRef<render::ASwapChain> m_swapChain;
   };
 
-  class WindowBuilder : IBuilder<UWindow>
-  {
-  public:
-    WindowBuilder& SetName(const std::string& name);
-    WindowBuilder& SetSize(u32 width, u32 height);
-
-  public:
-    [[nodiscard]] UWindow*             BuildRaw() override;
-    [[nodiscard]] mem::Ref<UWindow>    BuildRef() override;
-    [[nodiscard]] mem::Scope<UWindow>  BuildScope() override;
-
-  public:
-    u32         m_width;
-    u32         m_height;
-    std::string m_name;
-  };
+  using AWindowHandle = mem::TRef<AWindow>;
 }

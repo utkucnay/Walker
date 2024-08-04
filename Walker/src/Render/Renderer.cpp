@@ -1,101 +1,66 @@
-#include "Render/Core/RootSignature.h"
-#include <Render/Resource/Heap.h>
-#include <Render/Core/Device.h>
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
-#include <Render/Command/Command.h>
-#include <Render/Resource/Resource.h>
-#include <Render/ResourceBarrier/TransitionBarrier.h>
 
 namespace wkr::render
 {
-  URenderer::URenderer(mem::WeakRef<UWindow> window)
+  URenderer::URenderer(FRendererDesc& desc)
   {
-    RendererAPI::Init(RendererAPI::APIType::DirectX12);
+    URendererAPI::Init(URendererAPI::EType::DirectX12);
 
-    auto adapters = IAdapter::GetAllAdapters();
+    auto& renderFactory = URendererAPI::GetAbstractFactory();
 
-    mem::Ref<IAdapter> findedAdapter;
-    for(auto adapter : adapters)
-    {
-      if(adapter->GetDedicatedVideoMemory() > 4096)
-      {
-        findedAdapter = adapter;
-      }
-    }
-
-    m_device = mem::Scope<DeviceBuilder>::Create().Get()
-      .SetAdapter(findedAdapter)
-      .BuildRef();
+    FDeviceDesc deviceDesc = {};
+    m_device = renderFactory.GetIDeviceFactory()->CreateRef(deviceDesc);
 
     s_defaultDevice = m_device;
 
-    m_commandDirectQueue = mem::Scope<CommandQueueBuilder>::Create().Get()
-      .SetCommandListType(ICommandList::Type::Direct)
-      .SetCommandQueuePriority(ICommandQueue::Priority::Normal)
-      .SetCommandQueueFlags(ICommandQueue::Flags::None)
-      .BuildRef();
+    FCommandQueueDesc commandQueueDesc = {};
+    commandQueueDesc.m_commandType = ECommandType::Direct;
+    commandQueueDesc.m_commandQueuePriority = ECommandQueuePriority::Normal;
+    commandQueueDesc.m_commandQueueFlags = ECommandQueueFlags::None;
+    m_commandDirectQueue = renderFactory.GetICommandQueueFactory()->CreateRef(commandQueueDesc);
 
-    CreateSwapChain(window);
+    FSwapChainDesc swapChainDesc = {};
+    swapChainDesc.m_window = desc.window;
+    swapChainDesc.m_commandQueue = m_commandDirectQueue;
+    swapChainDesc.m_bufferCount = 3;
+    swapChainDesc.m_bufferUsage = EResourceUsageFlag::RENDER_TARGET_OUTPUT;
+    swapChainDesc.m_swapEffect = ESwapChainEffect::FlipDiscard;
+
+    swapChainDesc.m_sampleDesc.count = 1;
+    swapChainDesc.m_sampleDesc.quality = 0;
+
+    swapChainDesc.m_bufferDesc = {};
+    swapChainDesc.m_bufferDesc.m_width = desc.window->GetWidth();
+    swapChainDesc.m_bufferDesc.m_height = desc.window->GetHeight();
+    swapChainDesc.m_bufferDesc.m_format = EResourceFormat::R8G8B8A8_UNORM;
+    swapChainDesc.m_bufferDesc.m_refreshRate.m_numerator = 0;
+    swapChainDesc.m_bufferDesc.m_refreshRate.m_denominator = 1;
+
+    m_swapChain = renderFactory.GetASwapChainFactory()->CreateRef(swapChainDesc);
+    desc.window->SetSwapChain(m_swapChain);
+
+    FCommandAllocatorDesc commandAllocatorDesc;
+    commandAllocatorDesc.commandType = ECommandType::Direct;
 
     for(u32 i = 0; i < m_swapChain->GetBufferCount(); i++)
-      m_commandDirectAllocator.push_back(
-          mem::Scope<CommandAllocatorBuilder>::Create()
-          ->SetCommandListType(ICommandList::Type::Direct)
-          .BuildRef());
+      m_commandDirectAllocator.push_back(renderFactory.GetICommandAllocatorFactory()
+                                         ->CreateRef(commandAllocatorDesc));
 
-    m_commandDirectList = mem::Scope<CommandListBuilder>::Create(
-        m_commandDirectAllocator[0]).Get()
-      .SetCommandListType(ICommandList::Type::Direct)
-      .BuildRef();
+    FCommandListDesc commandListDesc = {};
+    commandListDesc.m_commandAllocator = m_commandDirectAllocator[0];
+    commandListDesc.m_commandType = ECommandType::Direct;
 
-    m_commandCopyQueue = mem::Scope<CommandQueueBuilder>::Create().Get()
-      .SetCommandListType(ICommandList::Type::Copy)
-      .SetCommandQueuePriority(ICommandQueue::Priority::Normal)
-      .SetCommandQueueFlags(ICommandQueue::Flags::None)
-      .BuildRef();
-
-    for(u32 i = 0; i < m_swapChain->GetBufferCount(); i++)
-      m_commandCopyAllocator.push_back(
-          mem::Scope<CommandAllocatorBuilder>::Create()
-          ->SetCommandListType(ICommandList::Type::Copy)
-          .BuildRef());
-
-    m_commandCopyList = mem::Scope<CommandListBuilder>::Create(
-        m_commandCopyAllocator[0]).Get()
-      .SetCommandListType(ICommandList::Type::Copy)
-      .BuildRef();
-  }
-
-  void URenderer::CreateSwapChain(mem::WeakRef<UWindow> window)
-  {
-    m_swapChain = mem::Scope<SwapChainBuilder>::Create(
-        window, m_commandDirectQueue).Get()
-      .SetMSAA(1, 0)
-      .SetVsync(USwapChain::VsyncDesc::None)
-      .BuildRef();
-
-    window.Lock()->SetSwapChain(m_swapChain);
+    m_commandDirectList = renderFactory.GetICommandListFactory()
+    ->CreateRef(commandListDesc);
   }
 
   void URenderer::CreateResource()
   {
-    m_vertexBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create().Get()
-      .SetCommittedType(rsc::IHeap::Type::Default, rsc::IHeap::Flag::None)
-      .SetSize(2 MB)
-      .BuildRef();
-
-    m_vertexUploadBuffer = mem::Scope<rsc::GenericBuffersBuilder>::Create().Get()
-      .SetCommittedType(rsc::IHeap::Type::Upload, rsc::IHeap::Flag::None)
-      .SetSize(2 MB)
-      .BuildRef();
-
-    m_rootSignature = mem::Scope<RootSignatureBuilder>()->BuildRef();
   }
 
   void URenderer::LoadResources()
   {
-
   }
 
   URenderer::~URenderer()
@@ -117,44 +82,53 @@ namespace wkr::render
 
   void URenderer::Render()
   {
-    mem::Ref<view::URenderTargetView> renderTarget = m_swapChain->GetCurrentRenderTarget();
+    ARenderTargetViewHandle renderTarget = m_swapChain->GetCurrentRenderTarget();
     u32 frameIndex = m_swapChain->GetFrameIndex();
 
     m_commandDirectAllocator[frameIndex]->Reset();
 
-    m_commandDirectList->Reset(m_commandDirectAllocator[frameIndex].Get());
+    m_commandDirectList->Reset(m_commandDirectAllocator[frameIndex].Get(), nullptr);
+
+    auto& renderFactory = URendererAPI::GetAbstractFactory();
+
+    FTransitionBarrierDesc transitionBarrierDesc = {};
+    transitionBarrierDesc.m_resource = renderTarget->m_resource.Lock();
+    transitionBarrierDesc.m_beforeState = EResourceState::RenderTarget;
+    transitionBarrierDesc.m_afterState = EResourceState::Present;
+
+    auto barrier = renderFactory.GetITransitionBarrierFactory()
+    ->CreateRef(transitionBarrierDesc);
 
     m_commandDirectList->ResourceBarriers(
         {
-          mem::Scope<rsc::bar::TransitionBarrierBuilder>::Create(
-              static_cast<mem::WeakRef<rsc::IResource>>(renderTarget->GetTexture())).Get()
-          .SetBeforeState(rsc::IResource::State::RenderTarget)
-          .SetAfterState(rsc::IResource::State::Present)
-          .BuildRef()
+          barrier.GetPtr()
         });
 
     m_commandDirectList->OMSetRenderTargets(
         {
-          renderTarget
+          renderTarget.GetPtr()
         });
 
     m_commandDirectList->ClearRenderTargetView(renderTarget.Get(),
         FColor32(0, 255, 0, 255));
 
+
+    transitionBarrierDesc.m_beforeState = EResourceState::Present;
+    transitionBarrierDesc.m_afterState = EResourceState::RenderTarget;
+
+    auto reverseBarrier = renderFactory.GetITransitionBarrierFactory()
+    ->CreateRef(transitionBarrierDesc);
+
     m_commandDirectList->ResourceBarriers(
         {
-          mem::Scope<rsc::bar::TransitionBarrierBuilder>::Create(
-              static_cast<mem::WeakRef<rsc::IResource>>(renderTarget->GetTexture())).Get()
-          .SetBeforeState(rsc::IResource::State::Present)
-          .SetAfterState(rsc::IResource::State::RenderTarget)
-          .BuildRef()
+          reverseBarrier.GetPtr()
         });
 
     m_commandDirectList->Close();
 
     m_commandDirectQueue->ExecuteCommandList(
         {
-          m_commandDirectList
+          m_commandDirectList.GetPtr()
         });
 
     m_commandDirectQueue->Signal(m_swapChain->GetCurrentFence(), frameIndex);

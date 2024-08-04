@@ -2,12 +2,19 @@
 
 namespace wkr::render
 {
+  struct FShaderDesc
+  {
+
+  };
+
   class IShader
   {
   public:
-    virtual ~IShader() {}
+    virtual ~IShader() = default;
 
   public:
-    virtual NativeHandle GetNativeHandle() = 0;
+    virtual NativeObject GetNativeObject() = 0;
   };
+
+  using IShaderHandle = mem::TRef<IShader>;
 }

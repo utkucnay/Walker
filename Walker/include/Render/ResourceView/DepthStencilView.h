@@ -4,10 +4,10 @@
 
 namespace wkr::render::view
 {
-  class UDepthStencilView : public UResourceView
+  class ADepthStencilView : public AResourceView
   {
   public:
-    virtual ~UDepthStencilView() override {}
+    virtual ~ADepthStencilView() override {}
 
   public:
     static std::string GetStaticTypeName() { return "DepthStencilView"; }

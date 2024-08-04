@@ -3,88 +3,53 @@
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/Core/AbstractFactory.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
   //Core
-  REGISTER_FACTORY(IDevice,        UDX12Device,     DeviceBuilder&);
-  REGISTER_FACTORY(IFence,         UDX12Fence,      FenceBuilder&);
-  REGISTER_FACTORY(USwapChain,     UDX12SwapChain,  SwapChainBuilder&);
-  //REGISTER_FACTORY(PipelineState, DX12PipelineState);
-  REGISTER_FACTORY(IRootSignature, UDX12RootSignature, RootSignatureBuilder&);
+  REGISTER_FACTORY(IDevice, UDevice, FDeviceDesc&);
+  REGISTER_FACTORY(IFence, UFence, FFenceDesc&);
+  REGISTER_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
+  //REGISTER_FACTORY(IPipelineState, UPipelineState, FPipelineStateDesc&);
+  REGISTER_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
 
   //Command
-  REGISTER_FACTORY(ICommandQueue,      UDX12CommandQueue,     CommandQueueBuilder&);
-  REGISTER_FACTORY(ICommandList,       UDX12CommandList,      CommandListBuilder&);
-  REGISTER_FACTORY(ICommandAllocator,  UDX12CommandAllocator, CommandAllocatorBuilder&);
+  REGISTER_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
+  REGISTER_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
+  REGISTER_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
 
   //Descriptor
-  REGISTER_FACTORY(IDescriptorHeap, UDX12DescriptorHeap, DescriptorHeapBuilder&);
+  REGISTER_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
 
   //Resource
-  namespace rsc
-  {
-    REGISTER_FACTORY(IHeap    , UDX12Heap   , HeapBuilder&);
-    REGISTER_FACTORY(IBuffers , UDX12Buffers, ResourceBuilder<IBuffers>&);
+  REGISTER_FACTORY(IHeap , UHeap, FHeapDesc&);
+  REGISTER_FACTORY(IBuffers, UBuffers, FBuffersDesc&);
   //REGISTER_FACTORY(rsc::Texture1D,      rsc::DX12Texture1D);
   //REGISTER_FACTORY(rsc::Texture1DArray, rsc::DX12Texture1DArray);
   //REGISTER_FACTORY(Texture2D,      DX12Texture2D);
   //REGISTER_FACTORY(rsc::Texture2DArray, rsc::DX12Texture2DArray);
   //REGISTER_FACTORY(rsc::Texture3D,      rsc::DX12Texture3D);
-    namespace bar
-    {
-      REGISTER_FACTORY(
-          ITransitionBarrier,
-          UDX12TransitionBarrier,
-          TransitionBarrierBuilder&);
-    }
-  }
+  REGISTER_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
 
-
-  class DX12AbstractFactory : public AbstractFactory
-  {
-  public:
-    DX12AbstractFactory() { UDX12Factory::Init(); }
+  BEGIN_FACTORY()
+    CTOR_FACTORY(UDX12Factory::Init();)
 
     //Core
-    mem::Scope<IFactory<IDevice, DeviceBuilder&>>
-      GetDeviceFactory() { return mem::Scope<UDX12DeviceFactory>::Create(); }
-    mem::Scope<IFactory<IFence, FenceBuilder&>>
-      GetFenceFactory() { return mem::Scope<UDX12FenceFactory>::Create(); }
-    mem::Scope<IFactory<USwapChain, SwapChainBuilder&>>
-      GetSwapChainFactory() { return mem::Scope<UDX12SwapChainFactory>::Create(); }
-    //mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory();
-    mem::Scope<IFactory<IRootSignature, RootSignatureBuilder&>>
-      GetRootSignatureFactory() { return mem::Scope<UDX12RootSignatureFactory>::Create(); };
+    SUBS_FACTORY(IDevice, UDevice, FDeviceDesc&);
+    SUBS_FACTORY(IFence, UFence, FFenceDesc&);
+    SUBS_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
+    SUBS_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
 
     //Command
-    mem::Scope<IFactory<ICommandQueue, CommandQueueBuilder&>>
-      GetCommandQueueFactory() { return mem::Scope<UDX12CommandQueueFactory>::Create(); }
-    mem::Scope<IFactory<ICommandList, CommandListBuilder&>>
-      GetCommandListFactory() { return mem::Scope<UDX12CommandListFactory>::Create(); }
-    mem::Scope<IFactory<ICommandAllocator, CommandAllocatorBuilder&>>
-      GetCommandAllocatorFactory() { return mem::Scope<UDX12CommandAllocatorFactory>::Create(); }
+    SUBS_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
+    SUBS_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
+    SUBS_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
 
     //Descriptor
-    mem::Scope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
-      GetDescriptorHeapFactory() { return mem::Scope<UDX12DescriptorHeapFactory>::Create(); }
+    SUBS_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
 
     //Resource
-    virtual mem::Scope<IFactory<rsc::IHeap, rsc::HeapBuilder&>>
-      GetHeapFactory()
-    { return mem::Scope<rsc::UDX12HeapFactory>::Create(); }
-    mem::Scope<IFactory<rsc::IBuffers, rsc::ResourceBuilder<rsc::IBuffers>&>>
-      GetBuffersFactory()
-    { return mem::Scope<rsc::UDX12BuffersFactory>::Create();}
-    //mem::Scope<Factory<rsc::Texture1D>> GetTexture1DFactory();
-    //mem::Scope<Factory<rsc::Texture2D>> GetTexture2DFactory();
-    //mem::Scope<Factory<rsc::Texture3D>> GetTexture3DFactory();
-
-    //mem::Scope<Factory<rsc::Texture1DArray>> GetTexture1DArrayFactory();
-    //mem::Scope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory();
-
-    //Resource Barrier
-    virtual mem::Scope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
-      GetTransitionBarrierFactory() {
-        return mem::Scope<rsc::bar::UDX12TransitionBarrierFactory>::Create();}
-  };
+    SUBS_FACTORY(IHeap , UHeap, FHeapDesc&);
+    SUBS_FACTORY(IBuffers, UBuffers, FBuffersDesc&);
+    SUBS_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
+  END_FACTORY()
 }

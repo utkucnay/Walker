@@ -4,24 +4,24 @@
 #include <Platforms/DirectX12/DX12.h>
 #include <Render/Descriptor/DescriptorHeap.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12DescriptorHeap : public IDescriptorHeap
+  class UDescriptorHeap : public IDescriptorHeap
   {
   public:
-    UDX12DescriptorHeap(DescriptorHeapBuilder& dhb);
-    ~UDX12DescriptorHeap() override;
+    UDescriptorHeap(FDescriptorHeapDesc& desc);
+    ~UDescriptorHeap() override;
 
   public:
     u32 GetCount() override final;
 
-    IDescriptorHeap::Type  GetType()  override final;
-    IDescriptorHeap::Flags GetFlags() override final;
+    EDescriptorHeapType  GetType()  override final;
+    EDescriptorHeapFlags GetFlags() override final;
     void Bind(
-        const std::vector<mem::WeakRef<rsc::IResource>>& resources) override final;
+        const std::vector<IResourceHandle>& resources) override final;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_descriptorHeap; }
+    NativeObject GetNativeObject() override { return m_descriptorHeap; }
 
   private:
     ID3D12DescriptorHeap* m_descriptorHeap;

@@ -1,49 +1,37 @@
 #pragma once
 
-#include <Render/Descriptor/DescriptorTable.h>
+#include <Render/Resource/Resource.h>
 #include <Render/ResourceView/ResourceView.h>
-#include <Render/Core/Device.h>
-#include <Render/Resource/Texture2D.h>
+#include <Render/Descriptor/DescriptorTypes.h>
 
 namespace wkr::render
 {
-  class DescriptorHeapBuilder;
+  struct FDescriptorHeapDesc
+  {
+    u32                   m_count;
+    EDescriptorHeapType   m_type;
+    EDescriptorHeapFlags  m_flags;
+  };
 
   class IDescriptorHeap
   {
   public:
-    enum class Flags
-    {
-      None = 0,
-      ShaderVisable = 0x1,
-    };
-
-    enum class Type
-    {
-      CBV_SRV_UAV = 0,
-      Sampler,
-      RTV,
-      DSV,
-      NumTypes,
-    };
-
-  public:
-    virtual ~IDescriptorHeap() {}
+    virtual ~IDescriptorHeap() = default;
 
   public:
     virtual u32 GetCount() = 0;
 
-    virtual IDescriptorHeap::Type  GetType()  = 0;
-    virtual IDescriptorHeap::Flags GetFlags() = 0;
+    virtual EDescriptorHeapType  GetType()  = 0;
+    virtual EDescriptorHeapFlags GetFlags() = 0;
 
     virtual void Bind(
-        const std::vector<mem::WeakRef<rsc::IResource>>& resources) = 0;
+        const std::vector<IResourceHandle>& resources) = 0;
 
    // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
    //     uint32_t offset, uint32_t size);
 
     template<typename T>
-    [[nodiscard]] mem::Ref<T> Get(std::size_t index)
+    [[nodiscard]] mem::TRef<T> Get(std::size_t index)
     {
       WKR_CORE_ERROR_COND(
           m_resourceViews[index]->GetTypeName() != T::GetStaticTypeName(),
@@ -52,28 +40,11 @@ namespace wkr::render
     }
 
   public:
-    virtual NativeHandle GetNativeHandle() = 0;
+    virtual NativeObject GetNativeObject() = 0;
 
   protected:
-    std::vector<mem::Ref<view::UResourceView>> m_resourceViews;
+    std::vector<AResourceViewHandle> m_resourceViews;
   };
 
-  class DescriptorHeapBuilder : IBuilder<IDescriptorHeap>
-  {
-  public:
-    DescriptorHeapBuilder& SetCount(u32 count);
-    DescriptorHeapBuilder& SetType(IDescriptorHeap::Type type);
-    DescriptorHeapBuilder& SetFlags(IDescriptorHeap::Flags flags);
-
-  public:
-    [[nodiscard]] IDescriptorHeap*             BuildRaw()    override final;
-    [[nodiscard]] mem::Ref<IDescriptorHeap>    BuildRef()    override final;
-    [[nodiscard]] mem::Scope<IDescriptorHeap>  BuildScope()  override final;
-
-  public:
-    u32 m_count{};
-
-    IDescriptorHeap::Type   m_type{};
-    IDescriptorHeap::Flags  m_flags{};
-  };
+  using IDescriptorHeapHandle = mem::TRef<IDescriptorHeap>;
 }

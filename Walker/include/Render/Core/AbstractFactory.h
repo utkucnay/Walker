@@ -4,45 +4,45 @@
 
 namespace wkr::render
 {
-  class AbstractFactory
+  class IAbstractFactory
   {
   public:
     //Core
-    virtual mem::Scope<IFactory<IDevice, DeviceBuilder&>>
-      GetDeviceFactory()        = 0;
-    virtual mem::Scope<IFactory<IFence, FenceBuilder&>>
-      GetFenceFactory()         = 0;
-    virtual mem::Scope<IFactory<USwapChain, SwapChainBuilder&>>
-      GetSwapChainFactory()     = 0;
-    virtual mem::Scope<IFactory<IRootSignature, RootSignatureBuilder&>>
-      GetRootSignatureFactory() = 0;
+    virtual mem::TScope<IFactory<IDevice, FDeviceDesc&>>
+      GetIDeviceFactory()        = 0;
+    virtual mem::TScope<IFactory<IFence, FFenceDesc&>>
+      GetIFenceFactory()         = 0;
+    virtual mem::TScope<IFactory<ASwapChain, FSwapChainDesc&>>
+      GetASwapChainFactory()     = 0;
+    virtual mem::TScope<IFactory<IRootSignature, FRootSignatureDesc&>>
+      GetIRootSignatureFactory() = 0;
     //virtual mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory() = 0;
 
     //Command
-    virtual mem::Scope<IFactory<ICommandQueue, CommandQueueBuilder&>>
-      GetCommandQueueFactory()    = 0;
-    virtual mem::Scope<IFactory<ICommandList, CommandListBuilder&>>
-      GetCommandListFactory()     = 0;
-    virtual mem::Scope<IFactory<ICommandAllocator, CommandAllocatorBuilder&>>
-      GetCommandAllocatorFactory()= 0;
+    virtual mem::TScope<IFactory<ICommandQueue, FCommandQueueDesc&>>
+      GetICommandQueueFactory()    = 0;
+    virtual mem::TScope<IFactory<ICommandList, FCommandListDesc&>>
+      GetICommandListFactory()     = 0;
+    virtual mem::TScope<IFactory<ICommandAllocator, FCommandAllocatorDesc&>>
+      GetICommandAllocatorFactory()= 0;
 
     //Descriptor
-    virtual mem::Scope<IFactory<IDescriptorHeap, DescriptorHeapBuilder&>>
-      GetDescriptorHeapFactory() = 0;
+    virtual mem::TScope<IFactory<IDescriptorHeap, FDescriptorHeapDesc&>>
+      GetIDescriptorHeapFactory() = 0;
 
     //Resource
-    virtual mem::Scope<IFactory<rsc::IHeap, rsc::HeapBuilder&>>
-      GetHeapFactory()    = 0;
-    virtual mem::Scope<IFactory<rsc::IBuffers, rsc::ResourceBuilder<rsc::IBuffers>&>>
-      GetBuffersFactory() = 0;
-    //virtual mem::Scope<Factory<rsc::Texture1D>> GetTexture1DFactory() = 0;
-    //virtual mem::Scope<Factory<rsc::Texture2D>> GetTexture2DFactory() = 0;
-    //virtual mem::Scope<Factory<rsc::Texture3D>> GetTexture3DFactory() = 0;
-    //virtual mem::Scope<Factory<rsc::Texture1DArray>> GetTexture1DArrayFactory() = 0;
-    //virtual mem::Scope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory() = 0;
+    virtual mem::TScope<IFactory<IHeap, FHeapDesc&>>
+      GetIHeapFactory()    = 0;
+    virtual mem::TScope<IFactory<IBuffers, FBuffersDesc&>>
+      GetIBuffersFactory() = 0;
+    //virtual mem::TScope<Factory<rsc::Texture1D>> GetTexture1DFactory() = 0;
+    //virtual mem::TScope<Factory<rsc::Texture2D>> GetTexture2DFactory() = 0;
+    //virtual mem::TScope<Factory<rsc::Texture3D>> GetTexture3DFactory() = 0;
+    //virtual mem::TScope<Factory<rsc::Texture1DArray>> GetTexture1DArrayFactory() = 0;
+    //virtual mem::TScope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory() = 0;
 
     //Barriers
-    virtual mem::Scope<IFactory<rsc::bar::ITransitionBarrier, rsc::bar::TransitionBarrierBuilder&>>
-      GetTransitionBarrierFactory() = 0;
+    virtual mem::TScope<IFactory<ITransitionBarrier, FTransitionBarrierDesc&>>
+      GetITransitionBarrierFactory() = 0;
   };
 }

@@ -2,7 +2,7 @@
 
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
   class UDX12Factory
   {

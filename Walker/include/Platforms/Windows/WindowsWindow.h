@@ -4,13 +4,13 @@
 
 LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-namespace wkr
+namespace wkr::windows
 {
-  class UWindowsWindow : public UWindow
+  class UWindow : public wkr::AWindow
   {
   public:
-    UWindowsWindow(WindowBuilder& windowBuilder);
-    ~UWindowsWindow() override;
+    UWindow(FWindowDesc& desc);
+    ~UWindow() override;
 
   public:
     void OnUpdate() override;
@@ -44,7 +44,7 @@ namespace wkr
       return (wLong & WS_POPUP) == 0;
     }
 
-    NativeHandle GetNativeHandle() override { return &window; }
+    NativeObject GetNativeObject() override { return &window; }
 
   private:
     void WindowProc(
@@ -64,9 +64,11 @@ namespace wkr
 
   private:
     bool m_isRunning;
-    static inline std::unordered_map<HWND, UWindowsWindow*> m_windowMap{};
+    static inline std::unordered_map<HWND, UWindow*> m_windowMap{};
 
     friend :: LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     friend bool WindowProcHandle(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   };
+
+  using UWindowHandle = mem::TRef<UWindow>;
 }

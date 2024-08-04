@@ -2,7 +2,7 @@
 
 #include <Core/Application.h>
 
-extern wkr::mem::Scope<wkr::UApplication> wkr::CreateApplication(
+extern wkr::mem::TScope<wkr::UApplication> wkr::CreateApplication(
     const FApplicationCommandLineArgs& args);
 
 int main(int argc, char** argv)

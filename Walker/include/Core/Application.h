@@ -10,7 +10,7 @@ namespace wkr
   struct FApplicationCommandLineArgs
   {
     char** argv;
-    i32 argc;
+    int argc;
   };
 
   struct FApplicationSpecs
@@ -30,13 +30,12 @@ namespace wkr
     void Run();
 
   private:
-    FApplicationSpecs             appSpecs;
-    mem::Ref<UWindow>             m_mainWindow;
-    mem::Ref<render::URenderer>   m_renderer;
+    AWindowHandle             m_mainWindow;
+    FApplicationSpecs         appSpecs;
+    render::URendererHandle   m_renderer;
 
     friend int ::main(int argc, char** argv);
   };
 
-  //defined in client
-  mem::Scope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args);
+  mem::TScope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args);
 }

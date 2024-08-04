@@ -3,15 +3,15 @@
 namespace wkr::mem
 {
   template<typename T>
-  class WeakRef;
+  class TWeakRef;
 
   template<typename T>
-  class Ref
+  class TRef
   {
   public:
-    Ref<T>() { }
-
-    Ref<T>(std::nullptr_t) { }
+    TRef<T>() { }
+    TRef<T>(T* obj) { ptr = std::shared_ptr<T>(obj); }
+    TRef<T>(std::nullptr_t) { ptr = nullptr; }
 
   public:
     [[nodiscard]] T& Get() const
@@ -31,17 +31,17 @@ namespace wkr::mem
 
   public:
     template<typename TConv>
-    operator Ref<TConv>()
+    operator TRef<TConv>()
     {
-      Ref<TConv> ret;
+      TRef<TConv> ret;
       ret.ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }
 
     template<typename TConv>
-    operator WeakRef<TConv>()
+    operator TWeakRef<TConv>()
     {
-      WeakRef<TConv> ret;
+      TWeakRef<TConv> ret;
       ret.m_ptr = std::static_pointer_cast<TConv>(this->ptr);
       return ret;
     }
@@ -51,22 +51,22 @@ namespace wkr::mem
       return ptr.get();
     };
 
-    Ref<T>& operator=(std::nullptr_t)
+    TRef<T>& operator=(std::nullptr_t)
     {
-      ptr = NULL;
+      ptr = nullptr;
       return *this;
     };
 
-    bool operator==(void* comp) const
+    b32 operator==(void* comp) const
     {
       return ptr.get() == comp;
     };
 
   public:
     template<typename... Args>
-    static Ref<T> Create(Args&&... args)
+    static TRef<T> Create(Args&&... args)
     {
-      Ref<T> ret;
+      TRef<T> ret;
       ret.ptr = std::make_shared<T>(std::forward<Args>(args)...);
       return ret;
     }

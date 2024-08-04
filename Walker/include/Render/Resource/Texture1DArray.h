@@ -2,12 +2,12 @@
 
 #include <Render/Resource/Texture.h>
 
-namespace wkr::render::rsc
+namespace wkr::render
 {
   class ITexture1DArray : public ITexture
   {
   public:
-    virtual ~ITexture1DArray() override {}
+    virtual ~ITexture1DArray() override = default;
 
   public:
     std::string GetTypeName() override final { return "Texture1DArray"; }
@@ -18,4 +18,6 @@ namespace wkr::render::rsc
   public:
     static std::string GetStaticTypeName() { return "Texture1DArray"; }
   };
+
+  using ITexture1DArrayHandle = mem::TRef<ITexture1DArray>;
 }

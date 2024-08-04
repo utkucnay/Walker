@@ -1,36 +1,24 @@
 #pragma once
 
-#include <Render/Command/Command.h>
-#include <Render/Core/Device.h>
-
-#if !defined (COMMAND_INCLUDE_BARRIER)
-  #error "Command Didn't Include Correctly"
-#endif
+#include <Render/Command/CommandTypes.h>
 
 namespace wkr::render
 {
-  class ICommandAllocator : public ICloneable<ICommandAllocator>
+  struct FCommandAllocatorDesc
+  {
+    ECommandType commandType;
+  };
+
+  class ICommandAllocator
   {
   public:
-    virtual ~ICommandAllocator() {}
+    virtual ~ICommandAllocator() = default;
 
   public:
-    virtual NativeHandle GetNativeHandle() = 0;
-    virtual ICommandList::Type GetCommandListType() = 0;
+    virtual NativeObject GetNativeObject() = 0;
+    virtual ECommandType GetCommandType() = 0;
     virtual void Reset() = 0;
   };
 
-  class CommandAllocatorBuilder : IBuilder<ICommandAllocator>
-  {
-  public:
-    CommandAllocatorBuilder& SetCommandListType(ICommandList::Type listType);
-
-  public:
-    [[nodiscard]] ICommandAllocator*             BuildRaw  () override final;
-    [[nodiscard]] mem::Ref<ICommandAllocator>    BuildRef  () override final;
-    [[nodiscard]] mem::Scope<ICommandAllocator>  BuildScope() override final;
-
-  public:
-    ICommandList::Type m_listType{};
-  };
+  using ICommandAllocatorHandle = mem::TRef<ICommandAllocator>;
 }

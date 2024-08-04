@@ -4,24 +4,22 @@
 
 #include <Platforms/DirectX12/DX12.h>
 
-namespace wkr::render
+namespace wkr::render::dx12
 {
-  class UDX12CommandAllocator : public ICommandAllocator
+  class UCommandAllocator : public ICommandAllocator
   {
   public:
-    UDX12CommandAllocator(CommandAllocatorBuilder& cab);
-    ~UDX12CommandAllocator() override;
+    UCommandAllocator(FCommandAllocatorDesc& desc);
+    ~UCommandAllocator() override;
 
   public:
-    NativeHandle GetNativeHandle() override { return m_commandAllocator; }
-    ICommandList::Type GetCommandListType() override final;
+    NativeObject GetNativeObject() override
+      { return m_commandAllocator; }
+    ECommandType GetCommandType() override final;
     void Reset() override final;
-
-  protected:
-    void Clone(ICommandAllocator& commandAllocator) override final;
 
   private:
     ID3D12CommandAllocator* m_commandAllocator;
-    ICommandList::Type      m_listType;
+    ECommandType      m_listType;
   };
 }
