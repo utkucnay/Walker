@@ -72,7 +72,7 @@ namespace wkr::render::dx12
           case EDescriptorHeapType::RTV:
             {
               m_resourceViews.push_back(mem::TRef<dx12::URenderTargetView>
-                  ::Create(rtvHandle, resources[i]));
+                  ::Create(rtvHandle, new UTexture2D(resources[i])));
             } break;
 
           default:

@@ -10,8 +10,8 @@ namespace wkr::render::dx12
   public:
     URenderTargetView(
         CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
-        IResourceHandle res)
-      : m_resourveViewHandle(handle) { m_resource = res; }
+        mem::TRef<UTexture2D> texture2d)
+      : m_resourveViewHandle(handle) { m_texture2D = texture2d; }
 
     ~URenderTargetView() override;
 

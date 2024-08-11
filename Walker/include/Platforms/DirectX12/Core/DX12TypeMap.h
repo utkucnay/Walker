@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Render/Descriptor/DescriptorTypes.h"
+#include "Core/Base.h"
+#include "Render/Resource/Heap.h"
+#include "Render/Resource/Resource.h"
 #include "d3d12.h"
-#include "dxgiformat.h"
+#include <Render/Descriptor/DescriptorTypes.h>
 #include <Render/Resource/ResourceTypes.h>
 #include <Render/Command/CommandTypes.h>
 #include <Render/Core/CoreTypes.h>
@@ -39,11 +41,9 @@ namespace wkr::render::dx12
 
     D3D12_COMMAND_QUEUE_FLAGS ret = {};
 
-    if(HAS_FLAG(ECommandQueueFlags::None, flag))
-      ret |= map[ECommandQueueFlags::None];
-
-    if(HAS_FLAG(ECommandQueueFlags::DisableGPUTimeout, flag))
-      ret |= map[ECommandQueueFlags::DisableGPUTimeout];
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
 
     return ret;
   }
@@ -61,56 +61,38 @@ namespace wkr::render::dx12
 
     D3D12_FENCE_FLAGS ret = {};
 
-    if(HAS_FLAG(EFenceFlag::None, flag))
-      ret |= map[EFenceFlag::None];
-
-    if(HAS_FLAG(EFenceFlag::Shared, flag))
-      ret |= map[EFenceFlag::Shared];
-
-    if(HAS_FLAG(EFenceFlag::NonMonitored, flag))
-      ret |= map[EFenceFlag::NonMonitored];
-
-    if(HAS_FLAG(EFenceFlag::SharedCrossAdapter, flag))
-      ret |= map[EFenceFlag::SharedCrossAdapter];
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
 
     return ret;
   }
 
   static inline DXGI_USAGE
-  ConvertEResourceUsageMap(EResourceUsageFlag flag)
+  ConvertEResourceUsageMap(EResourceUsageF flag)
   {
-    static std::unordered_map<EResourceUsageFlag, DXGI_USAGE> map =
+    static std::unordered_map<EResourceUsageF, DXGI_USAGE> map =
     {
-      {EResourceUsageFlag::SHARED, DXGI_USAGE_SHARED},
-      {EResourceUsageFlag::READ_ONLY, DXGI_USAGE_READ_ONLY},
-      {EResourceUsageFlag::SHADER_INPUT, DXGI_USAGE_SHADER_INPUT},
-      {EResourceUsageFlag::BACK_BUFFER, DXGI_USAGE_BACK_BUFFER},
-      {EResourceUsageFlag::UNORDERED_ACCESS, DXGI_USAGE_UNORDERED_ACCESS},
-      {EResourceUsageFlag::RENDER_TARGET_OUTPUT, DXGI_USAGE_RENDER_TARGET_OUTPUT},
-      {EResourceUsageFlag::DISCARD_ON_PRESENT, DXGI_USAGE_DISCARD_ON_PRESENT},
+      {EResourceUsageF::SHARED, DXGI_USAGE_SHARED},
+      {EResourceUsageF::READ_ONLY, DXGI_USAGE_READ_ONLY},
+      {EResourceUsageF::SHADER_INPUT, DXGI_USAGE_SHADER_INPUT},
+      {EResourceUsageF::BACK_BUFFER, DXGI_USAGE_BACK_BUFFER},
+      {EResourceUsageF::UNORDERED_ACCESS, DXGI_USAGE_UNORDERED_ACCESS},
+      {EResourceUsageF::RENDER_TARGET_OUTPUT, DXGI_USAGE_RENDER_TARGET_OUTPUT},
+      {EResourceUsageF::DISCARD_ON_PRESENT, DXGI_USAGE_DISCARD_ON_PRESENT},
 
-      {EResourceUsageFlag::CPU_ACCESS_NONE, DXGI_CPU_ACCESS_NONE},
-      {EResourceUsageFlag::CPU_ACCESS_FIELD, DXGI_CPU_ACCESS_FIELD},
-      {EResourceUsageFlag::CPU_ACCESS_DYNAMIC, DXGI_CPU_ACCESS_DYNAMIC},
-      {EResourceUsageFlag::CPU_ACCESS_SCRATCH, DXGI_CPU_ACCESS_SCRATCH},
-      {EResourceUsageFlag::CPU_ACCESS_READ_WRITE, DXGI_CPU_ACCESS_READ_WRITE},
+      {EResourceUsageF::CPU_ACCESS_NONE, DXGI_CPU_ACCESS_NONE},
+      {EResourceUsageF::CPU_ACCESS_FIELD, DXGI_CPU_ACCESS_FIELD},
+      {EResourceUsageF::CPU_ACCESS_DYNAMIC, DXGI_CPU_ACCESS_DYNAMIC},
+      {EResourceUsageF::CPU_ACCESS_SCRATCH, DXGI_CPU_ACCESS_SCRATCH},
+      {EResourceUsageF::CPU_ACCESS_READ_WRITE, DXGI_CPU_ACCESS_READ_WRITE},
     };
 
     DXGI_USAGE ret = {};
 
-    if(HAS_FLAG(EResourceUsageFlag::SHARED, flag)) ret |= map[EResourceUsageFlag::SHARED];
-    if(HAS_FLAG(EResourceUsageFlag::READ_ONLY, flag)) ret |= map[EResourceUsageFlag::READ_ONLY];
-    if(HAS_FLAG(EResourceUsageFlag::SHADER_INPUT, flag)) ret |= map[EResourceUsageFlag::SHADER_INPUT];
-    if(HAS_FLAG(EResourceUsageFlag::BACK_BUFFER, flag)) ret |= map[EResourceUsageFlag::BACK_BUFFER];
-    if(HAS_FLAG(EResourceUsageFlag::UNORDERED_ACCESS, flag)) ret |= map[EResourceUsageFlag::UNORDERED_ACCESS];
-    if(HAS_FLAG(EResourceUsageFlag::RENDER_TARGET_OUTPUT, flag)) ret |= map[EResourceUsageFlag::RENDER_TARGET_OUTPUT];
-    if(HAS_FLAG(EResourceUsageFlag::DISCARD_ON_PRESENT, flag)) ret |= map[EResourceUsageFlag::DISCARD_ON_PRESENT];
-
-    if(HAS_FLAG(EResourceUsageFlag::CPU_ACCESS_NONE, flag)) ret |= map[EResourceUsageFlag::CPU_ACCESS_NONE];
-    if(HAS_FLAG(EResourceUsageFlag::CPU_ACCESS_READ_WRITE, flag)) ret |= map[EResourceUsageFlag::CPU_ACCESS_READ_WRITE];
-    if(HAS_FLAG(EResourceUsageFlag::CPU_ACCESS_SCRATCH, flag)) ret |= map[EResourceUsageFlag::CPU_ACCESS_SCRATCH];
-    if(HAS_FLAG(EResourceUsageFlag::CPU_ACCESS_FIELD, flag)) ret |= map[EResourceUsageFlag::CPU_ACCESS_FIELD];
-    if(HAS_FLAG(EResourceUsageFlag::CPU_ACCESS_DYNAMIC, flag)) ret |= map[EResourceUsageFlag::CPU_ACCESS_DYNAMIC];
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
 
     return ret;
   }
@@ -313,11 +295,244 @@ namespace wkr::render::dx12
 
     D3D12_DESCRIPTOR_HEAP_FLAGS ret = {};
 
-    if(HAS_FLAG(EDescriptorHeapFlags::None, descriptorHeapFlag))
-      ret |= map[EDescriptorHeapFlags::None];
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, descriptorHeapFlag))
+        ret |= map[iter.first];
 
-    if(HAS_FLAG(EDescriptorHeapFlags::ShaderVisable, descriptorHeapFlag))
-      ret |= map[EDescriptorHeapFlags::ShaderVisable];
+    return ret;
+  }
+
+  static inline DXGI_SAMPLE_DESC
+  ConvertFSampleDesc(FSample& desc)
+  {
+    DXGI_SAMPLE_DESC ret = {};
+
+    ret.Count = desc.count;
+    ret.Quality = desc.quality;
+
+    return ret;
+  }
+
+  static inline D3D12_RESOURCE_STATES
+  ConvertEResourceState(EResourceStateF resourceState)
+  {
+    static std::unordered_map<EResourceStateF, D3D12_RESOURCE_STATES> map =
+    {
+      { EResourceStateF::Common                          , D3D12_RESOURCE_STATE_COMMON },
+      { EResourceStateF::VertexAndConstantBuffer         , D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER },
+      { EResourceStateF::IndexBuffer                     , D3D12_RESOURCE_STATE_INDEX_BUFFER },
+      { EResourceStateF::RenderTarget                    , D3D12_RESOURCE_STATE_RENDER_TARGET },
+      { EResourceStateF::UnorederedAccess                , D3D12_RESOURCE_STATE_UNORDERED_ACCESS },
+      { EResourceStateF::DepthWrite                      , D3D12_RESOURCE_STATE_DEPTH_WRITE },
+      { EResourceStateF::DepthRead                       , D3D12_RESOURCE_STATE_DEPTH_READ },
+      { EResourceStateF::NonPixelShaderResource          , D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE },
+      { EResourceStateF::PixelShaderResource             , D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE },
+      { EResourceStateF::StreamOut                       , D3D12_RESOURCE_STATE_STREAM_OUT },
+      { EResourceStateF::IndirectArgument                , D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT },
+      { EResourceStateF::CopyDest                        , D3D12_RESOURCE_STATE_COPY_DEST },
+      { EResourceStateF::CopySource                      , D3D12_RESOURCE_STATE_COPY_SOURCE },
+      { EResourceStateF::ResolveDest                     , D3D12_RESOURCE_STATE_RESOLVE_DEST },
+      { EResourceStateF::ResolveSource                   , D3D12_RESOURCE_STATE_RESOLVE_SOURCE },
+      { EResourceStateF::RaytracingAccelerationStructure , D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE },
+      { EResourceStateF::ShadingRateSource               , D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE },
+      { EResourceStateF::ReservedInternal8000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_8000 },
+      { EResourceStateF::ReservedInternal4000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_4000 },
+      { EResourceStateF::ReservedInternal100000          , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_100000 },
+      { EResourceStateF::ReservedInternal40000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_40000000 },
+      { EResourceStateF::ReservedInternal80000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_80000000 },
+      { EResourceStateF::GenericRead                     , D3D12_RESOURCE_STATE_GENERIC_READ },
+      { EResourceStateF::AllShaderResource               , D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE },
+      { EResourceStateF::Present                         , D3D12_RESOURCE_STATE_PRESENT },
+      { EResourceStateF::Predication                     , D3D12_RESOURCE_STATE_PREDICATION },
+      { EResourceStateF::VideoDecodeRead                 , D3D12_RESOURCE_STATE_VIDEO_DECODE_READ },
+      { EResourceStateF::VideoDecodeWrite                , D3D12_RESOURCE_STATE_VIDEO_DECODE_WRITE },
+      { EResourceStateF::VideoProcessRead                , D3D12_RESOURCE_STATE_VIDEO_PROCESS_READ },
+      { EResourceStateF::VideoProcessWrite               , D3D12_RESOURCE_STATE_VIDEO_PROCESS_WRITE },
+      { EResourceStateF::VideoEncodeRead                 , D3D12_RESOURCE_STATE_VIDEO_ENCODE_READ },
+      { EResourceStateF::VideoEncodeWrite                , D3D12_RESOURCE_STATE_VIDEO_ENCODE_WRITE },
+    };
+
+    D3D12_RESOURCE_STATES ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, resourceState))
+        ret |= map[iter.first];
+
+
+    return map[resourceState];
+  }
+
+  static inline mem::TScope<D3D12_CLEAR_VALUE>
+  ConvertFClearValue(FClearValue* clearValue)
+  {
+    if(clearValue == nullptr) return nullptr;
+
+    D3D12_CLEAR_VALUE* ret = new D3D12_CLEAR_VALUE();
+
+    ret->Format = ConvertEResourceFormat(clearValue->format);
+    ret->DepthStencil.Depth = clearValue->depthStencil.depth;
+    ret->DepthStencil.Stencil = clearValue->depthStencil.stencil;
+
+    return ret;
+  }
+
+  static inline D3D12_RESOURCE_DIMENSION
+  ConvertEResourceDimension(EResourceDimension resourceDimension)
+  {
+    static std::unordered_map<EResourceDimension, D3D12_RESOURCE_DIMENSION> map =
+    {
+      { EResourceDimension::Unknown   , D3D12_RESOURCE_DIMENSION_UNKNOWN },
+      { EResourceDimension::Buffer    , D3D12_RESOURCE_DIMENSION_BUFFER },
+      { EResourceDimension::Texture1D , D3D12_RESOURCE_DIMENSION_TEXTURE1D },
+      { EResourceDimension::Texture2D , D3D12_RESOURCE_DIMENSION_TEXTURE2D },
+      { EResourceDimension::Texture3D , D3D12_RESOURCE_DIMENSION_TEXTURE3D },
+    };
+
+    return map[resourceDimension];
+  }
+
+  static inline D3D12_TEXTURE_LAYOUT
+  ConvertEResourceLayout(EResourceLayout resourceLayout)
+  {
+    static std::unordered_map<EResourceLayout, D3D12_TEXTURE_LAYOUT> map =
+    {
+      { EResourceLayout::Unknown              , D3D12_TEXTURE_LAYOUT_UNKNOWN },
+      { EResourceLayout::RowMajor             , D3D12_TEXTURE_LAYOUT_ROW_MAJOR },
+      { EResourceLayout::StandardSwizzle64KB  , D3D12_TEXTURE_LAYOUT_64KB_STANDARD_SWIZZLE },
+      { EResourceLayout::UndefinedSwizzle64KB , D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE  },
+    };
+
+    return map[resourceLayout];
+  }
+
+  static inline D3D12_RESOURCE_FLAGS
+  ConvertEResourceF(EResourceF resourceFlag)
+  {
+    static std::unordered_map<EResourceF, D3D12_RESOURCE_FLAGS> map =
+    {
+      { EResourceF::None, D3D12_RESOURCE_FLAG_NONE },
+      { EResourceF::AllowCrossAdapter, D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER },
+      { EResourceF::AllowDepthStencil, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL },
+      { EResourceF::AllowRenderTarget, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET },
+      { EResourceF::DenyShaderResource, D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE },
+      { EResourceF::AllowUnorderedAccess, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS },
+      { EResourceF::AllowSimultaneousAccess, D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS },
+      { EResourceF::VideoDecodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_DECODE_REFERENCE_ONLY },
+      { EResourceF::VideoEncodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_ENCODE_REFERENCE_ONLY },
+      { EResourceF::RaytracingAccelerationStructure, D3D12_RESOURCE_FLAG_RAYTRACING_ACCELERATION_STRUCTURE },
+    };
+
+    D3D12_RESOURCE_FLAGS ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, resourceFlag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline mem::TScope<D3D12_RESOURCE_DESC>
+  ConvertFResource(FResource& desc)
+  {
+    D3D12_RESOURCE_DESC* ret = new D3D12_RESOURCE_DESC();
+
+    ret->Dimension = ConvertEResourceDimension(desc.dimension);
+    ret->Alignment = desc.alignment;
+    ret->Width = desc.width;
+    ret->Height = desc.height;
+    ret->DepthOrArraySize = desc.depthOrArraySize;
+    ret->MipLevels = desc.mipLevels;
+    ret->Format = ConvertEResourceFormat(desc.format);
+    ret->SampleDesc = ConvertFSampleDesc(desc.sample);
+    ret->Layout = ConvertEResourceLayout(desc.layout);
+    ret->Flags = ConvertEResourceF(desc.flag);
+
+    return ret;
+  }
+
+  static inline D3D12_HEAP_TYPE
+  ConvertEHeapType(EHeapType heapType)
+  {
+    static std::unordered_map<EHeapType, D3D12_HEAP_TYPE> map =
+    {
+      { EHeapType::Default, D3D12_HEAP_TYPE_DEFAULT },
+      { EHeapType::Custom, D3D12_HEAP_TYPE_CUSTOM },
+      { EHeapType::Upload, D3D12_HEAP_TYPE_UPLOAD },
+      { EHeapType::Readback, D3D12_HEAP_TYPE_READBACK },
+      { EHeapType::GPUUpload, D3D12_HEAP_TYPE_GPU_UPLOAD },
+    };
+
+    return map[heapType];
+  }
+
+  static inline D3D12_CPU_PAGE_PROPERTY
+  ConvertECPUPageProperty(ECPUPageProperty cpuPageProperty)
+  {
+    static std::unordered_map<ECPUPageProperty, D3D12_CPU_PAGE_PROPERTY> map =
+    {
+      { ECPUPageProperty::Unknown, D3D12_CPU_PAGE_PROPERTY_UNKNOWN },
+      { ECPUPageProperty::WriteBack, D3D12_CPU_PAGE_PROPERTY_WRITE_BACK },
+      { ECPUPageProperty::WriteCombine, D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE },
+      { ECPUPageProperty::NotAvailable, D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE },
+    };
+
+    return map[cpuPageProperty];
+  }
+
+  static inline D3D12_MEMORY_POOL
+  ConvertEMemoryPool(EMemoryPool memoryPool)
+  {
+    static std::unordered_map<EMemoryPool, D3D12_MEMORY_POOL> map =
+    {
+      { EMemoryPool::Unknown, D3D12_MEMORY_POOL_UNKNOWN },
+      { EMemoryPool::L0, D3D12_MEMORY_POOL_L0 },
+      { EMemoryPool::L1, D3D12_MEMORY_POOL_L1 },
+    };
+
+    return map[memoryPool];
+  }
+
+  static inline D3D12_HEAP_FLAGS
+  ConvertEHeapF(EHeapF heapFlag)
+  {
+    static std::unordered_map<EHeapF, D3D12_HEAP_FLAGS> map =
+    {
+      { EHeapF::None, D3D12_HEAP_FLAG_NONE },
+      { EHeapF::Shared, D3D12_HEAP_FLAG_SHARED },
+      { EHeapF::DenyBuffers, D3D12_HEAP_FLAG_DENY_BUFFERS },
+      { EHeapF::AllowDisplay, D3D12_HEAP_FLAG_ALLOW_DISPLAY },
+      { EHeapF::AllowWriteWatch, D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH },
+      { EHeapF::CreateNotZeroed, D3D12_HEAP_FLAG_CREATE_NOT_ZEROED },
+      { EHeapF::AllowOnlyBuffers, D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS },
+      { EHeapF::CreateNotResident, D3D12_HEAP_FLAG_CREATE_NOT_RESIDENT },
+      { EHeapF::HardwareProtected, D3D12_HEAP_FLAG_HARDWARE_PROTECTED },
+      { EHeapF::AllowShaderAtomics, D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS },
+      { EHeapF::DenyRT_DS_Textures, D3D12_HEAP_FLAG_DENY_RT_DS_TEXTURES },
+      { EHeapF::SharedCrossAdapter, D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER },
+      { EHeapF::DenyNonRT_DS_Textures, D3D12_HEAP_FLAG_DENY_NON_RT_DS_TEXTURES },
+      { EHeapF::AllowOnlyRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES },
+      { EHeapF::AllowOnlyNonRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES },
+      { EHeapF::AllowAllBuffersAndTextures, D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES },
+      { EHeapF::ToolsUseManualWriteTracking, D3D12_HEAP_FLAG_TOOLS_USE_MANUAL_WRITE_TRACKING },
+    };
+
+    D3D12_HEAP_FLAGS ret = {};
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, heapFlag) )
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline mem::TScope<D3D12_HEAP_PROPERTIES>
+  ConvertFHeapDesc(FHeapDesc& desc)
+  {
+    D3D12_HEAP_PROPERTIES* ret = new D3D12_HEAP_PROPERTIES();
+
+    ret->Type = ConvertEHeapType(desc.m_type);
+    ret->CPUPageProperty = ConvertECPUPageProperty(desc.m_cpuPageProperty);
+    ret->MemoryPoolPreference = ConvertEMemoryPool(desc.m_memoryPool);
 
     return ret;
   }

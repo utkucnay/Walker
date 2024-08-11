@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 namespace wkr::mem
 {
   template<typename T>
@@ -66,6 +67,9 @@ namespace wkr::mem
     template<typename... Args>
     static TRef<T> Create(Args&&... args)
     {
+      static_assert(
+          std::is_constructible<T, Args...>::value,
+          "Constructor Not Match...");
       TRef<T> ret;
       ret.ptr = std::make_shared<T>(std::forward<Args>(args)...);
       return ret;

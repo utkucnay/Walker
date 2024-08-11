@@ -8,8 +8,8 @@ namespace wkr::render
   {
     IResourceHandle m_resource;
 
-    EResourceState m_beforeState;
-    EResourceState m_afterState;
+    EResourceStateF m_beforeState;
+    EResourceStateF m_afterState;
   };
 
   class ITransitionBarrier : public IResourceBarrier

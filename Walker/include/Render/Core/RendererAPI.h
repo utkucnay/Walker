@@ -21,7 +21,6 @@ namespace wkr::render
     static IAbstractFactory& GetAbstractFactory()
     { return s_abstractFactory.Get(); }
 
-    //TODO(utku): ChangeAPI at Runtime
     static void ChangeAPI(EType type);
 
   private:

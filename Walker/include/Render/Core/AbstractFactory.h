@@ -4,45 +4,28 @@
 
 namespace wkr::render
 {
-  class IAbstractFactory
-  {
-  public:
+  CREATE_FACTORY()
+
     //Core
-    virtual mem::TScope<IFactory<IDevice, FDeviceDesc&>>
-      GetIDeviceFactory()        = 0;
-    virtual mem::TScope<IFactory<IFence, FFenceDesc&>>
-      GetIFenceFactory()         = 0;
-    virtual mem::TScope<IFactory<ASwapChain, FSwapChainDesc&>>
-      GetASwapChainFactory()     = 0;
-    virtual mem::TScope<IFactory<IRootSignature, FRootSignatureDesc&>>
-      GetIRootSignatureFactory() = 0;
-    //virtual mem::Scope<Factory<PipelineState>>  GetPipelineStateFactory() = 0;
+    SUBS_FACTORY(IDevice, FDeviceDesc&)
+    SUBS_FACTORY(IFence, FFenceDesc&)
+    SUBS_FACTORY(ASwapChain, FSwapChainDesc&)
+    SUBS_FACTORY(IRootSignature, FRootSignatureDesc&)
+    //SUBS_FACTORY(IPipelineState, FPipelineStateDesc&)
 
     //Command
-    virtual mem::TScope<IFactory<ICommandQueue, FCommandQueueDesc&>>
-      GetICommandQueueFactory()    = 0;
-    virtual mem::TScope<IFactory<ICommandList, FCommandListDesc&>>
-      GetICommandListFactory()     = 0;
-    virtual mem::TScope<IFactory<ICommandAllocator, FCommandAllocatorDesc&>>
-      GetICommandAllocatorFactory()= 0;
+    SUBS_FACTORY(ICommandQueue, FCommandQueueDesc&)
+    SUBS_FACTORY(ICommandList, FCommandListDesc&)
+    SUBS_FACTORY(ICommandAllocator, FCommandAllocatorDesc&)
 
     //Descriptor
-    virtual mem::TScope<IFactory<IDescriptorHeap, FDescriptorHeapDesc&>>
-      GetIDescriptorHeapFactory() = 0;
+    SUBS_FACTORY(IDescriptorHeap, FDescriptorHeapDesc&)
 
     //Resource
-    virtual mem::TScope<IFactory<IHeap, FHeapDesc&>>
-      GetIHeapFactory()    = 0;
-    virtual mem::TScope<IFactory<IBuffers, FBuffersDesc&>>
-      GetIBuffersFactory() = 0;
-    //virtual mem::TScope<Factory<rsc::Texture1D>> GetTexture1DFactory() = 0;
-    //virtual mem::TScope<Factory<rsc::Texture2D>> GetTexture2DFactory() = 0;
-    //virtual mem::TScope<Factory<rsc::Texture3D>> GetTexture3DFactory() = 0;
-    //virtual mem::TScope<Factory<rsc::Texture1DArray>> GetTexture1DArrayFactory() = 0;
-    //virtual mem::TScope<Factory<rsc::Texture2DArray>> GetTexture2DArrayFactory() = 0;
+    SUBS_FACTORY(IHeap, FHeapDesc&)
+    SUBS_FACTORY(IResource, FResourceDesc&)
 
     //Barriers
-    virtual mem::TScope<IFactory<ITransitionBarrier, FTransitionBarrierDesc&>>
-      GetITransitionBarrierFactory() = 0;
-  };
+    SUBS_FACTORY(ITransitionBarrier, FTransitionBarrierDesc&)
+  END_FACTORY()
 }

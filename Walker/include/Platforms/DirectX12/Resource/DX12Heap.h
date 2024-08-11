@@ -17,7 +17,7 @@ namespace wkr::render::dx12
     u64 GetSize() override;
     u64 GetAlignment() override;
     EHeapType GetType() override;
-    EHeapFlag GetFlag() override;
+    EHeapF GetFlag() override;
     EMemoryPool GetMemoryPool() override;
     ECPUPageProperty GetCPUPageProperty() override;
 

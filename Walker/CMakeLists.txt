@@ -13,6 +13,7 @@ set(source_files
   ./src/Core/RendererAPI.cpp
 
   ./src/Platforms/Windows/WindowsWindow.cpp
+  ./src/Platforms/Windows/WindowsPageAllocator.cpp
 
   ./src/Platforms/DirectX12/DX12Adapter.cpp
   ./src/Platforms/DirectX12/DX12Device.cpp
@@ -23,13 +24,17 @@ set(source_files
   ./src/Platforms/DirectX12/DX12SwapChain.cpp
   ./src/Platforms/DirectX12/DX12DescriptorHeap.cpp
   ./src/Platforms/DirectX12/DX12RenderTargetView.cpp
-  ./src/Platforms/DirectX12/DX12Texture2D.cpp
   ./src/Platforms/DirectX12/DX12TransitionBarrier.cpp
   ./src/Platforms/DirectX12/DX12Heap.cpp
-  ./src/Platforms/DirectX12/DX12Buffers.cpp
   ./src/Platforms/DirectX12/DX12RootSignature.cpp
+  ./src/Platforms/DirectX12/DX12Resource.cpp
 
   ./src/Render/Renderer.cpp
+  ./src/Render/Types.cpp
+  ./src/Render/Resource/Buffer.cpp
+  ./src/Render/Resource/Texture2D.cpp
+
+  ./src/OS/OSFactory.cpp
   )
 
 set(all_files

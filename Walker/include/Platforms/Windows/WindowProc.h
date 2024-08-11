@@ -5,7 +5,7 @@ LRESULT CALLBACK WindowProcNative(
     UINT uMsg,
     WPARAM wParam, LPARAM lParam)
 {
-  if(wkr::windows::UWindow::WindowProcHandle(hwnd, uMsg, wParam, lParam))
+  if(wkr::os::windows::UWindow::WindowProcHandle(hwnd, uMsg, wParam, lParam))
     return true;
 
   return DefWindowProc(hwnd, uMsg, wParam, lParam);

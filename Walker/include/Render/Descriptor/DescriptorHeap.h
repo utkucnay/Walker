@@ -43,7 +43,7 @@ namespace wkr::render
     virtual NativeObject GetNativeObject() = 0;
 
   protected:
-    std::vector<AResourceViewHandle> m_resourceViews;
+    std::vector<IResourceViewHandle> m_resourceViews;
   };
 
   using IDescriptorHeapHandle = mem::TRef<IDescriptorHeap>;

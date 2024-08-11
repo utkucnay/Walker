@@ -1,29 +1,33 @@
 #pragma once
 
-#include <Render/Resource/Texture.h>
+#include <Render/Resource/Resource.h>
 
 namespace wkr::render
 {
   struct FTexture2DDesc
   {
-
+    EHeapType heapType;
+    EResourceFormat resourceFormat;
+    u64 width;
+    u32 height;
+    FSample sample;
+    EResourceF resourceFlag;
+    EResourceLayout resourceLayout;
+    EResourceStateF initialState;
+    FClearValue* clearValue;
   };
 
-  class ITexture2D : public ITexture
+  class UTexture2D
   {
   public:
-    virtual ~ITexture2D() override = default;
+    UTexture2D(FTexture2DDesc& texture2DDesc);
+    UTexture2D(IResourceHandle resource) : m_resource(resource) {};
 
   public:
-    std::string GetTypeName() override final { return "Texture2D"; }
+    FTexture2DDesc GetDesc() const;
+    IResourceHandle GetResource() { return m_resource; }
 
-    virtual uint64_t    GetWidth()  = 0;
-    virtual uint64_t    GetHeight() = 0;
-    virtual FSample  GetMSAA()   = 0;
-
-  public:
-    static std::string GetStaticTypeName() { return "Texture2D"; }
+  private:
+    IResourceHandle m_resource;
   };
-
-  using ITexture2DHandle = mem::TRef<ITexture2D>;
 }

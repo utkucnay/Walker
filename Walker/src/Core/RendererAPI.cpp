@@ -1,5 +1,8 @@
 #include <Render/Core/RendererAPI.h>
+
+#if defined (WKR_PLATFORM_DIRECTX12)
 #include <Platforms/DirectX12/Core/DX12AbstractFactory.h>
+#endif
 
 namespace wkr::render
 {
@@ -12,11 +15,12 @@ namespace wkr::render
 
       } break;
 
+#if defined (WKR_PLATFORM_DIRECTX12)
       case URendererAPI::EType::DirectX12:
       {
         s_abstractFactory = mem::TScope<dx12::UAbstractFactory>::Create();
       } break;
-
+#endif
       default:
       {
 

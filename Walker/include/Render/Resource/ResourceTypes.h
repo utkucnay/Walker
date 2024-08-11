@@ -4,10 +4,10 @@
 
 namespace wkr::render
 {
-  enum class EResourceState
+  enum class EResourceStateF : u32
   {
     Common                          = 0,
-    VertextAndConstantBuffer        = 0x1,
+    VertexAndConstantBuffer        = 0x1,
     IndexBuffer                     = 0x2,
     RenderTarget                    = 0x4,
     UnorederedAccess                = 0x8,
@@ -37,8 +37,10 @@ namespace wkr::render
     VideoProcessRead                = 0x40000,
     VideoProcessWrite               = 0x80000,
     VideoEncodeRead                 = 0x200000,
-    VideoEncodeWrite                = 0x800000,
+    VideoEncodeWrite                = 0x800000
   };
+
+  DECLARATION_FLAG(EResourceStateF)
 
   enum class EResourceFormat : u32
   {
@@ -182,7 +184,7 @@ namespace wkr::render
     Texture3D = 4,
   };
 
-  enum class EResourceFlag
+  enum class EResourceF
   {
     None = 0,
     AllowRenderTarget = 0x1,
@@ -196,7 +198,9 @@ namespace wkr::render
     RaytracingAccelerationStructure = 0x100
   };
 
-  enum class EResourceUsageFlag
+  DECLARATION_FLAG(EResourceF)
+
+  enum class EResourceUsageF
   {
     CPU_ACCESS_NONE                = 0,
     CPU_ACCESS_DYNAMIC             = 1,
@@ -211,6 +215,8 @@ namespace wkr::render
     DISCARD_ON_PRESENT       = 0x00000200UL,
     UNORDERED_ACCESS         = 0x00000400UL
   };
+
+  DECLARATION_FLAG(EResourceUsageF)
 
   struct FClearValue
   {
@@ -258,26 +264,28 @@ namespace wkr::render
     DefaultMSAA = 4 MB,
   };
 
-  enum class EHeapFlag
+  enum class EHeapF : u32
   {
-    None = 0,
-    Shared = 0x1,
-    DenyBuffers = 0x4,
-    AllowDisplay = 0x8,
-    SharedCrossAdapter = 0x20,
-    DenyRT_DS_Textures = 0x40,
-    DenyNonRT_DS_Textures = 0x80,
-    HardwareProtected = 0x100,
-    AllowWriteWatch = 0x200,
-    AllowShaderAtomics = 0x400,
-    CreateNotResident = 0x800,
-    CreateNotZeroed = 0x1000,
+    None                          = 0,
+    Shared                        = 0x1,
+    DenyBuffers                   = 0x4,
+    AllowDisplay                  = 0x8,
+    SharedCrossAdapter            = 0x20,
+    DenyRT_DS_Textures            = 0x40,
+    DenyNonRT_DS_Textures         = 0x80,
+    HardwareProtected             = 0x100,
+    AllowWriteWatch               = 0x200,
+    AllowShaderAtomics            = 0x400,
+    CreateNotResident             = 0x800,
+    CreateNotZeroed               = 0x1000,
     ToolsUseManualWriteTracking,
-    AllowAllBuffersAndTextures = 0,
-    AllowOnlyBuffers = 0xc0,
-    AllowOnlyNonRT_DS_Textures = 0x44,
-    AllowOnlyRT_DS_Textures = 0x84
+    AllowAllBuffersAndTextures    = 0,
+    AllowOnlyBuffers              = 0xc0,
+    AllowOnlyNonRT_DS_Textures    = 0x44,
+    AllowOnlyRT_DS_Textures       = 0x84
   };
+
+  DECLARATION_FLAG(EHeapF)
 
   struct FModeDesc
   {
@@ -287,5 +295,12 @@ namespace wkr::render
     EScanlineOrder  m_scanlineOrdering;
     EScaling        m_scaling;
     EResourceFormat m_format;
+  };
+
+  enum class EResourceDescType
+  {
+    Committed,
+    Reserved,
+    Placed,
   };
 }

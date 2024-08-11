@@ -4,37 +4,15 @@
 
 namespace wkr::render
 {
-  class AResourceView
+  class IResourceView
   {
   public:
-    virtual ~AResourceView() = default;
-
-  public:
-    b32 IsResourceExpired()
-    {
-      return m_resource.Expired();
-    }
-
-    template<typename T>
-    mem::TWeakRef<T> GetResource()
-    {
-      WKR_CORE_ERROR_COND(
-          T::GetStaticTypeName() != m_resource.Lock()->GetTypeName(),
-          "Resource Didn't Match "
-            << T::GetStaticTypeName()
-            << " "
-            << m_resource.Lock()->GetTypeName());
-
-      return static_cast<mem::TWeakRef<T>>(m_resource);
-    }
+    virtual ~IResourceView() = default;
 
   public:
     virtual NativeObject  GetNativeObject() = 0;
     virtual std::string   GetTypeName()     = 0;
-
-  public:
-    mem::TWeakRef<IResource> m_resource;
   };
 
-  using AResourceViewHandle = mem::TRef<AResourceView>;
+  using IResourceViewHandle = mem::TRef<IResourceView>;
 }

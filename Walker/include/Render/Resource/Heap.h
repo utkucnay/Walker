@@ -9,9 +9,9 @@ namespace wkr::render
     u64 m_size;
     u64 m_alignment;
     EHeapType m_type;
-    EHeapFlag m_flag;
     EMemoryPool m_memoryPool;
     ECPUPageProperty m_cpuPageProperty;
+    EHeapF m_flag;
   };
 
   class IHeap
@@ -26,7 +26,7 @@ namespace wkr::render
     virtual u64 GetSize()       = 0;
     virtual u64 GetAlignment()  = 0;
     virtual EHeapType GetType() = 0;
-    virtual EHeapFlag GetFlag() = 0;
+    virtual EHeapF GetFlag() = 0;
     virtual EMemoryPool GetMemoryPool() = 0;
     virtual ECPUPageProperty GetCPUPageProperty()  = 0;
   };

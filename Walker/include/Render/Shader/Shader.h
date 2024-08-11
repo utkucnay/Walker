@@ -4,7 +4,8 @@ namespace wkr::render
 {
   struct FShaderDesc
   {
-
+    //EShaderType type;
+    std::string sourceCode;
   };
 
   class IShader

@@ -2,9 +2,9 @@
 
 #include <Render/ResourceView/ResourceView.h>
 
-namespace wkr::render::view
+namespace wkr::render
 {
-  class AVertexBufferView : public AResourceView
+  class AVertexBufferView : public IResourceView
   {
   public:
     virtual ~AVertexBufferView() override {}

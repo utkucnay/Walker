@@ -23,7 +23,7 @@ namespace wkr::render
     ESwapChainEffect              m_swapEffect;
     AWindowHandle                 m_window;
     FModeDesc                     m_bufferDesc;
-    EResourceUsageFlag                m_bufferUsage;
+    EResourceUsageF                m_bufferUsage;
     ICommandQueueHandle           m_commandQueue;
   };
 
@@ -45,7 +45,7 @@ namespace wkr::render
     virtual FModeDesc           GetBufferDesc()   = 0;
     virtual ESwapChainFlag      GetFlag()         = 0;
     virtual ESwapChainEffect    GetSwapEffect()   = 0;
-    virtual EResourceUsageFlag      GetBufferUsage()  = 0;
+    virtual EResourceUsageF      GetBufferUsage()  = 0;
 
     [[nodiscard]] virtual IFence& GetCurrentFence() { return m_fence.Get(); }
 

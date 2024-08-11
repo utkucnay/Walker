@@ -43,9 +43,9 @@ namespace wkr::render::dx12
     return desc.Alignment;
   }
 
-  EHeapFlag UHeap::GetFlag()
+  EHeapF UHeap::GetFlag()
   {
     auto desc = m_heap->GetDesc();
-    return static_cast<EHeapFlag>(desc.Flags);
+    return static_cast<EHeapF>(desc.Flags);
   }
 }

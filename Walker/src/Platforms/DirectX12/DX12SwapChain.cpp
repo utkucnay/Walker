@@ -1,3 +1,4 @@
+#include "Platforms/DirectX12/Resource/DX12Resource.h"
 #include <Platforms/DirectX12/Core/DX12TypeMap.h>
 #include <Render/Core/RendererAPI.h>
 #include <Render/Descriptor/DescriptorHeap.h>
@@ -44,7 +45,7 @@ namespace wkr::render::dx12
     {
       ID3D12Resource* res;
       m_swapChain->GetBuffer(i, IID_PPV_ARGS(&res));
-      m_textures.push_back(mem::TRef<UTexture2D>::Create(res));
+      m_textures.push_back(mem::TRef<UTexture2D>::Create(new UResource(res)));
       WKR_CORE_LOG("Binding Each Resource in Swap Chain");
     }
 
@@ -55,13 +56,13 @@ namespace wkr::render::dx12
     descriptorHeapDesc.m_type = EDescriptorHeapType::RTV;
     descriptorHeapDesc.m_flags = EDescriptorHeapFlags::None;
 
-    m_descripHeap = factory.GetIDescriptorHeapFactory()->CreateRef(descriptorHeapDesc);
+    m_descripHeap = factory.GetIDescriptorHeap()->Create(descriptorHeapDesc);
 
     std::vector<IResourceHandle> m_resources;
     std::transform(m_textures.begin(), m_textures.end(),
-        std::back_inserter(m_resources), [](ITexture2DHandle res)
+        std::back_inserter(m_resources), [](mem::TRef<UTexture2D> texture)
         {
-          return res;
+          return texture->GetResource();
         });
 
     m_descripHeap->Bind(m_resources);
@@ -70,7 +71,7 @@ namespace wkr::render::dx12
     fenceDesc.m_frameCount = GetBufferCount();
     fenceDesc.m_flag = EFenceFlag::None;
 
-    m_fence = factory.GetIFenceFactory()->CreateScope(fenceDesc);
+    m_fence = factory.GetIFence()->Create(fenceDesc);
 
     SetupEvents(desc.m_window);
   }
@@ -141,12 +142,12 @@ namespace wkr::render::dx12
     return retDesc;
   }
 
-  EResourceUsageFlag USwapChain::GetBufferUsage()
+  EResourceUsageF USwapChain::GetBufferUsage()
   {
     DXGI_SWAP_CHAIN_DESC desc;
 
     m_swapChain->GetDesc(&desc);
-    return static_cast<EResourceUsageFlag>(desc.BufferUsage);
+    return static_cast<EResourceUsageF>(desc.BufferUsage);
   }
 
   u32 USwapChain::GetBufferCount()

@@ -15,23 +15,13 @@
 #include <Render/Descriptor/DescriptorTable.h>
 
 #include <Render/Resource/Heap.h>
-#include <Render/Resource/Texture.h>
 #include <Render/Resource/Resource.h>
-#include <Render/Resource/Buffers.h>
-#include <Render/Resource/Texture1D.h>
+#include <Render/Resource/Buffer.h>
 #include <Render/Resource/Texture2D.h>
-#include <Render/Resource/Texture3D.h>
-#include <Render/Resource/Texture1DArray.h>
-#include <Render/Resource/Texture2DArray.h>
 
-#include <Render/ResourceView/IndexBufferView.h>
+#include <Render/ResourceView/ResourceView.h>
 #include <Render/ResourceView/VertexBufferView.h>
-#include <Render/ResourceView/ConstantBufferView.h>
-#include <Render/ResourceView/ShaderResourceView.h>
-#include <Render/ResourceView/UnorderedAccessView.h>
 #include <Render/ResourceView/RenderTargetView.h>
-#include <Render/ResourceView/DepthStencilView.h>
-#include <Render/ResourceView/Samplers.h>
 
 #include <Render/ResourceBarrier/TransitionBarrier.h>
 #include <Render/ResourceBarrier/AliasingBarrier.h>

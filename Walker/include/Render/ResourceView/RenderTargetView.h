@@ -5,19 +5,22 @@
 
 namespace wkr::render
 {
-  class ARenderTargetView : public AResourceView
+  class ARenderTargetView : public IResourceView
   {
   public:
     virtual ~ARenderTargetView() override = default;
 
   public:
-    mem::TWeakRef<ITexture2D> GetTexture2D()
-      { return GetResource<ITexture2D>(); }
+    mem::TRef<UTexture2D> GetTexture2D()
+      { return m_texture2D; }
 
     std::string GetTypeName() override final { return "RenderTargetView"; }
 
   public:
     static std::string GetStaticTypeName() { return "RenderTargetView"; }
+
+  protected:
+    mem::TRef<UTexture2D> m_texture2D;
   };
 
   using ARenderTargetViewHandle = mem::TRef<ARenderTargetView>;

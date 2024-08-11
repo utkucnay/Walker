@@ -31,5 +31,15 @@
 #define HAS_FLAG(flag1, flag2) \
   (static_cast<u64>(flag1) & static_cast<u64>(flag2)) != 0
 
+#define DECLARATION_FLAG(flag) flag operator|(const flag&, const flag&);
+
+#define DEFINITION_FLAG(flag) \
+  flag operator|(const flag& l, const flag& r) \
+  { \
+    return static_cast<flag>( \
+        std::underlying_type<flag>::type(l) | \
+        std::underlying_type<flag>::type(r)); \
+  }
+
 #define KB * 1024
 #define MB * 1024 * 1024

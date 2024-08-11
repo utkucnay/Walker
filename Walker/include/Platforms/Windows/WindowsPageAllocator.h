@@ -2,19 +2,21 @@
 
 #include <Memory/Allocator/PageAllocator.h>
 
-namespace wkr::mem
+using namespace wkr::mem;
+
+namespace wkr::os::windows
 {
-  class UWindowPageAllocator : public IPageAllocator
+  class UPageAllocator : public IPageAllocator
   {
   public:
-    UWindowPageAllocator() { m_pageSize = EPageSize::Default; };
-    UWindowPageAllocator(EPageSize pageSize) { m_pageSize = pageSize; };
+    UPageAllocator(FPageAllocatorDesc& desc);
 
   public:
     void* Allocate(int size) override final;
-    void* Allocate(int size, EPageSize pageSize) override final;
     void* Reallocate(void* ptr, int newSize) override final;
     void Deallocate(void* ptr) override final;
+
+    FPageAllocatorDesc GetDesc() const override;
 
   private:
     EPageSize m_pageSize;

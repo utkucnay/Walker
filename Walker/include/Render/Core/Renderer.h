@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Render/Resource/Buffer.h>
 #include <Core/Window.h>
 #include <Render/Core/Device.h>
 
@@ -28,6 +29,8 @@ namespace wkr::render {
 
     ASwapChainHandle m_swapChain;
 
+    mem::TScope<UBuffer> vertexBuffer;
+
   public:
     [[nodiscard]] static IDevice& GetDefaultDevice() {
       return s_defaultDevice.Get();
@@ -36,6 +39,4 @@ namespace wkr::render {
   private:
     static inline IDeviceHandle s_defaultDevice;
   };
-
-  using URendererHandle = mem::TRef<URenderer>;
 }

@@ -24,7 +24,7 @@ namespace wkr::render::dx12
     ESwapChainFlag      GetFlag()         override final;
     ESwapChainEffect    GetSwapEffect()   override final;
     FModeDesc   GetBufferDesc()   override final;
-    EResourceUsageFlag GetBufferUsage()  override final;
+    EResourceUsageF GetBufferUsage()  override final;
 
     void Present(u8 syncInterval, u8 flags) override final;
 
@@ -34,6 +34,6 @@ namespace wkr::render::dx12
   private:
     IDXGISwapChain3*  m_swapChain;
 
-    std::vector<ITexture2DHandle> m_textures;
+    std::vector<mem::TRef<UTexture2D>> m_textures;
   };
 }

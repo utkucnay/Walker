@@ -1,7 +1,7 @@
 #include <Platforms/Windows/WindowsWindow.h>
 #include <Platforms/Windows/WindowProc.h>
 
-namespace wkr::windows
+namespace wkr::os::windows
 {
   UWindow::UWindow(FWindowDesc& desc)
   {

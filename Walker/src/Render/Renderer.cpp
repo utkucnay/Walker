@@ -1,3 +1,5 @@
+#include "Render/Resource/Buffer.h"
+#include "Render/Resource/ResourceTypes.h"
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
 
@@ -10,7 +12,7 @@ namespace wkr::render
     auto& renderFactory = URendererAPI::GetAbstractFactory();
 
     FDeviceDesc deviceDesc = {};
-    m_device = renderFactory.GetIDeviceFactory()->CreateRef(deviceDesc);
+    m_device = renderFactory.GetIDevice()->Create(deviceDesc);
 
     s_defaultDevice = m_device;
 
@@ -18,13 +20,13 @@ namespace wkr::render
     commandQueueDesc.m_commandType = ECommandType::Direct;
     commandQueueDesc.m_commandQueuePriority = ECommandQueuePriority::Normal;
     commandQueueDesc.m_commandQueueFlags = ECommandQueueFlags::None;
-    m_commandDirectQueue = renderFactory.GetICommandQueueFactory()->CreateRef(commandQueueDesc);
+    m_commandDirectQueue = renderFactory.GetICommandQueue()->Create(commandQueueDesc);
 
     FSwapChainDesc swapChainDesc = {};
     swapChainDesc.m_window = desc.window;
     swapChainDesc.m_commandQueue = m_commandDirectQueue;
     swapChainDesc.m_bufferCount = 3;
-    swapChainDesc.m_bufferUsage = EResourceUsageFlag::RENDER_TARGET_OUTPUT;
+    swapChainDesc.m_bufferUsage = EResourceUsageF::RENDER_TARGET_OUTPUT;
     swapChainDesc.m_swapEffect = ESwapChainEffect::FlipDiscard;
 
     swapChainDesc.m_sampleDesc.count = 1;
@@ -37,22 +39,32 @@ namespace wkr::render
     swapChainDesc.m_bufferDesc.m_refreshRate.m_numerator = 0;
     swapChainDesc.m_bufferDesc.m_refreshRate.m_denominator = 1;
 
-    m_swapChain = renderFactory.GetASwapChainFactory()->CreateRef(swapChainDesc);
+    m_swapChain = renderFactory.GetASwapChain()->Create(swapChainDesc);
     desc.window->SetSwapChain(m_swapChain);
 
     FCommandAllocatorDesc commandAllocatorDesc;
     commandAllocatorDesc.commandType = ECommandType::Direct;
 
     for(u32 i = 0; i < m_swapChain->GetBufferCount(); i++)
-      m_commandDirectAllocator.push_back(renderFactory.GetICommandAllocatorFactory()
-                                         ->CreateRef(commandAllocatorDesc));
+      m_commandDirectAllocator.push_back(renderFactory.GetICommandAllocator()
+                                         ->Create(commandAllocatorDesc));
 
     FCommandListDesc commandListDesc = {};
     commandListDesc.m_commandAllocator = m_commandDirectAllocator[0];
     commandListDesc.m_commandType = ECommandType::Direct;
 
-    m_commandDirectList = renderFactory.GetICommandListFactory()
-    ->CreateRef(commandListDesc);
+    m_commandDirectList = renderFactory.GetICommandList()
+    ->Create(commandListDesc);
+
+
+
+    FBufferDesc bufferDesc = {};
+    bufferDesc.heapType = EHeapType::Default;
+    bufferDesc.initState = EResourceStateF::Common;
+    bufferDesc.bufferSize = 20 KB;
+    bufferDesc.resourceFlag = EResourceF::None;
+
+    vertexBuffer = new UBuffer(bufferDesc);
   }
 
   void URenderer::CreateResource()
@@ -92,12 +104,12 @@ namespace wkr::render
     auto& renderFactory = URendererAPI::GetAbstractFactory();
 
     FTransitionBarrierDesc transitionBarrierDesc = {};
-    transitionBarrierDesc.m_resource = renderTarget->m_resource.Lock();
-    transitionBarrierDesc.m_beforeState = EResourceState::RenderTarget;
-    transitionBarrierDesc.m_afterState = EResourceState::Present;
+    transitionBarrierDesc.m_resource = renderTarget->GetTexture2D()->GetResource();
+    transitionBarrierDesc.m_beforeState = EResourceStateF::RenderTarget;
+    transitionBarrierDesc.m_afterState = EResourceStateF::Present;
 
-    auto barrier = renderFactory.GetITransitionBarrierFactory()
-    ->CreateRef(transitionBarrierDesc);
+    ITransitionBarrierHandle barrier = renderFactory.GetITransitionBarrier()
+    ->Create(transitionBarrierDesc);
 
     m_commandDirectList->ResourceBarriers(
         {
@@ -113,11 +125,11 @@ namespace wkr::render
         FColor32(0, 255, 0, 255));
 
 
-    transitionBarrierDesc.m_beforeState = EResourceState::Present;
-    transitionBarrierDesc.m_afterState = EResourceState::RenderTarget;
+    transitionBarrierDesc.m_beforeState = EResourceStateF::Present;
+    transitionBarrierDesc.m_afterState = EResourceStateF::RenderTarget;
 
-    auto reverseBarrier = renderFactory.GetITransitionBarrierFactory()
-    ->CreateRef(transitionBarrierDesc);
+    ITransitionBarrierHandle reverseBarrier = renderFactory.GetITransitionBarrier()
+    ->Create(transitionBarrierDesc);
 
     m_commandDirectList->ResourceBarriers(
         {

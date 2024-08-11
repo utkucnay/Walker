@@ -1,6 +1,6 @@
 #include <Core/Application.h>
 
-#include <Platforms/Windows/WindowsWindow.h>
+#include <OS/OSFactory.h>
 
 namespace wkr
 {
@@ -10,17 +10,17 @@ namespace wkr
     WKR_CORE_LOG("Application Starting");
     appSpecs = applicationSpecs;
 
+    os::OSFactory::Init();
 
     FWindowDesc windowDesc = {};
     windowDesc.m_name = "Walker Engine";
     windowDesc.m_width = 1280;
     windowDesc.m_height = 720;
-    m_mainWindow = static_cast<wkr::AWindowHandle>(
-      wkr::windows::UWindowHandle::Create(windowDesc));
+    m_mainWindow = os::OSFactory::Get().GetAWindow()->Create(windowDesc);
 
     render::FRendererDesc rendererDesc;
     rendererDesc.window = m_mainWindow;
-    m_renderer = render::URendererHandle::Create(rendererDesc);
+    m_renderer = new render::URenderer(rendererDesc);
 
     m_renderer->CreateResource();
     m_renderer->LoadResources();
@@ -28,7 +28,7 @@ namespace wkr
 
   UApplication::~UApplication()
   {
-    m_renderer.Reset();
+    m_renderer.Release();
     m_mainWindow.Reset();
   }
 

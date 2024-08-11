@@ -4,7 +4,7 @@
 
 LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-namespace wkr::windows
+namespace wkr::os::windows
 {
   class UWindow : public wkr::AWindow
   {
@@ -69,6 +69,4 @@ namespace wkr::windows
     friend :: LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     friend bool WindowProcHandle(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   };
-
-  using UWindowHandle = mem::TRef<UWindow>;
 }
