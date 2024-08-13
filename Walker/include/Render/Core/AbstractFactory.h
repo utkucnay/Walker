@@ -24,6 +24,7 @@ namespace wkr::render
     //Resource
     SUBS_FACTORY(IHeap, FHeapDesc&)
     SUBS_FACTORY(IResource, FResourceDesc&)
+    SUBS_FACTORY(IShader, FShaderDesc&)
 
     //Barriers
     SUBS_FACTORY(ITransitionBarrier, FTransitionBarrierDesc&)

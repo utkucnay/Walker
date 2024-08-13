@@ -23,6 +23,7 @@ namespace wkr::render::dx12
   //Resource
   REGISTER_FACTORY(IHeap , UHeap, FHeapDesc&);
   REGISTER_FACTORY(IResource, UResource, FResourceDesc&);
+  REGISTER_FACTORY(IShader, UShader, FShaderDesc&);
 
   REGISTER_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
 
@@ -46,6 +47,7 @@ namespace wkr::render::dx12
     //Resource
     SUBS_ABSTRACT_FACTORY(IHeap , UHeap, FHeapDesc&);
     SUBS_ABSTRACT_FACTORY(IResource, UResource, FResourceDesc&);
+    SUBS_ABSTRACT_FACTORY(IShader, UShader, FShaderDesc&);
 
     SUBS_ABSTRACT_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
   END_FACTORY()

@@ -1,5 +1,7 @@
 #include "Render/Resource/Buffer.h"
 #include "Render/Resource/ResourceTypes.h"
+#include "Render/Shader/Shader.h"
+#include "Render/Shader/ShaderType.h"
 #include <Render/Core/Renderer.h>
 #include <Render/Core/RendererAPI.h>
 
@@ -56,8 +58,6 @@ namespace wkr::render
     m_commandDirectList = renderFactory.GetICommandList()
     ->Create(commandListDesc);
 
-
-
     FBufferDesc bufferDesc = {};
     bufferDesc.heapType = EHeapType::Default;
     bufferDesc.initState = EResourceStateF::Common;
@@ -65,6 +65,15 @@ namespace wkr::render
     bufferDesc.resourceFlag = EResourceF::None;
 
     vertexBuffer = new UBuffer(bufferDesc);
+
+    FShaderDesc vertexShaderDesc = {};
+    vertexShaderDesc.type = EShaderType::Vertex;
+    vertexShaderDesc.name = "DefaultVertexShader";
+    vertexShaderDesc.entryPoint = "main";
+    vertexShaderDesc.sourceCode = "float4 main( float3 pos : POSITION ) : SV_POSITION{"
+    "return float4(pos, 1.0f);}";
+
+    vertexShader = renderFactory.GetIShader()->Create(vertexShaderDesc);
   }
 
   void URenderer::CreateResource()

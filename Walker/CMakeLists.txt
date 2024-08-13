@@ -28,6 +28,7 @@ set(source_files
   ./src/Platforms/DirectX12/DX12Heap.cpp
   ./src/Platforms/DirectX12/DX12RootSignature.cpp
   ./src/Platforms/DirectX12/DX12Resource.cpp
+  ./src/Platforms/DirectX12/DX12Shader.cpp
 
   ./src/Render/Renderer.cpp
   ./src/Render/Types.cpp
@@ -44,7 +45,7 @@ set(all_files
 add_library(Walker ${all_files})
 target_precompile_headers(Walker PUBLIC ./include/pch.h)
 target_include_directories(Walker PUBLIC ./include/)
-target_link_libraries(Walker PUBLIC D3D12.lib DXGI.lib)
+target_link_libraries(Walker PUBLIC D3D12.lib DXGI.lib d3dcompiler.lib)
 
 target_link_libraries(Walker PUBLIC DirectStorage WinPixEventRuntime DirectX12)
 

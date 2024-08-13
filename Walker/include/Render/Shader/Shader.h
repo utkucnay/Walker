@@ -1,11 +1,16 @@
 #pragma once
 
+#include <Render/Shader/ShaderType.h>
+
 namespace wkr::render
 {
   struct FShaderDesc
   {
-    //EShaderType type;
+    EShaderType type;
+    std::string name;
     std::string sourceCode;
+    std::string entryPoint;
+    FShaderMakro* shaderMakro;
   };
 
   class IShader
@@ -14,7 +19,7 @@ namespace wkr::render
     virtual ~IShader() = default;
 
   public:
-    virtual NativeObject GetNativeObject() = 0;
+    virtual const std::string& GetCompiledCode() const = 0;
   };
 
   using IShaderHandle = mem::TRef<IShader>;

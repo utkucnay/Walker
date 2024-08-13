@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Render/Shader/Shader.h"
 #include <Render/Resource/Buffer.h>
 #include <Core/Window.h>
 #include <Render/Core/Device.h>
@@ -30,6 +31,7 @@ namespace wkr::render {
     ASwapChainHandle m_swapChain;
 
     mem::TScope<UBuffer> vertexBuffer;
+    mem::TScope<IShader> vertexShader;
 
   public:
     [[nodiscard]] static IDevice& GetDefaultDevice() {

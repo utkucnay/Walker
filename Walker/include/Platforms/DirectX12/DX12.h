@@ -18,6 +18,8 @@
   #include <Platforms/DirectX12/Resource/DX12Resource.h>
   #include <Platforms/DirectX12/Resource/DX12Heap.h>
 
+  #include <Platforms/DirectX12/Shader/DX12Shader.h>
+
   #include <Platforms/DirectX12/ResourceView/DX12RenderTargetView.h>
 
   #include <Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h>

@@ -8,11 +8,12 @@ namespace wkr::render::dx12
   {
     ID3D12Device* nDevice = URenderer::GetDefaultDevice().GetNativeObject();
 
+    HRESULT hr;
     switch (desc.descType)
     {
       case EResourceDescType::Committed:
       {
-        nDevice->CreateCommittedResource(
+        hr = nDevice->CreateCommittedResource(
             ConvertFHeapDesc(desc.heapDesc).GetPtr(),
             ConvertEHeapF(desc.heapDesc.m_flag),
             ConvertFResource(desc.resource).GetPtr(),
@@ -22,7 +23,7 @@ namespace wkr::render::dx12
       } break;
       case EResourceDescType::Reserved:
       {
-        nDevice->CreateReservedResource(
+        hr = nDevice->CreateReservedResource(
             ConvertFResource(desc.resource).GetPtr(),
             ConvertEResourceState(desc.initialState),
             ConvertFClearValue(desc.clearValue).GetPtr(),
@@ -30,7 +31,7 @@ namespace wkr::render::dx12
       } break;
       case EResourceDescType::Placed:
       {
-        nDevice->CreatePlacedResource(
+        hr = nDevice->CreatePlacedResource(
             desc.heap->GetNativeObject(),
             desc.heapOffset,
             ConvertFResource(desc.resource).GetPtr(),
@@ -40,6 +41,8 @@ namespace wkr::render::dx12
       } break;
     }
 
+    WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Resource");
+    WKR_CORE_LOG("Created DX12 Resource!");
   }
 
   UResource::~UResource()
