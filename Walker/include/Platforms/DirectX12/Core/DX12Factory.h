@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-
 namespace wkr::render::dx12
 {
   class UDX12Factory

@@ -1,4 +1,5 @@
-#include <Core/EntryPoint.h>
+#include "Walker.inc"
+#include "Core/EntryPoint.h"
 
 namespace wkr
 {

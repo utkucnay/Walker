@@ -1,15 +1,14 @@
-#include <Platforms/DirectX12/Core/DX12RootSignature.h>
-#include <Render/Core/Renderer.h>
+#include "Platforms/DirectX12/Core/DX12RootSignature.h"
+#include "Graphics/Core/UGraphics.h"
 
-namespace wkr::render::dx12
-{
-  URootSignature::URootSignature(FRootSignatureDesc& desc)
-  {
-    auto nDevice = URenderer::GetDefaultDevice().GetNativeObject();
-  }
+namespace wkr::render::dx12 {
 
-  URootSignature::~URootSignature()
-  {
-    m_rootSignature->Release();
-  }
+URootSignature::URootSignature(FRootSignatureDesc& desc) {
+  auto nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 }
+
+URootSignature::~URootSignature() {
+  m_rootSignature->Release();
+}
+
+}  // namespace wkr::render::dx12

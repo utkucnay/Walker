@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Render/Core/SwapChain.h>
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Core/ASwapChain.h"
 
 namespace wkr::render::dx12
 {

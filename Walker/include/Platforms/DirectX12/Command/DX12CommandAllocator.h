@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Render/Command/CommandAllocator.h>
-
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Command/ICommandAllocator.h"
 
 namespace wkr::render::dx12
 {
@@ -13,8 +11,7 @@ namespace wkr::render::dx12
     ~UCommandAllocator() override;
 
   public:
-    NativeObject GetNativeObject() override
-      { return m_commandAllocator; }
+    inline NativeObject GetNativeObject() override { return m_commandAllocator; }
     ECommandType GetCommandType() override final;
     void Reset() override final;
 

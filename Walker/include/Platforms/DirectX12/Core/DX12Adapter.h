@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Render/Core/Adapter.h>
-
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Core/IAdapter.h"
 
 namespace wkr::render::dx12
 {

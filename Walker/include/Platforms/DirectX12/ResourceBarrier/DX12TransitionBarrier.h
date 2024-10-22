@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/ResourceBarrier/TransitionBarrier.h>
+#include "Graphics/ResourceBarrier/ITransitionBarrier.h"
 
 namespace wkr::render::dx12
 {

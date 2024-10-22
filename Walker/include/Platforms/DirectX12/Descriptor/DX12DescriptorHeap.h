@@ -1,8 +1,7 @@
 #pragma once
 
-#include <Render/Resource/Resource.h>
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/Descriptor/DescriptorHeap.h>
+#include "Graphics/Resource/IResource.h"
+#include "Graphics/Descriptor/ADescriptorHeap.h"
 
 namespace wkr::render::dx12
 {

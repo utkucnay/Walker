@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Render/Core/Device.h>
-
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Core/IDevice.h"
 
 namespace wkr::render::dx12
 {

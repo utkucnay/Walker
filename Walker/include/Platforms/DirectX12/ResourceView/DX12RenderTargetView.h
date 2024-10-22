@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/ResourceView/RenderTargetView.h>
+#include "Graphics/ResourceView/ARenderTargetView.h"
 
 namespace wkr::render::dx12
 {

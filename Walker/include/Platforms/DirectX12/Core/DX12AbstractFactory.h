@@ -1,54 +1,56 @@
 #pragma once
 
-#include <Platforms/DirectX12/DX12.h>
-#include <Render/Core/AbstractFactory.h>
+#include "Graphics/Core/GraphicsAbstractFactory.h"
+#include "Platforms/DirectX12/DX12.inc"
 
-namespace wkr::render::dx12
-{
-  //Core
-  REGISTER_FACTORY(IDevice, UDevice, FDeviceDesc&);
-  REGISTER_FACTORY(IFence, UFence, FFenceDesc&);
-  REGISTER_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
-  //REGISTER_FACTORY(IPipelineState, UPipelineState, FPipelineStateDesc&);
-  REGISTER_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
+namespace wkr::render::dx12 {
 
-  //Command
-  REGISTER_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
-  REGISTER_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
-  REGISTER_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
+//Core
+REGISTER_FACTORY(IDevice, UDevice, FDeviceDesc&);
+REGISTER_FACTORY(IFence, UFence, FFenceDesc&);
+REGISTER_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
+//REGISTER_FACTORY(IPipelineState, UPipelineState, FPipelineStateDesc&);
+REGISTER_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
 
-  //Descriptor
-  REGISTER_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
+//Command
+REGISTER_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
+REGISTER_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
+REGISTER_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
 
-  //Resource
-  REGISTER_FACTORY(IHeap , UHeap, FHeapDesc&);
-  REGISTER_FACTORY(IResource, UResource, FResourceDesc&);
-  REGISTER_FACTORY(IShader, UShader, FShaderDesc&);
+//Descriptor
+REGISTER_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
 
-  REGISTER_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
+//Resource
+REGISTER_FACTORY(IHeap, UHeap, FHeapDesc&);
+REGISTER_FACTORY(IResource, UResource, FResourceDesc&);
+REGISTER_FACTORY(IShader, UShader, FShaderDesc&);
 
-  BEGIN_ABSTRACT_FACTORY()
-    CTOR_ABSTRACT_FACTORY(UDX12Factory::Init();)
+REGISTER_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
 
-    //Core
-    SUBS_ABSTRACT_FACTORY(IDevice, UDevice, FDeviceDesc&);
-    SUBS_ABSTRACT_FACTORY(IFence, UFence, FFenceDesc&);
-    SUBS_ABSTRACT_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
-    SUBS_ABSTRACT_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
+BEGIN_ABSTRACT_FACTORY(Graphics)
 
-    //Command
-    SUBS_ABSTRACT_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
-    SUBS_ABSTRACT_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
-    SUBS_ABSTRACT_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
+CTOR_ABSTRACT_FACTORY(Graphics, UDX12Factory::Init();)
 
-    //Descriptor
-    SUBS_ABSTRACT_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
+//Core
+SUBS_ABSTRACT_FACTORY(IDevice, UDevice, FDeviceDesc&);
+SUBS_ABSTRACT_FACTORY(IFence, UFence, FFenceDesc&);
+SUBS_ABSTRACT_FACTORY(ASwapChain, USwapChain, FSwapChainDesc&);
+SUBS_ABSTRACT_FACTORY(IRootSignature, URootSignature, FRootSignatureDesc&);
 
-    //Resource
-    SUBS_ABSTRACT_FACTORY(IHeap , UHeap, FHeapDesc&);
-    SUBS_ABSTRACT_FACTORY(IResource, UResource, FResourceDesc&);
-    SUBS_ABSTRACT_FACTORY(IShader, UShader, FShaderDesc&);
+//Command
+SUBS_ABSTRACT_FACTORY(ICommandQueue, UCommandQueue, FCommandQueueDesc&);
+SUBS_ABSTRACT_FACTORY(ICommandList, UCommandList, FCommandListDesc&);
+SUBS_ABSTRACT_FACTORY(ICommandAllocator, UCommandAllocator, FCommandAllocatorDesc&);
 
-    SUBS_ABSTRACT_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
-  END_FACTORY()
-}
+//Descriptor
+SUBS_ABSTRACT_FACTORY(IDescriptorHeap, UDescriptorHeap, FDescriptorHeapDesc&);
+
+//Resource
+SUBS_ABSTRACT_FACTORY(IHeap, UHeap, FHeapDesc&);
+SUBS_ABSTRACT_FACTORY(IResource, UResource, FResourceDesc&);
+SUBS_ABSTRACT_FACTORY(IShader, UShader, FShaderDesc&);
+
+SUBS_ABSTRACT_FACTORY(ITransitionBarrier, UTransitionBarrier, FTransitionBarrierDesc&);
+END_FACTORY()
+
+}  // namespace wkr::render::dx12

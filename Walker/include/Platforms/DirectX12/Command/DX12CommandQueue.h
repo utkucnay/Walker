@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Render/Command/CommandQueue.h>
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Command/ICommandQueue.h"
 
 namespace wkr::render::dx12
 {

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Render/Core/RootSignature.h>
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Core/IRootSignature.h"
 
 namespace wkr::render::dx12
 {

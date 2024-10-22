@@ -1,29 +1,27 @@
 #pragma once
 
-#include <Memory/Allocator/PageAllocator.h>
+#include "Memory/Allocator/PageAllocator.h"
 
 using namespace wkr::mem;
 
-namespace wkr::os::windows
-{
-  class UPageAllocator : public IPageAllocator
-  {
-  public:
-    UPageAllocator(FPageAllocatorDesc& desc);
+namespace wkr::os::windows {
 
-  public:
-    void* Allocate(int size) override final;
-    void* Reallocate(void* ptr, int newSize) override final;
-    void Deallocate(void* ptr) override final;
+class UPageAllocator : public IPageAllocator {
+ public:
+  UPageAllocator(FPageAllocatorDesc& desc);
 
-    FPageAllocatorDesc GetDesc() const override;
+ public:
+  void* Allocate(int size) override final;
+  void* Reallocate(void* ptr, int newSize) override final;
+  void Deallocate(void* ptr) override final;
 
-  private:
-    EPageSize m_pageSize;
-    std::unordered_map<EPageSize, DWORD> m_pageSizeMap =
-    {
+  FPageAllocatorDesc GetDesc() const override;
+
+ private:
+  EPageSize m_pageSize;
+  std::unordered_map<EPageSize, DWORD> m_pageSizeMap = {
       {EPageSize::Default, 0},
-      {EPageSize::LargePage, MEM_LARGE_PAGES}
-    };
-  };
-}
+      {EPageSize::LargePage, MEM_LARGE_PAGES}};
+};
+
+}  // namespace wkr::os::windows

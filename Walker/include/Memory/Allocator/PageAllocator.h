@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Memory/Allocator.h>
+#include "Memory/Core/IAllocator.h"
 
 namespace wkr::mem
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Shader/Shader.h>
+#include "Graphics/Shader/IShader.h"
 
 namespace wkr::render::dx12
 {

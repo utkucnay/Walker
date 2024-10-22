@@ -1,51 +1,44 @@
-#include <Render/Core/Renderer.h>
-#include <Platforms/DirectX12/Resource/DX12Heap.h>
+#include "Platforms/DirectX12/Resource/DX12Heap.h"
+#include "Graphics/Core/UGraphics.h"
 
-namespace wkr::render::dx12
-{
-  UHeap::UHeap(FHeapDesc& desc)
-  {
-    auto nDevice = URenderer::GetDefaultDevice().GetNativeObject();
-  }
+namespace wkr::render::dx12 {
 
-  UHeap::~UHeap()
-  {
-    m_heap->Release();
-  }
-
-  u64 UHeap::GetSize()
-  {
-    auto desc = m_heap->GetDesc();
-    return desc.SizeInBytes;
-  }
-
-  EHeapType UHeap::GetType()
-  {
-    auto desc = m_heap->GetDesc();
-    return static_cast<EHeapType>(desc.Properties.Type);
-  }
-
-  ECPUPageProperty UHeap::GetCPUPageProperty()
-  {
-    auto desc = m_heap->GetDesc();
-    return static_cast<ECPUPageProperty>(desc.Properties.CPUPageProperty);
-  }
-
-  EMemoryPool UHeap::GetMemoryPool()
-  {
-    auto desc = m_heap->GetDesc();
-    return static_cast<EMemoryPool>(desc.Properties.MemoryPoolPreference);
-  }
-
-  u64 UHeap::GetAlignment()
-  {
-    auto desc = m_heap->GetDesc();
-    return desc.Alignment;
-  }
-
-  EHeapF UHeap::GetFlag()
-  {
-    auto desc = m_heap->GetDesc();
-    return static_cast<EHeapF>(desc.Flags);
-  }
+UHeap::UHeap(FHeapDesc& desc) {
+  auto nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 }
+
+UHeap::~UHeap() {
+  m_heap->Release();
+}
+
+u64 UHeap::GetSize() {
+  auto desc = m_heap->GetDesc();
+  return desc.SizeInBytes;
+}
+
+EHeapType UHeap::GetType() {
+  auto desc = m_heap->GetDesc();
+  return static_cast<EHeapType>(desc.Properties.Type);
+}
+
+ECPUPageProperty UHeap::GetCPUPageProperty() {
+  auto desc = m_heap->GetDesc();
+  return static_cast<ECPUPageProperty>(desc.Properties.CPUPageProperty);
+}
+
+EMemoryPool UHeap::GetMemoryPool() {
+  auto desc = m_heap->GetDesc();
+  return static_cast<EMemoryPool>(desc.Properties.MemoryPoolPreference);
+}
+
+u64 UHeap::GetAlignment() {
+  auto desc = m_heap->GetDesc();
+  return desc.Alignment;
+}
+
+EHeapF UHeap::GetFlag() {
+  auto desc = m_heap->GetDesc();
+  return static_cast<EHeapF>(desc.Flags);
+}
+
+}  // namespace wkr::render::dx12

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <Core/Application.h>
+#include "Core/UApplication.h"
 
 extern wkr::mem::TScope<wkr::UApplication> wkr::CreateApplication(
     const FApplicationCommandLineArgs& args);
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
   auto app = wkr::CreateApplication({argv, argc});
 
   app->Run();

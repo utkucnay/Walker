@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Resource/Resource.h>
+#include "Graphics/Resource/IResource.h"
 
 namespace wkr::render::dx12
 {

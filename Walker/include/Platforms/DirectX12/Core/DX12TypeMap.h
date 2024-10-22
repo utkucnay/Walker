@@ -1,14 +1,11 @@
 #pragma once
 
-#include "Core/Base.h"
-#include "Render/Resource/Heap.h"
-#include "Render/Resource/Resource.h"
-#include "d3d12.h"
-#include <Render/Descriptor/DescriptorTypes.h>
-#include <Render/Resource/ResourceTypes.h>
-#include <Render/Command/CommandTypes.h>
-#include <Render/Core/CoreTypes.h>
-#include <unordered_map>
+#include "Graphics/Core/GraphicsType.h"
+#include "Graphics/Command/CommandType.h"
+#include "Graphics/Resource/IResource.h"
+#include "Graphics/Resource/IHeap.h"
+#include "Graphics/Resource/ResourceType.h"
+#include "Graphics/Descriptor/DescriptorType.h"
 
 namespace wkr::render::dx12
 {

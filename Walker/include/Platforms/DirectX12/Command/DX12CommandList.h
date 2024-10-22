@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Render/Command/CommandList.h>
-
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Command/ICommandList.h"
 
 namespace wkr::render::dx12
 {

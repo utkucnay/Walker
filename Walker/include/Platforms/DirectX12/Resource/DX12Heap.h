@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Render/Resource/Heap.h>
-#include <Platforms/DirectX12/DX12.h>
+#include "Graphics/Resource/IHeap.h"
 
 namespace wkr::render::dx12
 {
