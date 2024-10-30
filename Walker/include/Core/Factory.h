@@ -26,18 +26,20 @@
 #define SUBS_ABSTRACT_FACTORY(Type, SubType, ...)                 \
  public:                                                          \
   mem::TScope<IFactory<Type, __VA_ARGS__>> Get##Type() override { \
-    return mem::TScope<SubType##Factory>::Create();               \
+    return wkr::mem::TScope<SubType##Factory>::Create();               \
   }
 
 #define CREATE_FACTORY(Prefix) class I##Prefix##AbstractFactory {
 
+#define CREATE_FACTORY_WITH_MARKER(Prefix, Marker) class Marker I##Prefix##AbstractFactory {
+
 #define SUBS_FACTORY(Type, ...) \
  public:                        \
-  virtual mem::TScope<IFactory<Type, __VA_ARGS__>> Get##Type() = 0;
+  virtual wkr::mem::TScope<IFactory<Type, __VA_ARGS__>> Get##Type() = 0;
 
 #define SUBS_FACTORY_NAMESPACE(Namespace, Type, ...) \
  public:                                             \
-  virtual mem::TScope<IFactory<Namespace::Type, __VA_ARGS__>> Get##Type() = 0;
+  virtual wkr::mem::TScope<IFactory<Namespace::Type, __VA_ARGS__>> Get##Type() = 0;
 
 namespace wkr {
 template <typename T, typename... Args>

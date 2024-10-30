@@ -1,33 +1,31 @@
 #pragma once
 
-#include "Graphics/Resource/IResource.h"
+#include "Graphics/RHI/Resource/IResource.h"
 
-namespace wkr::render
-{
-  struct FTexture2DDesc
-  {
-    EHeapType heapType;
-    EResourceFormat resourceFormat;
-    u64 width;
-    u32 height;
-    FSample sample;
-    EResourceF resourceFlag;
-    EResourceLayout resourceLayout;
-    EResourceStateF initialState;
-    FClearValue* clearValue;
-  };
+namespace wkr::graphics::rsc {
 
-  class UTexture2D
-  {
-  public:
-    UTexture2D(FTexture2DDesc& texture2DDesc);
-    UTexture2D(IResourceHandle resource) : m_resource(resource) {};
+struct WALKER_API FTexture2DDesc {
+  EHeapType heapType = EHeapType::kDefault;
+  EResourceFormat resourceFormat = EResourceFormat::kUNKNOWN;
+  u64 width = 0;
+  u32 height = 0;
+  FSample sample = {0, 0};
+  EResourceF resourceFlag = EResourceF::kNone;
+  EResourceLayout resourceLayout = EResourceLayout::kUnknown;
+  EResourceStateF initialState = EResourceStateF::kCommon;
+  FClearValue* clearValue = nullptr;
+};
 
-  public:
-    FTexture2DDesc GetDesc() const;
-    IResourceHandle GetResource() { return m_resource; }
+class WALKER_API UTexture2D {
+ public:
+  UTexture2D(const FTexture2DDesc& texture2DDesc);
 
-  private:
-    IResourceHandle m_resource;
-  };
-}
+ public:
+  FTexture2DDesc GetDesc() const;
+  IResourceHandle GetResource() { return m_Resource; }
+
+ private:
+  IResourceHandle m_Resource;
+};
+
+}  // namespace wkr::graphics::rsc

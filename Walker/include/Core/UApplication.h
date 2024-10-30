@@ -7,18 +7,18 @@ int main(int argc, char** argv);
 
 namespace wkr {
 
-struct FApplicationCommandLineArgs {
-  char** argv;
-  int argc;
+struct WALKER_API FApplicationCommandLineArgs {
+  char** argv = nullptr;
+  i32 argc = 0;
 };
 
-struct FApplicationSpecs {
-  std::string name;
-  FApplicationCommandLineArgs ApplicationCommandLineArgs;
-  b32 showCLI;
+struct WALKER_API FApplicationSpecs {
+  std::string name = {};
+  b32 showCLI = false;
+  FApplicationCommandLineArgs ApplicationCommandLineArgs = {};
 };
 
-class UApplication {
+class WALKER_API UApplication {
  public:
   UApplication(const FApplicationSpecs& applicationSpecs);
   virtual ~UApplication();
@@ -29,7 +29,7 @@ class UApplication {
  private:
   AWindowHandle m_mainWindow;
   FApplicationSpecs appSpecs;
-  mem::TScope<render::UGraphics> m_renderer;
+  mem::TScope<graphics::UGraphics> m_renderer;
 
   friend int ::main(int argc, char** argv);
 };

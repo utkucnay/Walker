@@ -5,10 +5,10 @@
 #include "Graphics/Resource/UBuffer.h"
 #include "Graphics/Shader/IShader.h"
 
-namespace wkr::render {
+namespace wkr::graphics {
 
 struct FGraphicsDesc {
-  AWindowHandle window;
+  AWindowHandle window = {};
 };
 
 class UGraphics {
@@ -22,24 +22,24 @@ class UGraphics {
   void LoadResources();
 
  private:
-  IDeviceHandle m_device;
+  rhi::IDeviceHandle m_device;
 
-  std::vector<ICommandAllocatorHandle> m_commandDirectAllocator;
-  ICommandListHandle m_commandDirectList;
-  ICommandQueueHandle m_commandDirectQueue;
+  std::vector<rhi::ICommandAllocatorHandle> m_commandDirectAllocator;
+  rhi::ICommandListHandle m_commandDirectList;
+  rhi::ICommandQueueHandle m_commandDirectQueue;
 
   ASwapChainHandle m_swapChain;
 
-  mem::TScope<UBuffer> vertexBuffer;
-  mem::TScope<IShader> vertexShader;
+  mem::TScope<rhi::UBuffer> vertexBuffer;
+  mem::TScope<rhi::IShader> vertexShader;
 
  public:
-  [[nodiscard]] static IDevice& GetDefaultDevice() {
+  [[nodiscard]] static rhi::IDevice& GetDefaultDevice() {
     return s_defaultDevice.Get();
   }
 
  private:
-  static inline IDeviceHandle s_defaultDevice;
+  static inline rhi::IDeviceHandle s_defaultDevice;
 };
 
 }  // namespace wkr::render

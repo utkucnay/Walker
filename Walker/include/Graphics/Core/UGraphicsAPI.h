@@ -2,7 +2,7 @@
 
 #include "Graphics/Core/GraphicsAbstractFactory.h"
 
-namespace wkr::render {
+namespace wkr::graphics {
 
 class UGraphicsAPI {
  public:
@@ -13,7 +13,9 @@ class UGraphicsAPI {
 
  public:
   static void Init(EType apiType);
+
   static inline EType GetAPIType() { return s_Api; }
+
   static inline void Destroy() { s_abstractFactory.Release(); }
 
   static IGraphicsAbstractFactory& GetAbstractFactory() {
@@ -27,4 +29,4 @@ class UGraphicsAPI {
   static inline mem::TScope<IGraphicsAbstractFactory> s_abstractFactory;
 };
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics
