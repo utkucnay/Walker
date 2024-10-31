@@ -1,17 +1,20 @@
 #pragma once
 
-#include "Core/AWindow.h"
-#include "Graphics/Core/IDevice.h"
+#include "Graphics/RHI/Command/ICommandAllocator.h"
+#include "Graphics/RHI/Command/ICommandList.h"
+#include "Graphics/RHI/Core/ASwapChain.h"
+#include "Graphics/RHI/Core/IDevice.h"
+#include "Graphics/RHI/Shader/IShader.h"
 #include "Graphics/Resource/UBuffer.h"
-#include "Graphics/Shader/IShader.h"
+#include "OS/Window/AWindow.h"
 
 namespace wkr::graphics {
 
-struct FGraphicsDesc {
-  AWindowHandle window = {};
+struct WALKER_API FGraphicsDesc {
+  os::AWindowHandle window = {};
 };
 
-class UGraphics {
+class WALKER_API UGraphics {
  public:
   UGraphics(FGraphicsDesc& rendererDesc);
   ~UGraphics();
@@ -28,9 +31,9 @@ class UGraphics {
   rhi::ICommandListHandle m_commandDirectList;
   rhi::ICommandQueueHandle m_commandDirectQueue;
 
-  ASwapChainHandle m_swapChain;
+  rhi::ASwapChainHandle m_swapChain;
 
-  mem::TScope<rhi::UBuffer> vertexBuffer;
+  mem::TScope<rsc::UBuffer> vertexBuffer;
   mem::TScope<rhi::IShader> vertexShader;
 
  public:
@@ -42,4 +45,4 @@ class UGraphics {
   static inline rhi::IDeviceHandle s_defaultDevice;
 };
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics

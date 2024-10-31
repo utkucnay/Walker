@@ -2,7 +2,7 @@
 
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/RHI/ResourceView/IResourceView.h"
+#include "Graphics/RHI/Resource/View/IResourceView.h"
 
 namespace wkr::graphics::rhi {
 
@@ -26,10 +26,6 @@ class WALKER_API IDescriptorHeap {
 
   template <typename T>
   [[nodiscard]] wkr::mem::TRef<T> Get(std::size_t index) {
-    WKR_CORE_ERROR_COND(
-        m_resourceViews[index]->GetTypeName() != T::GetStaticTypeName(),
-        "Didn't Match View Type " << m_resourceViews[index]->GetTypeName()
-                                  << " " << T::GetStaticTypeName());
     return m_resourceViews[index];
   }
 

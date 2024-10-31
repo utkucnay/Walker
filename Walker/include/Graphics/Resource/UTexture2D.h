@@ -22,10 +22,10 @@ class WALKER_API UTexture2D {
 
  public:
   FTexture2DDesc GetDesc() const;
-  IResourceHandle GetResource() { return m_Resource; }
+  rhi::IResourceHandle GetResource() { return m_Resource; }
 
  private:
-  IResourceHandle m_Resource;
+  rhi::IResourceHandle m_Resource;
 };
 
 }  // namespace wkr::graphics::rsc

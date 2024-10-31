@@ -1,27 +1,17 @@
 #pragma once
 
+#include "Graphics/RHI/Resource/View/IResourceView.h"
 #include "Graphics/Resource/UTexture2D.h"
-#include "Graphics/ResourceView/IResourceView.h"
 
-namespace wkr::render
-{
-  class ARenderTargetView : public IResourceView
-  {
-  public:
-    virtual ~ARenderTargetView() override = default;
+namespace wkr::graphics::rsc {
 
-  public:
-    mem::TRef<UTexture2D> GetTexture2D()
-      { return m_texture2D; }
+class WALKER_API URenderTargetView {
+ public:
+ protected:
+  rhi::IResourceViewHandle m_ResourceView;
+  UTexture2D m_Texture2D;
+};
 
-    std::string GetTypeName() override final { return "RenderTargetView"; }
+using URenderTargetViewHandle = mem::TRef<URenderTargetView>;
 
-  public:
-    static std::string GetStaticTypeName() { return "RenderTargetView"; }
-
-  protected:
-    mem::TRef<UTexture2D> m_texture2D;
-  };
-
-  using ARenderTargetViewHandle = mem::TRef<ARenderTargetView>;
-}
+}  // namespace wkr::graphics::rsc

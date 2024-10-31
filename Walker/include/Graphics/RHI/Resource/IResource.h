@@ -3,16 +3,16 @@
 #include "Graphics/RHI/Memory/IHeap.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
 
-namespace wkr::graphics {
+namespace wkr::graphics::rhi {
 
 struct WALKER_API FResourceDesc {
   EResourceDescType descType = EResourceDescType::kCommitted;
 
   union {
-    mem::FHeapDesc heapDesc;
+    FHeapDesc heapDesc;
 
     struct {
-      mem::IHeap* heap = nullptr;
+      IHeap* heap = nullptr;
       u64 heapOffset = 0;
     };
   };
@@ -33,4 +33,4 @@ class WALKER_API IResource {
 
 using IResourceHandle = wkr::mem::TRef<IResource>;
 
-}  // namespace wkr::graphics
+}  // namespace wkr::graphics::rhi

@@ -5,6 +5,7 @@
 #include "Graphics/RHI/Core/IFence.h"
 #include "Graphics/RHI/Descriptor/ADescriptorHeap.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
+#include "OS/Window/AWindow.h"
 
 namespace wkr::graphics::rhi {
 
@@ -13,7 +14,7 @@ struct WALKER_API FSwapChainDesc {
   FSample m_sampleDesc = {0, 0};
   ESwapChainF m_flag = ESwapChainF::kNone;
   ESwapChainEffect m_swapEffect = ESwapChainEffect::kDiscard;
-  AWindowHandle m_window = {};
+  os::AWindowHandle m_window = {};
   FModeDesc m_bufferDesc = {};
   EResourceUsageF m_bufferUsage = EResourceUsageF::kCPU_ACCESS_NONE;
   ICommandQueueHandle m_commandQueue = nullptr;

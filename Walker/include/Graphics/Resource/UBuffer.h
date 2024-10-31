@@ -22,7 +22,7 @@ class WALKER_API UBuffer {
   FBufferDesc GetDesc() const;
 
  private:
-  IResourceHandle m_resource;
+  rhi::IResourceHandle m_resource;
 };
 
 }  // namespace wkr::graphics::rsc

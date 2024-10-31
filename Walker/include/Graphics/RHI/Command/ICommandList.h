@@ -4,9 +4,9 @@
 #include "Graphics/RHI/Command/CommandType.h"
 #include "Graphics/RHI/Command/ICommandAllocator.h"
 #include "Graphics/RHI/Core/IPipelineState.h"
-#include "Graphics/RHI/Resource/IResource.h"
 #include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
-#include "Graphics/RHI/Resource/View/ARenderTargetView.h"
+#include "Graphics/RHI/Resource/IResource.h"
+#include "Graphics/RHI/Resource/View/URenderTargetView.h"
 
 namespace wkr::graphics::rhi {
 
@@ -31,9 +31,9 @@ class WALKER_API ICommandList {
       const std::vector<IResourceBarrier*>& barriers) = 0;
 
   virtual void OMSetRenderTargets(
-      const std::vector<ARenderTargetView*>& rtvs) = 0;
+      const std::vector<URenderTargetView*>& rtvs) = 0;
 
-  virtual void ClearRenderTargetView(ARenderTargetView& rtv,
+  virtual void ClearRenderTargetView(URenderTargetView& rtv,
                                      FColor32 color) = 0;
 
   //  virtual void CopyBufferRegion(

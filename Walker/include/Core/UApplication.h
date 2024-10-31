@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/AWindow.h"
+#include "OS/Window/AWindow.h"
 #include "Graphics/Core/UGraphics.h"
 
 int main(int argc, char** argv);
@@ -27,7 +27,7 @@ class WALKER_API UApplication {
   void Run();
 
  private:
-  AWindowHandle m_mainWindow;
+  os::AWindowHandle m_mainWindow;
   FApplicationSpecs appSpecs;
   mem::TScope<graphics::UGraphics> m_renderer;
 
