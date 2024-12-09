@@ -9,7 +9,7 @@ UResource::UResource(FResourceDesc& desc) {
 
   HRESULT hr;
   switch (desc.descType) {
-    case EResourceDescType::Committed: {
+    case EResourceDescType::kCommitted: {
       hr = nDevice->CreateCommittedResource(
           ConvertFHeapDesc(desc.heapDesc).GetPtr(),
           ConvertEHeapF(desc.heapDesc.m_flag),
@@ -18,14 +18,14 @@ UResource::UResource(FResourceDesc& desc) {
           ConvertFClearValue(desc.clearValue).GetPtr(),
           IID_PPV_ARGS(&m_resource));
     } break;
-    case EResourceDescType::Reserved: {
+    case EResourceDescType::kReserved: {
       hr = nDevice->CreateReservedResource(
           ConvertFResource(desc.resource).GetPtr(),
           ConvertEResourceState(desc.initialState),
           ConvertFClearValue(desc.clearValue).GetPtr(),
           IID_PPV_ARGS(&m_resource));
     } break;
-    case EResourceDescType::Placed: {
+    case EResourceDescType::kPlaced: {
       hr = nDevice->CreatePlacedResource(
           desc.heap->GetNativeObject(), desc.heapOffset,
           ConvertFResource(desc.resource).GetPtr(),

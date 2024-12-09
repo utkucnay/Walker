@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wkr::os::mem {
+namespace wkr::os {
 
 enum class WALKER_API EPageSize
 {

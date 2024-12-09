@@ -1,18 +1,17 @@
 #include "Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h"
 #include "Graphics/Core/UGraphics.h"
-#include "Graphics/Descriptor/ADescriptorHeap.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
-#include "Platforms/DirectX12/ResourceView/DX12RenderTargetView.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 UDescriptorHeap::UDescriptorHeap(FDescriptorHeapDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
-  D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{};
-  nDHeapDesc.NumDescriptors = desc.m_count;
-  nDHeapDesc.Type = ConvertEDescriptorHeapType(desc.m_type);
-  nDHeapDesc.Flags = ConvertEDescriptorHeapFlag(desc.m_flags);
+  D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{
+    .Type = ConvertEDescriptorHeapType(desc.Type),
+    .NumDescriptors = desc.Count,
+    .Flags = ConvertEDescriptorHeapF(desc.Flag),
+  };
 
   HRESULT hr = nDevice->CreateDescriptorHeap(&nDHeapDesc,
                                              IID_PPV_ARGS(&m_descriptorHeap));

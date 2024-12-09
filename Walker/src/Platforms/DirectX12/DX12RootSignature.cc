@@ -1,7 +1,7 @@
 #include "Platforms/DirectX12/Core/DX12RootSignature.h"
 #include "Graphics/Core/UGraphics.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 URootSignature::URootSignature(FRootSignatureDesc& desc) {
   auto nDevice = UGraphics::GetDefaultDevice().GetNativeObject();

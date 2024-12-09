@@ -1,40 +1,43 @@
 #include "Platforms/DirectX12/Core/DX12SwapChain.h"
 #include "Graphics/Core/UGraphicsAPI.h"
-#include "Graphics/Descriptor/ADescriptorHeap.h"
+#include "Graphics/RHI/Core/ASwapChain.h"
+#include "OS/Window/AWindow.h"
 #include "Platforms/DirectX12/Core/DX12Factory.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
-#include "Platforms/DirectX12/Resource/DX12Resource.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 USwapChain::USwapChain(FSwapChainDesc& desc) {
+  m_Window = desc.Window;
   IDXGISwapChain* swapChain;
-  DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-  swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  swapChainDesc.BufferCount = desc.m_bufferCount;
-  swapChainDesc.BufferDesc.Width = desc.m_bufferDesc.m_width;
-  swapChainDesc.BufferDesc.Height = desc.m_bufferDesc.m_height;
-  swapChainDesc.BufferDesc.Format =
-      ConvertEResourceFormat(desc.m_bufferDesc.m_format);
-  swapChainDesc.BufferDesc.Scaling =
-      ConvertEScaling(desc.m_bufferDesc.m_scaling);
-  swapChainDesc.BufferDesc.ScanlineOrdering =
-      ConvertEScanlineOrder(desc.m_bufferDesc.m_scanlineOrdering);
+  os::FWindowDesc windowDesc = m_Window->GetDesc();
 
-  swapChainDesc.BufferDesc.RefreshRate.Numerator =
-      desc.m_bufferDesc.m_refreshRate.m_numerator;
-  swapChainDesc.BufferDesc.RefreshRate.Denominator =
-      desc.m_bufferDesc.m_refreshRate.m_denominator;
-
-  swapChainDesc.SampleDesc.Count = desc.m_sampleDesc.count;
-  swapChainDesc.SampleDesc.Quality = desc.m_sampleDesc.quality;
-
-  swapChainDesc.SwapEffect = ConvertESwapChainEffect(desc.m_swapEffect);
-  swapChainDesc.Flags = (UINT)desc.m_flag;
-
-  swapChainDesc.OutputWindow =
-      *(static_cast<HWND*>(desc.m_window->GetNativeObject()));
-  swapChainDesc.Windowed = desc.m_window->GetWindowed();
+  DXGI_SWAP_CHAIN_DESC swapChainDesc = {
+      .BufferDesc =
+          {
+              .Width = desc.BufferDesc.Width,
+              .Height = desc.BufferDesc.Height,
+              .RefreshRate =
+                  {
+                      .Numerator = desc.BufferDesc.RefreshRate.Numerator,
+                      .Denominator = desc.BufferDesc.RefreshRate.Denominator,
+                  },
+              .Format =
+                  wkrtodx12::ConvertEResourceFormat(desc.BufferDesc.Format),
+              .ScanlineOrdering = wkrtodx12::ConvertEScanlineOrder(
+                  desc.BufferDesc.ScanlineOrdering),
+              .Scaling = wkrtodx12::ConvertEScaling(desc.BufferDesc.Scaling),
+          },
+      .SampleDesc = {.Count = desc.SampleDesc.Count,
+                     .Quality = desc.SampleDesc.Quality},
+      .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+      .BufferCount = desc.BufferCount,
+      .OutputWindow = *(static_cast<HWND*>(desc.Window->GetNativeObject())),
+      .Windowed = (int)windowDesc.Windowed,
+      .SwapEffect = wkrtodx12::ConvertESwapChainEffect(desc.SwapEffect),
+      //TODO(utku): Change this
+      .Flags = (UINT)desc.Flag,
+  };
 
   HRESULT hr = UDX12Factory::GetFactory()->CreateSwapChain(
       desc.m_commandQueue->GetNativeObject(), &swapChainDesc, &swapChain);
@@ -42,126 +45,95 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
   WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 SwapChain")
   WKR_CORE_LOG("Created DX12 SwapChain")
 
-  m_swapChain = static_cast<IDXGISwapChain3*>(swapChain);
-  m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+  m_SwapChain = static_cast<IDXGISwapChain3*>(swapChain);
+  m_FrameIndex = m_SwapChain->GetCurrentBackBufferIndex();
 
   for (u32 i = 0; i < GetBufferCount(); i++) {
     ID3D12Resource* res;
-    m_swapChain->GetBuffer(i, IID_PPV_ARGS(&res));
-    m_textures.push_back(mem::TRef<UTexture2D>::Create(new UResource(res)));
+    m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&res));
+    //TODO(utku): Change This!
+    //m_Textures.push_back(mem::TRef<UTexture2D>::Create(new UResource(res)));
     WKR_CORE_LOG("Binding Each Resource in Swap Chain");
   }
 
   auto& factory = UGraphicsAPI::GetAbstractFactory();
 
   FDescriptorHeapDesc descriptorHeapDesc;
-  descriptorHeapDesc.m_count = GetBufferCount();
-  descriptorHeapDesc.m_type = EDescriptorHeapType::RTV;
-  descriptorHeapDesc.m_flags = EDescriptorHeapFlags::None;
+  // descriptorHeapDesc.m_count = GetBufferCount();
+  // descriptorHeapDesc.m_type = EDescriptorHeapType::RTV;
+  // descriptorHeapDesc.m_flags = EDescriptorHeapFlags::None;
 
-  m_descripHeap = factory.GetIDescriptorHeap()->Create(descriptorHeapDesc);
+  // m_DescripHeap = factory.GetIDescriptorHeap()->Create(descriptorHeapDesc);
 
-  std::vector<IResourceHandle> m_resources;
-  std::transform(
-      m_textures.begin(), m_textures.end(), std::back_inserter(m_resources),
-      [](mem::TRef<UTexture2D> texture) { return texture->GetResource(); });
+  // std::vector<IResourceHandle> m_resources;
+  // std::transform(
+  //     m_Textures.begin(), m_Textures.end(), std::back_inserter(m_resources),
+  //     [](mem::TRef<UTexture2D> texture) { return texture->GetResource(); });
 
-  m_descripHeap->Bind(m_resources);
+  // m_DescripHeap->Bind(m_resources);
 
-  FFenceDesc fenceDesc;
-  fenceDesc.m_frameCount = GetBufferCount();
-  fenceDesc.m_flag = EFenceFlag::None;
+  m_ResizeEvent = BIND_EVENT_2(USwapChain::WindowSizeEvent);
+  m_FullscreenEvent = BIND_EVENT_1(USwapChain::FullscreenEvent);
 
-  m_fence = factory.GetIFence()->Create(fenceDesc);
-
-  SetupEvents(desc.m_window);
+  m_Window->ResizeEvent += m_ResizeEvent;
+  m_Window->SetFullscreenEvent += m_FullscreenEvent;
 }
 
 USwapChain::~USwapChain() {
-  m_swapChain->Release();
-  DestroyEvents();
+  m_SwapChain->Release();
+
+  m_Window->ResizeEvent -= m_ResizeEvent;
+  m_Window->SetFullscreenEvent -= m_FullscreenEvent;
 }
 
 void USwapChain::WindowSizeEvent(u32 width, u32 height) {
-  m_swapChain->SetSourceSize(width, height);
+  m_SwapChain->SetSourceSize(width, height);
 }
 
 void USwapChain::FullscreenEvent(b64 isTrue) {
-  m_swapChain->SetFullscreenState(isTrue, nullptr);
+  m_SwapChain->SetFullscreenState(isTrue, nullptr);
 }
 
 void USwapChain::SwapBuffers() {
-  m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
-
-  m_fence->FenceEvent(m_frameIndex);
+  m_FrameIndex = m_SwapChain->GetCurrentBackBufferIndex();
 }
 
-void USwapChain::SetupEvents(AWindowHandle window) {
-  m_resizeEvent = BIND_EVENT_2(USwapChain::WindowSizeEvent);
-  m_fullscreenEvent = BIND_EVENT_1(USwapChain::FullscreenEvent);
+FSwapChainDesc USwapChain::GetDesc() {
+  DXGI_SWAP_CHAIN_DESC nDesc;
+  m_SwapChain->GetDesc(&nDesc);
 
-  window->m_resizeEvent += m_resizeEvent;
-  window->m_setFullscreenEvent += m_fullscreenEvent;
-}
+  FSwapChainDesc desc = {
+      .BufferCount = nDesc.BufferCount,
+      .SampleDesc =
+          {
+              .Count = nDesc.SampleDesc.Count,
+              .Quality = nDesc.SampleDesc.Quality,
+          },
+      .Flag = {},
+      .SwapEffect = dx12towkr::ConvertESwapChainEffect(nDesc.SwapEffect),
+      .Window = m_Window,
+      .BufferDesc =
+          {
+              .Width = nDesc.BufferDesc.Width,
+              .Height = nDesc.BufferDesc.Height,
+              .RefreshRate = {.Numerator =
+                                  nDesc.BufferDesc.RefreshRate.Numerator,
+                              .Denominator =
+                                  nDesc.BufferDesc.RefreshRate.Denominator},
+              .ScanlineOrdering = dx12towkr::ConvertEScanlineOrder(
+                  nDesc.BufferDesc.ScanlineOrdering),
+              .Scaling = dx12towkr::ConvertEScaling(nDesc.BufferDesc.Scaling),
+              .Format =
+                  dx12towkr::ConvertEResourceFormat(nDesc.BufferDesc.Format),
+          },
+      .m_bufferUsage = dx12towkr::ConvertEResourceUsage(nDesc.BufferUsage),
+  };
 
-void USwapChain::DestroyEvents() {}
-
-FModeDesc USwapChain::GetBufferDesc() {
-  DXGI_SWAP_CHAIN_DESC desc;
-  FModeDesc retDesc;
-
-  m_swapChain->GetDesc(&desc);
-  retDesc.m_height = desc.BufferDesc.Height;
-  retDesc.m_width = desc.BufferDesc.Width;
-  retDesc.m_format = static_cast<EResourceFormat>(desc.BufferDesc.Format);
-  retDesc.m_scaling = static_cast<EScaling>(desc.BufferDesc.Scaling);
-  retDesc.m_refreshRate.m_numerator = desc.BufferDesc.RefreshRate.Numerator;
-  retDesc.m_refreshRate.m_denominator = desc.BufferDesc.RefreshRate.Denominator;
-  retDesc.m_scanlineOrdering =
-      static_cast<EScanlineOrder>(desc.BufferDesc.ScanlineOrdering);
-  return retDesc;
-}
-
-FSample USwapChain::GetSampleDesc() {
-  DXGI_SWAP_CHAIN_DESC desc;
-  FSample retDesc;
-
-  m_swapChain->GetDesc(&desc);
-  retDesc.count = desc.SampleDesc.Count;
-  retDesc.quality = desc.SampleDesc.Quality;
-  return retDesc;
-}
-
-EResourceUsageF USwapChain::GetBufferUsage() {
-  DXGI_SWAP_CHAIN_DESC desc;
-
-  m_swapChain->GetDesc(&desc);
-  return static_cast<EResourceUsageF>(desc.BufferUsage);
-}
-
-u32 USwapChain::GetBufferCount() {
-  DXGI_SWAP_CHAIN_DESC desc;
-
-  m_swapChain->GetDesc(&desc);
-  return desc.BufferCount;
-}
-
-ESwapChainEffect USwapChain::GetSwapEffect() {
-  DXGI_SWAP_CHAIN_DESC desc;
-
-  m_swapChain->GetDesc(&desc);
-  return static_cast<ESwapChainEffect>(desc.SwapEffect);
-}
-
-ESwapChainFlag USwapChain::GetFlag() {
-  DXGI_SWAP_CHAIN_DESC desc;
-
-  m_swapChain->GetDesc(&desc);
-  return static_cast<ESwapChainFlag>(desc.Flags);
+  return desc;
 }
 
 void USwapChain::Present(u8 syncInterval, u8 flags) {
-  m_swapChain->Present(syncInterval, flags);
+  m_SwapChain->Present(syncInterval, flags);
 }
 
-}  // namespace wkr::render::dx12
+}  // namespace wkr::graphics::rhi::dx12

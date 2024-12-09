@@ -2,7 +2,7 @@
 
 #include "Memory/Core/IAllocator.h"
 
-namespace wkr::os::mem {
+namespace wkr::os {
 
 struct WALKER_API FPageAllocatorDesc {
   EPageSize pageSize;

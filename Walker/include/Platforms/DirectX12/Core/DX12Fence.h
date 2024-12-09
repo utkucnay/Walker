@@ -1,27 +1,24 @@
 #pragma once
 
-#include "Graphics/Core/IFence.h"
+#include "Graphics/RHI/Core/IFence.h"
 
-namespace wkr::render::dx12
-{
-  class UFence : public IFence
-  {
-  public:
-    UFence(FFenceDesc& desc);
-    ~UFence() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    void FenceEvent(int frameIndex) override final;
-    void IncFenceValue(int frameIndex) { m_fenceValue[frameIndex]++; }
+class UFence : public AFence {
+ public:
+  UFence(FFenceDesc& desc);
+  ~UFence() override;
 
-    NativeObject GetNativeObject(int frameIndex) override final { return m_fence[frameIndex]; }
+ public:
+  void FenceEvent(int frameIndex) override final;
 
-  public:
-    std::vector<u64>  m_fenceValue;
-    HANDLE            m_fenceEvent;
+  NativeObject GetNativeObject(int frameIndex) override final {
+    return m_Fence[frameIndex];
+  }
 
-  private:
-    EFenceFlag m_flag;
-    std::vector<ID3D12Fence*> m_fence;
-  };
-}
+ private:
+  HANDLE m_FenceEvent;
+  std::vector<ID3D12Fence*> m_Fence;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

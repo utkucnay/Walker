@@ -1,41 +1,42 @@
 #include "Core/UApplication.h"
-
-#include "OS/UOSFactory.h"
+#include "OS/Core/UOSFactory.h"
 
 namespace wkr {
 
 UApplication::UApplication(const FApplicationSpecs& applicationSpecs) {
   WKR_CORE_LOG("Application Starting");
-  appSpecs = applicationSpecs;
+  m_AppSpecs = applicationSpecs;
 
   os::UOSFactory::Init();
 
-  FWindowDesc windowDesc = {};
-  windowDesc.m_name = "Walker Engine";
-  windowDesc.m_width = 1280;
-  windowDesc.m_height = 720;
-  m_mainWindow = os::UOSFactory::Get().GetAWindow()->Create(windowDesc);
+  os::FWindowDesc windowDesc = {
+    .Width = 1280,
+    .Height = 720,
+    .Name = "Walker Engine",
+  };
+  m_MainWindow = os::UOSFactory::Get().GetAWindow()->Create(windowDesc);
 
-  render::FGraphicsDesc rendererDesc;
-  rendererDesc.window = m_mainWindow;
-  m_renderer = new render::UGraphics(rendererDesc);
+  graphics::FGraphicsDesc graphicsDesc = {
+    .Window = m_MainWindow
+  };
+  m_Graphics = new graphics::UGraphics(graphicsDesc);
 
-  m_renderer->CreateResource();
-  m_renderer->LoadResources();
+  m_Graphics->CreateResource();
+  m_Graphics->LoadResources();
 }
 
 UApplication::~UApplication() {
-  m_renderer.Release();
-  m_mainWindow.Reset();
+  m_Graphics.Release();
+  m_MainWindow.Reset();
   os::UOSFactory::Destroy();
 }
 
 void UApplication::Run() {
-  while (m_mainWindow->IsShouldClose()) {
-    m_mainWindow->PoolEvents();
+  while (m_MainWindow->IsShouldClose()) {
+    m_MainWindow->PoolEvents();
 
-    m_renderer->Render();
-    m_mainWindow->SwapBuffers();
+    m_Graphics->Render();
+    //m_MainWindow->SwapBuffers();
   }
 }
 

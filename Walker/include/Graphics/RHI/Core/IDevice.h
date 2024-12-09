@@ -5,7 +5,7 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FDeviceDesc {
-  IAdapter* adapter;
+  IAdapter* Adapter;
 };
 
 class WALKER_API IDevice {

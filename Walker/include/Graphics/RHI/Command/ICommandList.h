@@ -6,14 +6,14 @@
 #include "Graphics/RHI/Core/IPipelineState.h"
 #include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/RHI/Resource/View/URenderTargetView.h"
+#include "Graphics/Resource/View/URenderTargetView.h"
 
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FCommandListDesc {
   ECommandType CommandType = ECommandType::kNone;
   IPipelineState* PipelineState = nullptr;
-  ICommandAllocatorHandle CommandAllocator = {};
+  ICommandAllocatorHandle CommandAllocator = nullptr;
 };
 
 class WALKER_API ICommandList {
@@ -28,10 +28,10 @@ class WALKER_API ICommandList {
                      IPipelineState* pipelineState) = 0;
 
   virtual void ResourceBarriers(
-      const std::vector<IResourceBarrier*>& barriers) = 0;
+      const std::vector<IResourceBarrierHandle>& barriers) = 0;
 
   virtual void OMSetRenderTargets(
-      const std::vector<URenderTargetView*>& rtvs) = 0;
+      const std::vector<URenderTargetView>& rtvs) = 0;
 
   virtual void ClearRenderTargetView(URenderTargetView& rtv,
                                      FColor32 color) = 0;

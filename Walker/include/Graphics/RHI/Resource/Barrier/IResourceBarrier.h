@@ -20,6 +20,7 @@ class WALKER_API IResourceBarrier {
   virtual ~IResourceBarrier() = default;
 
  public:
+  virtual FResourceBarrierDesc GetDesc() = 0;
   virtual NativeObject GetNativeObject() = 0;
 };
 

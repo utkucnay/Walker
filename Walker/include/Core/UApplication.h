@@ -27,9 +27,9 @@ class WALKER_API UApplication {
   void Run();
 
  private:
-  os::AWindowHandle m_mainWindow;
-  FApplicationSpecs appSpecs;
-  mem::TScope<graphics::UGraphics> m_renderer;
+  os::AWindowHandle m_MainWindow;
+  FApplicationSpecs m_AppSpecs;
+  mem::TScope<graphics::UGraphics> m_Graphics;
 
   friend int ::main(int argc, char** argv);
 };

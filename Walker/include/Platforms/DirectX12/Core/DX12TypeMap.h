@@ -1,39 +1,41 @@
 #pragma once
 
 #include "Graphics/Core/GraphicsType.h"
-#include "Graphics/Command/CommandType.h"
-#include "Graphics/Resource/IResource.h"
-#include "Graphics/Resource/IHeap.h"
-#include "Graphics/Resource/ResourceType.h"
-#include "Graphics/Descriptor/DescriptorType.h"
+#include "Graphics/RHI/Command/CommandType.h"
+#include "Graphics/RHI/Memory/IHeap.h"
+#include "Graphics/RHI/Resource/ResourceType.h"
+#include "Graphics/RHI/Descriptor/DescriptorType.h"
 
-namespace wkr::render::dx12
+namespace wkr::graphics::rhi
+{
+
+namespace wkrtodx12
 {
   static inline D3D12_COMMAND_LIST_TYPE
   ConvertECommandType(ECommandType commandType)
   {
     static std::unordered_map<ECommandType, D3D12_COMMAND_LIST_TYPE> map =
     {
-      {ECommandType::Bundle,        D3D12_COMMAND_LIST_TYPE_BUNDLE        },
-      {ECommandType::Direct,        D3D12_COMMAND_LIST_TYPE_DIRECT        },
-      {ECommandType::Compute,       D3D12_COMMAND_LIST_TYPE_COMPUTE       },
-      {ECommandType::Copy,          D3D12_COMMAND_LIST_TYPE_COPY          },
-      {ECommandType::VideoDecode,   D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE  },
-      {ECommandType::VideoProcess,  D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS },
-      {ECommandType::VideoEncode,   D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE  },
-      {ECommandType::None,          D3D12_COMMAND_LIST_TYPE_NONE          },
+      {ECommandType::kBundle,        D3D12_COMMAND_LIST_TYPE_BUNDLE        },
+      {ECommandType::kDirect,        D3D12_COMMAND_LIST_TYPE_DIRECT        },
+      {ECommandType::kCompute,       D3D12_COMMAND_LIST_TYPE_COMPUTE       },
+      {ECommandType::kCopy,          D3D12_COMMAND_LIST_TYPE_COPY          },
+      {ECommandType::kVideoDecode,   D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE  },
+      {ECommandType::kVideoProcess,  D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS },
+      {ECommandType::kVideoEncode,   D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE  },
+      {ECommandType::kNone,          D3D12_COMMAND_LIST_TYPE_NONE          },
     };
 
     return map[commandType];
   }
 
   static inline D3D12_COMMAND_QUEUE_FLAGS
-  ConvertECommandQueueFlags(ECommandQueueFlags flag)
+  ConvertECommandQueueF(ECommandQueueF flag)
   {
-    static std::unordered_map<ECommandQueueFlags, D3D12_COMMAND_QUEUE_FLAGS> map =
+    static std::unordered_map<ECommandQueueF, D3D12_COMMAND_QUEUE_FLAGS> map =
     {
-      {ECommandQueueFlags::None,              D3D12_COMMAND_QUEUE_FLAG_NONE               },
-      {ECommandQueueFlags::DisableGPUTimeout, D3D12_COMMAND_QUEUE_FLAG_DISABLE_GPU_TIMEOUT},
+      {ECommandQueueF::kNone,              D3D12_COMMAND_QUEUE_FLAG_NONE               },
+      {ECommandQueueF::kDisableGPUTimeout, D3D12_COMMAND_QUEUE_FLAG_DISABLE_GPU_TIMEOUT},
     };
 
     D3D12_COMMAND_QUEUE_FLAGS ret = {};
@@ -46,14 +48,14 @@ namespace wkr::render::dx12
   }
 
   static inline D3D12_FENCE_FLAGS
-  ConvertEFenceFlags(EFenceFlag flag)
+  ConvertEFenceF(EFenceF flag)
   {
-    static std::unordered_map<EFenceFlag, D3D12_FENCE_FLAGS> map =
+    static std::unordered_map<EFenceF, D3D12_FENCE_FLAGS> map =
     {
-      {EFenceFlag::None,                D3D12_FENCE_FLAG_NONE},
-      {EFenceFlag::Shared,              D3D12_FENCE_FLAG_SHARED},
-      {EFenceFlag::NonMonitored,        D3D12_FENCE_FLAG_NON_MONITORED},
-      {EFenceFlag::SharedCrossAdapter,  D3D12_FENCE_FLAG_SHARED_CROSS_ADAPTER},
+      {EFenceF::kNone,                D3D12_FENCE_FLAG_NONE},
+      {EFenceF::kShared,              D3D12_FENCE_FLAG_SHARED},
+      {EFenceF::kNonMonitored,        D3D12_FENCE_FLAG_NON_MONITORED},
+      {EFenceF::kSharedCrossAdapter,  D3D12_FENCE_FLAG_SHARED_CROSS_ADAPTER},
     };
 
     D3D12_FENCE_FLAGS ret = {};
@@ -66,23 +68,23 @@ namespace wkr::render::dx12
   }
 
   static inline DXGI_USAGE
-  ConvertEResourceUsageMap(EResourceUsageF flag)
+  ConvertEResourceUsage(EResourceUsageF flag)
   {
     static std::unordered_map<EResourceUsageF, DXGI_USAGE> map =
     {
-      {EResourceUsageF::SHARED, DXGI_USAGE_SHARED},
-      {EResourceUsageF::READ_ONLY, DXGI_USAGE_READ_ONLY},
-      {EResourceUsageF::SHADER_INPUT, DXGI_USAGE_SHADER_INPUT},
-      {EResourceUsageF::BACK_BUFFER, DXGI_USAGE_BACK_BUFFER},
-      {EResourceUsageF::UNORDERED_ACCESS, DXGI_USAGE_UNORDERED_ACCESS},
-      {EResourceUsageF::RENDER_TARGET_OUTPUT, DXGI_USAGE_RENDER_TARGET_OUTPUT},
-      {EResourceUsageF::DISCARD_ON_PRESENT, DXGI_USAGE_DISCARD_ON_PRESENT},
+      {EResourceUsageF::kSHARED, DXGI_USAGE_SHARED},
+      {EResourceUsageF::kREAD_ONLY, DXGI_USAGE_READ_ONLY},
+      {EResourceUsageF::kSHADER_INPUT, DXGI_USAGE_SHADER_INPUT},
+      {EResourceUsageF::kBACK_BUFFER, DXGI_USAGE_BACK_BUFFER},
+      {EResourceUsageF::kUNORDERED_ACCESS, DXGI_USAGE_UNORDERED_ACCESS},
+      {EResourceUsageF::kRENDER_TARGET_OUTPUT, DXGI_USAGE_RENDER_TARGET_OUTPUT},
+      {EResourceUsageF::kDISCARD_ON_PRESENT, DXGI_USAGE_DISCARD_ON_PRESENT},
 
-      {EResourceUsageF::CPU_ACCESS_NONE, DXGI_CPU_ACCESS_NONE},
-      {EResourceUsageF::CPU_ACCESS_FIELD, DXGI_CPU_ACCESS_FIELD},
-      {EResourceUsageF::CPU_ACCESS_DYNAMIC, DXGI_CPU_ACCESS_DYNAMIC},
-      {EResourceUsageF::CPU_ACCESS_SCRATCH, DXGI_CPU_ACCESS_SCRATCH},
-      {EResourceUsageF::CPU_ACCESS_READ_WRITE, DXGI_CPU_ACCESS_READ_WRITE},
+      {EResourceUsageF::kCPU_ACCESS_NONE, DXGI_CPU_ACCESS_NONE},
+      {EResourceUsageF::kCPU_ACCESS_FIELD, DXGI_CPU_ACCESS_FIELD},
+      {EResourceUsageF::kCPU_ACCESS_DYNAMIC, DXGI_CPU_ACCESS_DYNAMIC},
+      {EResourceUsageF::kCPU_ACCESS_SCRATCH, DXGI_CPU_ACCESS_SCRATCH},
+      {EResourceUsageF::kCPU_ACCESS_READ_WRITE, DXGI_CPU_ACCESS_READ_WRITE},
     };
 
     DXGI_USAGE ret = {};
@@ -99,127 +101,127 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EResourceFormat, DXGI_FORMAT> map =
     {
-      { EResourceFormat::UNKNOWN, DXGI_FORMAT_UNKNOWN },
-      { EResourceFormat::R32G32B32A32_TYPELESS, DXGI_FORMAT_R32G32B32A32_TYPELESS },
-      { EResourceFormat::R32G32B32A32_FLOAT, DXGI_FORMAT_R32G32B32A32_FLOAT },
-      { EResourceFormat::R32G32B32A32_UINT, DXGI_FORMAT_R32G32B32A32_UINT },
-      { EResourceFormat::R32G32B32A32_SINT, DXGI_FORMAT_R32G32B32A32_SINT },
-      { EResourceFormat::R32G32B32_TYPELESS, DXGI_FORMAT_R32G32B32_TYPELESS },
-      { EResourceFormat::R32G32B32_FLOAT, DXGI_FORMAT_R32G32B32_FLOAT },
-      { EResourceFormat::R32G32B32_UINT, DXGI_FORMAT_R32G32B32_UINT },
-      { EResourceFormat::R32G32B32_SINT, DXGI_FORMAT_R32G32B32_SINT },
-      { EResourceFormat::R16G16B16A16_TYPELESS, DXGI_FORMAT_R16G16B16A16_TYPELESS },
-      { EResourceFormat::R16G16B16A16_FLOAT, DXGI_FORMAT_R16G16B16A16_FLOAT },
-      { EResourceFormat::R16G16B16A16_UNORM, DXGI_FORMAT_R16G16B16A16_UNORM },
-      { EResourceFormat::R16G16B16A16_UINT, DXGI_FORMAT_R16G16B16A16_UINT },
-      { EResourceFormat::R16G16B16A16_SNORM, DXGI_FORMAT_R16G16B16A16_SNORM },
-      { EResourceFormat::R16G16B16A16_SINT, DXGI_FORMAT_R16G16B16A16_SINT },
-      { EResourceFormat::R32G32_TYPELESS, DXGI_FORMAT_R32G32_TYPELESS },
-      { EResourceFormat::R32G32_FLOAT, DXGI_FORMAT_R32G32_FLOAT },
-      { EResourceFormat::R32G32_UINT, DXGI_FORMAT_R32G32_UINT },
-      { EResourceFormat::R32G32_SINT, DXGI_FORMAT_R32G32_SINT },
-      { EResourceFormat::R32G8X24_TYPELESS, DXGI_FORMAT_R32G8X24_TYPELESS },
-      { EResourceFormat::D32_FLOAT_S8X24_UINT, DXGI_FORMAT_D32_FLOAT_S8X24_UINT },
-      { EResourceFormat::R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS },
-      { EResourceFormat::X32_TYPELESS_G8X24_UINT, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT },
-      { EResourceFormat::R10G10B10A2_TYPELESS, DXGI_FORMAT_R10G10B10A2_TYPELESS },
-      { EResourceFormat::R10G10B10A2_UNORM, DXGI_FORMAT_R10G10B10A2_UNORM },
-      { EResourceFormat::R10G10B10A2_UINT, DXGI_FORMAT_R10G10B10A2_UINT },
-      { EResourceFormat::R11G11B10_FLOAT, DXGI_FORMAT_R11G11B10_FLOAT },
-      { EResourceFormat::R8G8B8A8_TYPELESS, DXGI_FORMAT_R8G8B8A8_TYPELESS },
-      { EResourceFormat::R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM },
-      { EResourceFormat::R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB },
-      { EResourceFormat::R8G8B8A8_UINT, DXGI_FORMAT_R8G8B8A8_UINT },
-      { EResourceFormat::R8G8B8A8_SNORM, DXGI_FORMAT_R8G8B8A8_SNORM },
-      { EResourceFormat::R8G8B8A8_SINT, DXGI_FORMAT_R8G8B8A8_SINT },
-      { EResourceFormat::R16G16_TYPELESS, DXGI_FORMAT_R16G16_TYPELESS },
-      { EResourceFormat::R16G16_FLOAT, DXGI_FORMAT_R16G16_FLOAT },
-      { EResourceFormat::R16G16_UNORM, DXGI_FORMAT_R16G16_UNORM },
-      { EResourceFormat::R16G16_UINT, DXGI_FORMAT_R16G16_UINT },
-      { EResourceFormat::R16G16_SNORM, DXGI_FORMAT_R16G16_SNORM },
-      { EResourceFormat::R16G16_SINT, DXGI_FORMAT_R16G16_SINT },
-      { EResourceFormat::R32_TYPELESS, DXGI_FORMAT_R32_TYPELESS },
-      { EResourceFormat::D32_FLOAT, DXGI_FORMAT_D32_FLOAT },
-      { EResourceFormat::R32_FLOAT, DXGI_FORMAT_R32_FLOAT },
-      { EResourceFormat::R32_UINT, DXGI_FORMAT_R32_UINT },
-      { EResourceFormat::R32_SINT, DXGI_FORMAT_R32_SINT },
-      { EResourceFormat::R24G8_TYPELESS, DXGI_FORMAT_R24G8_TYPELESS },
-      { EResourceFormat::D24_UNORM_S8_UINT, DXGI_FORMAT_D24_UNORM_S8_UINT },
-      { EResourceFormat::R24_UNORM_X8_TYPELESS, DXGI_FORMAT_R24_UNORM_X8_TYPELESS },
-      { EResourceFormat::X24_TYPELESS_G8_UINT, DXGI_FORMAT_X24_TYPELESS_G8_UINT },
-      { EResourceFormat::R8G8_TYPELESS, DXGI_FORMAT_R8G8_TYPELESS },
-      { EResourceFormat::R8G8_UNORM, DXGI_FORMAT_R8G8_UNORM },
-      { EResourceFormat::R8G8_UINT, DXGI_FORMAT_R8G8_UINT },
-      { EResourceFormat::R8G8_SNORM, DXGI_FORMAT_R8G8_SNORM },
-      { EResourceFormat::R8G8_SINT, DXGI_FORMAT_R8G8_SINT },
-      { EResourceFormat::R16_TYPELESS, DXGI_FORMAT_R16_TYPELESS },
-      { EResourceFormat::R16_FLOAT, DXGI_FORMAT_R16_FLOAT },
-      { EResourceFormat::D16_UNORM, DXGI_FORMAT_D16_UNORM },
-      { EResourceFormat::R16_UNORM, DXGI_FORMAT_R16_UNORM },
-      { EResourceFormat::R16_UINT, DXGI_FORMAT_R16_UINT },
-      { EResourceFormat::R16_SNORM, DXGI_FORMAT_R16_SNORM },
-      { EResourceFormat::R16_SINT, DXGI_FORMAT_R16_SINT },
-      { EResourceFormat::R8_TYPELESS, DXGI_FORMAT_R8_TYPELESS },
-      { EResourceFormat::R8_UNORM, DXGI_FORMAT_R8_UNORM },
-      { EResourceFormat::R8_UINT, DXGI_FORMAT_R8_UINT },
-      { EResourceFormat::R8_SNORM, DXGI_FORMAT_R8_SNORM },
-      { EResourceFormat::R8_SINT, DXGI_FORMAT_R8_SINT },
-      { EResourceFormat::A8_UNORM, DXGI_FORMAT_A8_UNORM },
-      { EResourceFormat::R1_UNORM, DXGI_FORMAT_R1_UNORM },
-      { EResourceFormat::R9G9B9E5_SHAREDEXP, DXGI_FORMAT_R9G9B9E5_SHAREDEXP },
-      { EResourceFormat::R8G8_B8G8_UNORM, DXGI_FORMAT_R8G8_B8G8_UNORM },
-      { EResourceFormat::G8R8_G8B8_UNORM, DXGI_FORMAT_G8R8_G8B8_UNORM },
-      { EResourceFormat::BC1_TYPELESS, DXGI_FORMAT_BC1_TYPELESS },
-      { EResourceFormat::BC1_UNORM, DXGI_FORMAT_BC1_UNORM },
-      { EResourceFormat::BC1_UNORM_SRGB, DXGI_FORMAT_BC1_UNORM_SRGB },
-      { EResourceFormat::BC2_TYPELESS, DXGI_FORMAT_BC2_TYPELESS },
-      { EResourceFormat::BC2_UNORM, DXGI_FORMAT_BC2_UNORM },
-      { EResourceFormat::BC2_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM_SRGB },
-      { EResourceFormat::BC3_TYPELESS, DXGI_FORMAT_BC3_TYPELESS },
-      { EResourceFormat::BC3_UNORM, DXGI_FORMAT_BC3_UNORM },
-      { EResourceFormat::BC3_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM_SRGB },
-      { EResourceFormat::BC4_TYPELESS, DXGI_FORMAT_BC4_TYPELESS },
-      { EResourceFormat::BC4_UNORM, DXGI_FORMAT_BC4_UNORM },
-      { EResourceFormat::BC4_SNORM, DXGI_FORMAT_BC4_SNORM },
-      { EResourceFormat::BC5_TYPELESS, DXGI_FORMAT_BC5_TYPELESS },
-      { EResourceFormat::BC5_UNORM, DXGI_FORMAT_BC5_UNORM },
-      { EResourceFormat::BC5_SNORM, DXGI_FORMAT_BC5_SNORM },
-      { EResourceFormat::B5G6R5_UNORM, DXGI_FORMAT_B5G6R5_UNORM },
-      { EResourceFormat::B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM },
-      { EResourceFormat::B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM },
-      { EResourceFormat::B8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM },
-      { EResourceFormat::R10G10B10_XR_BIAS_A2_UNORM, DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM },
-      { EResourceFormat::B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_TYPELESS },
-      { EResourceFormat::B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB },
-      { EResourceFormat::B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS },
-      { EResourceFormat::B8G8R8X8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB },
-      { EResourceFormat::BC6H_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS },
-      { EResourceFormat::BC6H_UF16, DXGI_FORMAT_BC6H_UF16 },
-      { EResourceFormat::BC6H_SF16, DXGI_FORMAT_BC6H_SF16 },
-      { EResourceFormat::BC7_TYPELESS, DXGI_FORMAT_BC7_TYPELESS },
-      { EResourceFormat::BC7_UNORM, DXGI_FORMAT_BC7_UNORM },
-      { EResourceFormat::BC7_UNORM_SRGB, DXGI_FORMAT_BC7_UNORM_SRGB },
-      { EResourceFormat::AYUV, DXGI_FORMAT_AYUV },
-      { EResourceFormat::Y410, DXGI_FORMAT_Y410 },
-      { EResourceFormat::Y416, DXGI_FORMAT_Y416 },
-      { EResourceFormat::NV12, DXGI_FORMAT_NV12 },
-      { EResourceFormat::P010, DXGI_FORMAT_P010 },
-      { EResourceFormat::P016, DXGI_FORMAT_P016 },
-      { EResourceFormat::YUY2, DXGI_FORMAT_YUY2 },
-      { EResourceFormat::Y210, DXGI_FORMAT_Y210 },
-      { EResourceFormat::Y216, DXGI_FORMAT_Y216 },
-      { EResourceFormat::NV11, DXGI_FORMAT_NV11 },
-      { EResourceFormat::AI44, DXGI_FORMAT_AI44 },
-      { EResourceFormat::IA44, DXGI_FORMAT_IA44 },
-      { EResourceFormat::P8, DXGI_FORMAT_P8 },
-      { EResourceFormat::A8P8, DXGI_FORMAT_A8P8 },
-      { EResourceFormat::B4G4R4A4_UNORM, DXGI_FORMAT_B4G4R4A4_UNORM },
-      { EResourceFormat::P208, DXGI_FORMAT_P208 },
-      { EResourceFormat::V208, DXGI_FORMAT_V208 },
-      { EResourceFormat::V408, DXGI_FORMAT_V408 },
-      { EResourceFormat::SAMPLER_FEEDBACK_MIN_MIP_OPAQUE, DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE },
-      { EResourceFormat::SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE, DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE },
-      { EResourceFormat::FORCE_UINT, DXGI_FORMAT_FORCE_UINT },
+      { EResourceFormat::kUNKNOWN, DXGI_FORMAT_UNKNOWN },
+      { EResourceFormat::kR32G32B32A32_TYPELESS, DXGI_FORMAT_R32G32B32A32_TYPELESS },
+      { EResourceFormat::kR32G32B32A32_FLOAT, DXGI_FORMAT_R32G32B32A32_FLOAT },
+      { EResourceFormat::kR32G32B32A32_UINT, DXGI_FORMAT_R32G32B32A32_UINT },
+      { EResourceFormat::kR32G32B32A32_SINT, DXGI_FORMAT_R32G32B32A32_SINT },
+      { EResourceFormat::kR32G32B32_TYPELESS, DXGI_FORMAT_R32G32B32_TYPELESS },
+      { EResourceFormat::kR32G32B32_FLOAT, DXGI_FORMAT_R32G32B32_FLOAT },
+      { EResourceFormat::kR32G32B32_UINT, DXGI_FORMAT_R32G32B32_UINT },
+      { EResourceFormat::kR32G32B32_SINT, DXGI_FORMAT_R32G32B32_SINT },
+      { EResourceFormat::kR16G16B16A16_TYPELESS, DXGI_FORMAT_R16G16B16A16_TYPELESS },
+      { EResourceFormat::kR16G16B16A16_FLOAT, DXGI_FORMAT_R16G16B16A16_FLOAT },
+      { EResourceFormat::kR16G16B16A16_UNORM, DXGI_FORMAT_R16G16B16A16_UNORM },
+      { EResourceFormat::kR16G16B16A16_UINT, DXGI_FORMAT_R16G16B16A16_UINT },
+      { EResourceFormat::kR16G16B16A16_SNORM, DXGI_FORMAT_R16G16B16A16_SNORM },
+      { EResourceFormat::kR16G16B16A16_SINT, DXGI_FORMAT_R16G16B16A16_SINT },
+      { EResourceFormat::kR32G32_TYPELESS, DXGI_FORMAT_R32G32_TYPELESS },
+      { EResourceFormat::kR32G32_FLOAT, DXGI_FORMAT_R32G32_FLOAT },
+      { EResourceFormat::kR32G32_UINT, DXGI_FORMAT_R32G32_UINT },
+      { EResourceFormat::kR32G32_SINT, DXGI_FORMAT_R32G32_SINT },
+      { EResourceFormat::kR32G8X24_TYPELESS, DXGI_FORMAT_R32G8X24_TYPELESS },
+      { EResourceFormat::kD32_FLOAT_S8X24_UINT, DXGI_FORMAT_D32_FLOAT_S8X24_UINT },
+      { EResourceFormat::kR32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS },
+      { EResourceFormat::kX32_TYPELESS_G8X24_UINT, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT },
+      { EResourceFormat::kR10G10B10A2_TYPELESS, DXGI_FORMAT_R10G10B10A2_TYPELESS },
+      { EResourceFormat::kR10G10B10A2_UNORM, DXGI_FORMAT_R10G10B10A2_UNORM },
+      { EResourceFormat::kR10G10B10A2_UINT, DXGI_FORMAT_R10G10B10A2_UINT },
+      { EResourceFormat::kR11G11B10_FLOAT, DXGI_FORMAT_R11G11B10_FLOAT },
+      { EResourceFormat::kR8G8B8A8_TYPELESS, DXGI_FORMAT_R8G8B8A8_TYPELESS },
+      { EResourceFormat::kR8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM },
+      { EResourceFormat::kR8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB },
+      { EResourceFormat::kR8G8B8A8_UINT, DXGI_FORMAT_R8G8B8A8_UINT },
+      { EResourceFormat::kR8G8B8A8_SNORM, DXGI_FORMAT_R8G8B8A8_SNORM },
+      { EResourceFormat::kR8G8B8A8_SINT, DXGI_FORMAT_R8G8B8A8_SINT },
+      { EResourceFormat::kR16G16_TYPELESS, DXGI_FORMAT_R16G16_TYPELESS },
+      { EResourceFormat::kR16G16_FLOAT, DXGI_FORMAT_R16G16_FLOAT },
+      { EResourceFormat::kR16G16_UNORM, DXGI_FORMAT_R16G16_UNORM },
+      { EResourceFormat::kR16G16_UINT, DXGI_FORMAT_R16G16_UINT },
+      { EResourceFormat::kR16G16_SNORM, DXGI_FORMAT_R16G16_SNORM },
+      { EResourceFormat::kR16G16_SINT, DXGI_FORMAT_R16G16_SINT },
+      { EResourceFormat::kR32_TYPELESS, DXGI_FORMAT_R32_TYPELESS },
+      { EResourceFormat::kD32_FLOAT, DXGI_FORMAT_D32_FLOAT },
+      { EResourceFormat::kR32_FLOAT, DXGI_FORMAT_R32_FLOAT },
+      { EResourceFormat::kR32_UINT, DXGI_FORMAT_R32_UINT },
+      { EResourceFormat::kR32_SINT, DXGI_FORMAT_R32_SINT },
+      { EResourceFormat::kR24G8_TYPELESS, DXGI_FORMAT_R24G8_TYPELESS },
+      { EResourceFormat::kD24_UNORM_S8_UINT, DXGI_FORMAT_D24_UNORM_S8_UINT },
+      { EResourceFormat::kR24_UNORM_X8_TYPELESS, DXGI_FORMAT_R24_UNORM_X8_TYPELESS },
+      { EResourceFormat::kX24_TYPELESS_G8_UINT, DXGI_FORMAT_X24_TYPELESS_G8_UINT },
+      { EResourceFormat::kR8G8_TYPELESS, DXGI_FORMAT_R8G8_TYPELESS },
+      { EResourceFormat::kR8G8_UNORM, DXGI_FORMAT_R8G8_UNORM },
+      { EResourceFormat::kR8G8_UINT, DXGI_FORMAT_R8G8_UINT },
+      { EResourceFormat::kR8G8_SNORM, DXGI_FORMAT_R8G8_SNORM },
+      { EResourceFormat::kR8G8_SINT, DXGI_FORMAT_R8G8_SINT },
+      { EResourceFormat::kR16_TYPELESS, DXGI_FORMAT_R16_TYPELESS },
+      { EResourceFormat::kR16_FLOAT, DXGI_FORMAT_R16_FLOAT },
+      { EResourceFormat::kD16_UNORM, DXGI_FORMAT_D16_UNORM },
+      { EResourceFormat::kR16_UNORM, DXGI_FORMAT_R16_UNORM },
+      { EResourceFormat::kR16_UINT, DXGI_FORMAT_R16_UINT },
+      { EResourceFormat::kR16_SNORM, DXGI_FORMAT_R16_SNORM },
+      { EResourceFormat::kR16_SINT, DXGI_FORMAT_R16_SINT },
+      { EResourceFormat::kR8_TYPELESS, DXGI_FORMAT_R8_TYPELESS },
+      { EResourceFormat::kR8_UNORM, DXGI_FORMAT_R8_UNORM },
+      { EResourceFormat::kR8_UINT, DXGI_FORMAT_R8_UINT },
+      { EResourceFormat::kR8_SNORM, DXGI_FORMAT_R8_SNORM },
+      { EResourceFormat::kR8_SINT, DXGI_FORMAT_R8_SINT },
+      { EResourceFormat::kA8_UNORM, DXGI_FORMAT_A8_UNORM },
+      { EResourceFormat::kR1_UNORM, DXGI_FORMAT_R1_UNORM },
+      { EResourceFormat::kR9G9B9E5_SHAREDEXP, DXGI_FORMAT_R9G9B9E5_SHAREDEXP },
+      { EResourceFormat::kR8G8_B8G8_UNORM, DXGI_FORMAT_R8G8_B8G8_UNORM },
+      { EResourceFormat::kG8R8_G8B8_UNORM, DXGI_FORMAT_G8R8_G8B8_UNORM },
+      { EResourceFormat::kBC1_TYPELESS, DXGI_FORMAT_BC1_TYPELESS },
+      { EResourceFormat::kBC1_UNORM, DXGI_FORMAT_BC1_UNORM },
+      { EResourceFormat::kBC1_UNORM_SRGB, DXGI_FORMAT_BC1_UNORM_SRGB },
+      { EResourceFormat::kBC2_TYPELESS, DXGI_FORMAT_BC2_TYPELESS },
+      { EResourceFormat::kBC2_UNORM, DXGI_FORMAT_BC2_UNORM },
+      { EResourceFormat::kBC2_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM_SRGB },
+      { EResourceFormat::kBC3_TYPELESS, DXGI_FORMAT_BC3_TYPELESS },
+      { EResourceFormat::kBC3_UNORM, DXGI_FORMAT_BC3_UNORM },
+      { EResourceFormat::kBC3_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM_SRGB },
+      { EResourceFormat::kBC4_TYPELESS, DXGI_FORMAT_BC4_TYPELESS },
+      { EResourceFormat::kBC4_UNORM, DXGI_FORMAT_BC4_UNORM },
+      { EResourceFormat::kBC4_SNORM, DXGI_FORMAT_BC4_SNORM },
+      { EResourceFormat::kBC5_TYPELESS, DXGI_FORMAT_BC5_TYPELESS },
+      { EResourceFormat::kBC5_UNORM, DXGI_FORMAT_BC5_UNORM },
+      { EResourceFormat::kBC5_SNORM, DXGI_FORMAT_BC5_SNORM },
+      { EResourceFormat::kB5G6R5_UNORM, DXGI_FORMAT_B5G6R5_UNORM },
+      { EResourceFormat::kB5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM },
+      { EResourceFormat::kB8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM },
+      { EResourceFormat::kB8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM },
+      { EResourceFormat::kR10G10B10_XR_BIAS_A2_UNORM, DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM },
+      { EResourceFormat::kB8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_TYPELESS },
+      { EResourceFormat::kB8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB },
+      { EResourceFormat::kB8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS },
+      { EResourceFormat::kB8G8R8X8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB },
+      { EResourceFormat::kBC6H_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS },
+      { EResourceFormat::kBC6H_UF16, DXGI_FORMAT_BC6H_UF16 },
+      { EResourceFormat::kBC6H_SF16, DXGI_FORMAT_BC6H_SF16 },
+      { EResourceFormat::kBC7_TYPELESS, DXGI_FORMAT_BC7_TYPELESS },
+      { EResourceFormat::kBC7_UNORM, DXGI_FORMAT_BC7_UNORM },
+      { EResourceFormat::kBC7_UNORM_SRGB, DXGI_FORMAT_BC7_UNORM_SRGB },
+      { EResourceFormat::kAYUV, DXGI_FORMAT_AYUV },
+      { EResourceFormat::kY410, DXGI_FORMAT_Y410 },
+      { EResourceFormat::kY416, DXGI_FORMAT_Y416 },
+      { EResourceFormat::kNV12, DXGI_FORMAT_NV12 },
+      { EResourceFormat::kP010, DXGI_FORMAT_P010 },
+      { EResourceFormat::kP016, DXGI_FORMAT_P016 },
+      { EResourceFormat::kYUY2, DXGI_FORMAT_YUY2 },
+      { EResourceFormat::kY210, DXGI_FORMAT_Y210 },
+      { EResourceFormat::kY216, DXGI_FORMAT_Y216 },
+      { EResourceFormat::kNV11, DXGI_FORMAT_NV11 },
+      { EResourceFormat::kAI44, DXGI_FORMAT_AI44 },
+      { EResourceFormat::kIA44, DXGI_FORMAT_IA44 },
+      { EResourceFormat::kP8, DXGI_FORMAT_P8 },
+      { EResourceFormat::kA8P8, DXGI_FORMAT_A8P8 },
+      { EResourceFormat::kB4G4R4A4_UNORM, DXGI_FORMAT_B4G4R4A4_UNORM },
+      { EResourceFormat::kP208, DXGI_FORMAT_P208 },
+      { EResourceFormat::kV208, DXGI_FORMAT_V208 },
+      { EResourceFormat::kV408, DXGI_FORMAT_V408 },
+      { EResourceFormat::kSAMPLER_FEEDBACK_MIN_MIP_OPAQUE, DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE },
+      { EResourceFormat::kSAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE, DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE },
+      { EResourceFormat::kFORCE_UINT, DXGI_FORMAT_FORCE_UINT },
     };
 
     return map[format];
@@ -230,9 +232,9 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EScaling, DXGI_MODE_SCALING> map =
     {
-      { EScaling::Centered, DXGI_MODE_SCALING_CENTERED },
-      { EScaling::Stretched, DXGI_MODE_SCALING_STRETCHED },
-      { EScaling::Unspecified, DXGI_MODE_SCALING_UNSPECIFIED },
+      { EScaling::kCentered, DXGI_MODE_SCALING_CENTERED },
+      { EScaling::kStretched, DXGI_MODE_SCALING_STRETCHED },
+      { EScaling::kUnspecified, DXGI_MODE_SCALING_UNSPECIFIED },
     };
 
     return map[scaling];
@@ -243,10 +245,10 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EScanlineOrder, DXGI_MODE_SCANLINE_ORDER> map =
     {
-      { EScanlineOrder::Unspecified, DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED },
-      { EScanlineOrder::Progressive, DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE },
-      { EScanlineOrder::LowerFieldFirst, DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST },
-      { EScanlineOrder::UpperFieldFirst, DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST },
+      { EScanlineOrder::kUnspecified, DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED },
+      { EScanlineOrder::kProgressive, DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE },
+      { EScanlineOrder::kLowerFieldFirst, DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST },
+      { EScanlineOrder::kUpperFieldFirst, DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST },
     };
 
     return map[scanlineOrder];
@@ -257,10 +259,10 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<ESwapChainEffect, DXGI_SWAP_EFFECT> map =
     {
-      { ESwapChainEffect::Discard, DXGI_SWAP_EFFECT_DISCARD },
-      { ESwapChainEffect::Sequential, DXGI_SWAP_EFFECT_SEQUENTIAL },
-      { ESwapChainEffect::FlipDiscard, DXGI_SWAP_EFFECT_FLIP_DISCARD },
-      { ESwapChainEffect::FlipSequential, DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL },
+      { ESwapChainEffect::kDiscard, DXGI_SWAP_EFFECT_DISCARD },
+      { ESwapChainEffect::kSequential, DXGI_SWAP_EFFECT_SEQUENTIAL },
+      { ESwapChainEffect::kFlipDiscard, DXGI_SWAP_EFFECT_FLIP_DISCARD },
+      { ESwapChainEffect::kFlipSequential, DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL },
     };
 
     return map[swapChainEffect];
@@ -271,23 +273,23 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EDescriptorHeapType, D3D12_DESCRIPTOR_HEAP_TYPE> map =
     {
-      { EDescriptorHeapType::DSV, D3D12_DESCRIPTOR_HEAP_TYPE_DSV },
-      { EDescriptorHeapType::RTV, D3D12_DESCRIPTOR_HEAP_TYPE_RTV },
-      { EDescriptorHeapType::Sampler, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER },
-      { EDescriptorHeapType::CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV },
-      { EDescriptorHeapType::NumTypes, D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES },
+      { EDescriptorHeapType::kDSV, D3D12_DESCRIPTOR_HEAP_TYPE_DSV },
+      { EDescriptorHeapType::kRTV, D3D12_DESCRIPTOR_HEAP_TYPE_RTV },
+      { EDescriptorHeapType::kSampler, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER },
+      { EDescriptorHeapType::kCBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV },
+      { EDescriptorHeapType::kNumTypes, D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES },
     };
 
     return map[descriptorHeapType];
   }
 
   static inline D3D12_DESCRIPTOR_HEAP_FLAGS
-  ConvertEDescriptorHeapFlag(EDescriptorHeapFlags descriptorHeapFlag)
+  ConvertEDescriptorHeapF(EDescriptorHeapF descriptorHeapFlag)
   {
-    static std::unordered_map<EDescriptorHeapFlags, D3D12_DESCRIPTOR_HEAP_FLAGS> map =
+    static std::unordered_map<EDescriptorHeapF, D3D12_DESCRIPTOR_HEAP_FLAGS> map =
     {
-      { EDescriptorHeapFlags::None, D3D12_DESCRIPTOR_HEAP_FLAG_NONE },
-      { EDescriptorHeapFlags::ShaderVisable, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE },
+      { EDescriptorHeapF::kNone, D3D12_DESCRIPTOR_HEAP_FLAG_NONE },
+      { EDescriptorHeapF::kShaderVisable, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE },
     };
 
     D3D12_DESCRIPTOR_HEAP_FLAGS ret = {};
@@ -304,8 +306,8 @@ namespace wkr::render::dx12
   {
     DXGI_SAMPLE_DESC ret = {};
 
-    ret.Count = desc.count;
-    ret.Quality = desc.quality;
+    ret.Count = desc.Count;
+    ret.Quality = desc.Quality;
 
     return ret;
   }
@@ -315,38 +317,38 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EResourceStateF, D3D12_RESOURCE_STATES> map =
     {
-      { EResourceStateF::Common                          , D3D12_RESOURCE_STATE_COMMON },
-      { EResourceStateF::VertexAndConstantBuffer         , D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER },
-      { EResourceStateF::IndexBuffer                     , D3D12_RESOURCE_STATE_INDEX_BUFFER },
-      { EResourceStateF::RenderTarget                    , D3D12_RESOURCE_STATE_RENDER_TARGET },
-      { EResourceStateF::UnorederedAccess                , D3D12_RESOURCE_STATE_UNORDERED_ACCESS },
-      { EResourceStateF::DepthWrite                      , D3D12_RESOURCE_STATE_DEPTH_WRITE },
-      { EResourceStateF::DepthRead                       , D3D12_RESOURCE_STATE_DEPTH_READ },
-      { EResourceStateF::NonPixelShaderResource          , D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE },
-      { EResourceStateF::PixelShaderResource             , D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE },
-      { EResourceStateF::StreamOut                       , D3D12_RESOURCE_STATE_STREAM_OUT },
-      { EResourceStateF::IndirectArgument                , D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT },
-      { EResourceStateF::CopyDest                        , D3D12_RESOURCE_STATE_COPY_DEST },
-      { EResourceStateF::CopySource                      , D3D12_RESOURCE_STATE_COPY_SOURCE },
-      { EResourceStateF::ResolveDest                     , D3D12_RESOURCE_STATE_RESOLVE_DEST },
-      { EResourceStateF::ResolveSource                   , D3D12_RESOURCE_STATE_RESOLVE_SOURCE },
-      { EResourceStateF::RaytracingAccelerationStructure , D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE },
-      { EResourceStateF::ShadingRateSource               , D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE },
-      { EResourceStateF::ReservedInternal8000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_8000 },
-      { EResourceStateF::ReservedInternal4000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_4000 },
-      { EResourceStateF::ReservedInternal100000          , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_100000 },
-      { EResourceStateF::ReservedInternal40000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_40000000 },
-      { EResourceStateF::ReservedInternal80000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_80000000 },
-      { EResourceStateF::GenericRead                     , D3D12_RESOURCE_STATE_GENERIC_READ },
-      { EResourceStateF::AllShaderResource               , D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE },
-      { EResourceStateF::Present                         , D3D12_RESOURCE_STATE_PRESENT },
-      { EResourceStateF::Predication                     , D3D12_RESOURCE_STATE_PREDICATION },
-      { EResourceStateF::VideoDecodeRead                 , D3D12_RESOURCE_STATE_VIDEO_DECODE_READ },
-      { EResourceStateF::VideoDecodeWrite                , D3D12_RESOURCE_STATE_VIDEO_DECODE_WRITE },
-      { EResourceStateF::VideoProcessRead                , D3D12_RESOURCE_STATE_VIDEO_PROCESS_READ },
-      { EResourceStateF::VideoProcessWrite               , D3D12_RESOURCE_STATE_VIDEO_PROCESS_WRITE },
-      { EResourceStateF::VideoEncodeRead                 , D3D12_RESOURCE_STATE_VIDEO_ENCODE_READ },
-      { EResourceStateF::VideoEncodeWrite                , D3D12_RESOURCE_STATE_VIDEO_ENCODE_WRITE },
+      { EResourceStateF::kCommon                          , D3D12_RESOURCE_STATE_COMMON },
+      { EResourceStateF::kVertexAndConstantBuffer         , D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER },
+      { EResourceStateF::kIndexBuffer                     , D3D12_RESOURCE_STATE_INDEX_BUFFER },
+      { EResourceStateF::kRenderTarget                    , D3D12_RESOURCE_STATE_RENDER_TARGET },
+      { EResourceStateF::kUnorederedAccess                , D3D12_RESOURCE_STATE_UNORDERED_ACCESS },
+      { EResourceStateF::kDepthWrite                      , D3D12_RESOURCE_STATE_DEPTH_WRITE },
+      { EResourceStateF::kDepthRead                       , D3D12_RESOURCE_STATE_DEPTH_READ },
+      { EResourceStateF::kNonPixelShaderResource          , D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE },
+      { EResourceStateF::kPixelShaderResource             , D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE },
+      { EResourceStateF::kStreamOut                       , D3D12_RESOURCE_STATE_STREAM_OUT },
+      { EResourceStateF::kIndirectArgument                , D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT },
+      { EResourceStateF::kCopyDest                        , D3D12_RESOURCE_STATE_COPY_DEST },
+      { EResourceStateF::kCopySource                      , D3D12_RESOURCE_STATE_COPY_SOURCE },
+      { EResourceStateF::kResolveDest                     , D3D12_RESOURCE_STATE_RESOLVE_DEST },
+      { EResourceStateF::kResolveSource                   , D3D12_RESOURCE_STATE_RESOLVE_SOURCE },
+      { EResourceStateF::kRaytracingAccelerationStructure , D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE },
+      { EResourceStateF::kShadingRateSource               , D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE },
+      { EResourceStateF::kReservedInternal8000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_8000 },
+      { EResourceStateF::kReservedInternal4000            , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_4000 },
+      { EResourceStateF::kReservedInternal100000          , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_100000 },
+      { EResourceStateF::kReservedInternal40000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_40000000 },
+      { EResourceStateF::kReservedInternal80000000        , D3D12_RESOURCE_STATE_RESERVED_INTERNAL_80000000 },
+      { EResourceStateF::kGenericRead                     , D3D12_RESOURCE_STATE_GENERIC_READ },
+      { EResourceStateF::kAllShaderResource               , D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE },
+      { EResourceStateF::kPresent                         , D3D12_RESOURCE_STATE_PRESENT },
+      { EResourceStateF::kPredication                     , D3D12_RESOURCE_STATE_PREDICATION },
+      { EResourceStateF::kVideoDecodeRead                 , D3D12_RESOURCE_STATE_VIDEO_DECODE_READ },
+      { EResourceStateF::kVideoDecodeWrite                , D3D12_RESOURCE_STATE_VIDEO_DECODE_WRITE },
+      { EResourceStateF::kVideoProcessRead                , D3D12_RESOURCE_STATE_VIDEO_PROCESS_READ },
+      { EResourceStateF::kVideoProcessWrite               , D3D12_RESOURCE_STATE_VIDEO_PROCESS_WRITE },
+      { EResourceStateF::kVideoEncodeRead                 , D3D12_RESOURCE_STATE_VIDEO_ENCODE_READ },
+      { EResourceStateF::kVideoEncodeWrite                , D3D12_RESOURCE_STATE_VIDEO_ENCODE_WRITE },
     };
 
     D3D12_RESOURCE_STATES ret = {};
@@ -366,9 +368,9 @@ namespace wkr::render::dx12
 
     D3D12_CLEAR_VALUE* ret = new D3D12_CLEAR_VALUE();
 
-    ret->Format = ConvertEResourceFormat(clearValue->format);
-    ret->DepthStencil.Depth = clearValue->depthStencil.depth;
-    ret->DepthStencil.Stencil = clearValue->depthStencil.stencil;
+    ret->Format = ConvertEResourceFormat(clearValue->Format);
+    ret->DepthStencil.Depth = clearValue->Depth;
+    ret->DepthStencil.Stencil = clearValue->Stencil;
 
     return ret;
   }
@@ -378,11 +380,11 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EResourceDimension, D3D12_RESOURCE_DIMENSION> map =
     {
-      { EResourceDimension::Unknown   , D3D12_RESOURCE_DIMENSION_UNKNOWN },
-      { EResourceDimension::Buffer    , D3D12_RESOURCE_DIMENSION_BUFFER },
-      { EResourceDimension::Texture1D , D3D12_RESOURCE_DIMENSION_TEXTURE1D },
-      { EResourceDimension::Texture2D , D3D12_RESOURCE_DIMENSION_TEXTURE2D },
-      { EResourceDimension::Texture3D , D3D12_RESOURCE_DIMENSION_TEXTURE3D },
+      { EResourceDimension::kUnknown   , D3D12_RESOURCE_DIMENSION_UNKNOWN },
+      { EResourceDimension::kBuffer    , D3D12_RESOURCE_DIMENSION_BUFFER },
+      { EResourceDimension::kTexture1D , D3D12_RESOURCE_DIMENSION_TEXTURE1D },
+      { EResourceDimension::kTexture2D , D3D12_RESOURCE_DIMENSION_TEXTURE2D },
+      { EResourceDimension::kTexture3D , D3D12_RESOURCE_DIMENSION_TEXTURE3D },
     };
 
     return map[resourceDimension];
@@ -393,10 +395,10 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EResourceLayout, D3D12_TEXTURE_LAYOUT> map =
     {
-      { EResourceLayout::Unknown              , D3D12_TEXTURE_LAYOUT_UNKNOWN },
-      { EResourceLayout::RowMajor             , D3D12_TEXTURE_LAYOUT_ROW_MAJOR },
-      { EResourceLayout::StandardSwizzle64KB  , D3D12_TEXTURE_LAYOUT_64KB_STANDARD_SWIZZLE },
-      { EResourceLayout::UndefinedSwizzle64KB , D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE  },
+      { EResourceLayout::kUnknown              , D3D12_TEXTURE_LAYOUT_UNKNOWN },
+      { EResourceLayout::kRowMajor             , D3D12_TEXTURE_LAYOUT_ROW_MAJOR },
+      { EResourceLayout::kStandardSwizzle64KB  , D3D12_TEXTURE_LAYOUT_64KB_STANDARD_SWIZZLE },
+      { EResourceLayout::kUndefinedSwizzle64KB , D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE  },
     };
 
     return map[resourceLayout];
@@ -407,16 +409,16 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EResourceF, D3D12_RESOURCE_FLAGS> map =
     {
-      { EResourceF::None, D3D12_RESOURCE_FLAG_NONE },
-      { EResourceF::AllowCrossAdapter, D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER },
-      { EResourceF::AllowDepthStencil, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL },
-      { EResourceF::AllowRenderTarget, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET },
-      { EResourceF::DenyShaderResource, D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE },
-      { EResourceF::AllowUnorderedAccess, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS },
-      { EResourceF::AllowSimultaneousAccess, D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS },
-      { EResourceF::VideoDecodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_DECODE_REFERENCE_ONLY },
-      { EResourceF::VideoEncodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_ENCODE_REFERENCE_ONLY },
-      { EResourceF::RaytracingAccelerationStructure, D3D12_RESOURCE_FLAG_RAYTRACING_ACCELERATION_STRUCTURE },
+      { EResourceF::kNone, D3D12_RESOURCE_FLAG_NONE },
+      { EResourceF::kAllowCrossAdapter, D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER },
+      { EResourceF::kAllowDepthStencil, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL },
+      { EResourceF::kAllowRenderTarget, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET },
+      { EResourceF::kDenyShaderResource, D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE },
+      { EResourceF::kAllowUnorderedAccess, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS },
+      { EResourceF::kAllowSimultaneousAccess, D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS },
+      { EResourceF::kVideoDecodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_DECODE_REFERENCE_ONLY },
+      { EResourceF::kVideoEncodeReferenceOnly, D3D12_RESOURCE_FLAG_VIDEO_ENCODE_REFERENCE_ONLY },
+      { EResourceF::kRaytracingAccelerationStructure, D3D12_RESOURCE_FLAG_RAYTRACING_ACCELERATION_STRUCTURE },
     };
 
     D3D12_RESOURCE_FLAGS ret = {};
@@ -433,16 +435,16 @@ namespace wkr::render::dx12
   {
     D3D12_RESOURCE_DESC* ret = new D3D12_RESOURCE_DESC();
 
-    ret->Dimension = ConvertEResourceDimension(desc.dimension);
-    ret->Alignment = desc.alignment;
-    ret->Width = desc.width;
-    ret->Height = desc.height;
-    ret->DepthOrArraySize = desc.depthOrArraySize;
-    ret->MipLevels = desc.mipLevels;
-    ret->Format = ConvertEResourceFormat(desc.format);
-    ret->SampleDesc = ConvertFSampleDesc(desc.sample);
-    ret->Layout = ConvertEResourceLayout(desc.layout);
-    ret->Flags = ConvertEResourceF(desc.flag);
+    ret->Dimension = ConvertEResourceDimension(desc.Dimension);
+    ret->Alignment = desc.Alignment;
+    ret->Width = desc.Width;
+    ret->Height = desc.Height;
+    ret->DepthOrArraySize = desc.DepthOrArraySize;
+    ret->MipLevels = desc.MipLevels;
+    ret->Format = ConvertEResourceFormat(desc.Format);
+    ret->SampleDesc = ConvertFSampleDesc(desc.Sample);
+    ret->Layout = ConvertEResourceLayout(desc.Layout);
+    ret->Flags = ConvertEResourceF(desc.Flag);
 
     return ret;
   }
@@ -452,11 +454,11 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EHeapType, D3D12_HEAP_TYPE> map =
     {
-      { EHeapType::Default, D3D12_HEAP_TYPE_DEFAULT },
-      { EHeapType::Custom, D3D12_HEAP_TYPE_CUSTOM },
-      { EHeapType::Upload, D3D12_HEAP_TYPE_UPLOAD },
-      { EHeapType::Readback, D3D12_HEAP_TYPE_READBACK },
-      { EHeapType::GPUUpload, D3D12_HEAP_TYPE_GPU_UPLOAD },
+      { EHeapType::kDefault, D3D12_HEAP_TYPE_DEFAULT },
+      { EHeapType::kCustom, D3D12_HEAP_TYPE_CUSTOM },
+      { EHeapType::kUpload, D3D12_HEAP_TYPE_UPLOAD },
+      { EHeapType::kReadback, D3D12_HEAP_TYPE_READBACK },
+      { EHeapType::kGPUUpload, D3D12_HEAP_TYPE_GPU_UPLOAD },
     };
 
     return map[heapType];
@@ -467,10 +469,10 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<ECPUPageProperty, D3D12_CPU_PAGE_PROPERTY> map =
     {
-      { ECPUPageProperty::Unknown, D3D12_CPU_PAGE_PROPERTY_UNKNOWN },
-      { ECPUPageProperty::WriteBack, D3D12_CPU_PAGE_PROPERTY_WRITE_BACK },
-      { ECPUPageProperty::WriteCombine, D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE },
-      { ECPUPageProperty::NotAvailable, D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE },
+      { ECPUPageProperty::kUnknown, D3D12_CPU_PAGE_PROPERTY_UNKNOWN },
+      { ECPUPageProperty::kWriteBack, D3D12_CPU_PAGE_PROPERTY_WRITE_BACK },
+      { ECPUPageProperty::kWriteCombine, D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE },
+      { ECPUPageProperty::kNotAvailable, D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE },
     };
 
     return map[cpuPageProperty];
@@ -481,9 +483,9 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EMemoryPool, D3D12_MEMORY_POOL> map =
     {
-      { EMemoryPool::Unknown, D3D12_MEMORY_POOL_UNKNOWN },
-      { EMemoryPool::L0, D3D12_MEMORY_POOL_L0 },
-      { EMemoryPool::L1, D3D12_MEMORY_POOL_L1 },
+      { EMemoryPool::kUnknown, D3D12_MEMORY_POOL_UNKNOWN },
+      { EMemoryPool::kL0, D3D12_MEMORY_POOL_L0 },
+      { EMemoryPool::kL1, D3D12_MEMORY_POOL_L1 },
     };
 
     return map[memoryPool];
@@ -494,23 +496,23 @@ namespace wkr::render::dx12
   {
     static std::unordered_map<EHeapF, D3D12_HEAP_FLAGS> map =
     {
-      { EHeapF::None, D3D12_HEAP_FLAG_NONE },
-      { EHeapF::Shared, D3D12_HEAP_FLAG_SHARED },
-      { EHeapF::DenyBuffers, D3D12_HEAP_FLAG_DENY_BUFFERS },
-      { EHeapF::AllowDisplay, D3D12_HEAP_FLAG_ALLOW_DISPLAY },
-      { EHeapF::AllowWriteWatch, D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH },
-      { EHeapF::CreateNotZeroed, D3D12_HEAP_FLAG_CREATE_NOT_ZEROED },
-      { EHeapF::AllowOnlyBuffers, D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS },
-      { EHeapF::CreateNotResident, D3D12_HEAP_FLAG_CREATE_NOT_RESIDENT },
-      { EHeapF::HardwareProtected, D3D12_HEAP_FLAG_HARDWARE_PROTECTED },
-      { EHeapF::AllowShaderAtomics, D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS },
-      { EHeapF::DenyRT_DS_Textures, D3D12_HEAP_FLAG_DENY_RT_DS_TEXTURES },
-      { EHeapF::SharedCrossAdapter, D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER },
-      { EHeapF::DenyNonRT_DS_Textures, D3D12_HEAP_FLAG_DENY_NON_RT_DS_TEXTURES },
-      { EHeapF::AllowOnlyRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES },
-      { EHeapF::AllowOnlyNonRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES },
-      { EHeapF::AllowAllBuffersAndTextures, D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES },
-      { EHeapF::ToolsUseManualWriteTracking, D3D12_HEAP_FLAG_TOOLS_USE_MANUAL_WRITE_TRACKING },
+      { EHeapF::kNone, D3D12_HEAP_FLAG_NONE },
+      { EHeapF::kShared, D3D12_HEAP_FLAG_SHARED },
+      { EHeapF::kDenyBuffers, D3D12_HEAP_FLAG_DENY_BUFFERS },
+      { EHeapF::kAllowDisplay, D3D12_HEAP_FLAG_ALLOW_DISPLAY },
+      { EHeapF::kAllowWriteWatch, D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH },
+      { EHeapF::kCreateNotZeroed, D3D12_HEAP_FLAG_CREATE_NOT_ZEROED },
+      { EHeapF::kAllowOnlyBuffers, D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS },
+      { EHeapF::kCreateNotResident, D3D12_HEAP_FLAG_CREATE_NOT_RESIDENT },
+      { EHeapF::kHardwareProtected, D3D12_HEAP_FLAG_HARDWARE_PROTECTED },
+      { EHeapF::kAllowShaderAtomics, D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS },
+      { EHeapF::kDenyRT_DS_Textures, D3D12_HEAP_FLAG_DENY_RT_DS_TEXTURES },
+      { EHeapF::kSharedCrossAdapter, D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER },
+      { EHeapF::kDenyNonRT_DS_Textures, D3D12_HEAP_FLAG_DENY_NON_RT_DS_TEXTURES },
+      { EHeapF::kAllowOnlyRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES },
+      { EHeapF::kAllowOnlyNonRT_DS_Textures, D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES },
+      { EHeapF::kAllowAllBuffersAndTextures, D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES },
+      { EHeapF::kToolsUseManualWriteTracking, D3D12_HEAP_FLAG_TOOLS_USE_MANUAL_WRITE_TRACKING },
     };
 
     D3D12_HEAP_FLAGS ret = {};
@@ -522,15 +524,547 @@ namespace wkr::render::dx12
     return ret;
   }
 
-  static inline mem::TScope<D3D12_HEAP_PROPERTIES>
+  static inline D3D12_HEAP_PROPERTIES
   ConvertFHeapDesc(FHeapDesc& desc)
   {
-    D3D12_HEAP_PROPERTIES* ret = new D3D12_HEAP_PROPERTIES();
-
-    ret->Type = ConvertEHeapType(desc.m_type);
-    ret->CPUPageProperty = ConvertECPUPageProperty(desc.m_cpuPageProperty);
-    ret->MemoryPoolPreference = ConvertEMemoryPool(desc.m_memoryPool);
+    D3D12_HEAP_PROPERTIES ret = {
+      .Type = ConvertEHeapType(desc.Type),
+      .CPUPageProperty = ConvertECPUPageProperty(desc.CpuPageProperty),
+      .MemoryPoolPreference = ConvertEMemoryPool(desc.MemoryPool),
+    };
 
     return ret;
   }
+
+}
+
+
+namespace dx12towkr
+{
+  static inline ECommandType
+  ConvertECommandType(D3D12_COMMAND_LIST_TYPE commandType)
+  {
+    static std::unordered_map<D3D12_COMMAND_LIST_TYPE, ECommandType> map =
+    {
+      {D3D12_COMMAND_LIST_TYPE_BUNDLE, ECommandType::kBundle               },
+      {D3D12_COMMAND_LIST_TYPE_DIRECT, ECommandType::kDirect               },
+      {D3D12_COMMAND_LIST_TYPE_COMPUTE, ECommandType::kCompute             },
+      {D3D12_COMMAND_LIST_TYPE_COPY, ECommandType::kCopy                   },
+      {D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE, ECommandType::kVideoDecode    },
+      {D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS, ECommandType::kVideoProcess  },
+      {D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE, ECommandType::kVideoEncode    },
+      {D3D12_COMMAND_LIST_TYPE_NONE, ECommandType::kNone                   },
+    };
+
+    return map[commandType];
+  }
+
+  static inline ECommandQueueF
+  ConvertECommandQueueF(D3D12_COMMAND_QUEUE_FLAGS flag)
+  {
+    static std::unordered_map<D3D12_COMMAND_QUEUE_FLAGS, ECommandQueueF> map =
+    {
+      {D3D12_COMMAND_QUEUE_FLAG_NONE, ECommandQueueF::kNone                            },
+      {D3D12_COMMAND_QUEUE_FLAG_DISABLE_GPU_TIMEOUT, ECommandQueueF::kDisableGPUTimeout} ,
+    };
+
+    ECommandQueueF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline EFenceF
+  ConvertEFenceF(D3D12_FENCE_FLAGS flag)
+  {
+    static std::unordered_map<D3D12_FENCE_FLAGS, EFenceF> map =
+    {
+      {D3D12_FENCE_FLAG_NONE,EFenceF::kNone                },
+      {D3D12_FENCE_FLAG_SHARED, EFenceF::kShared              },
+      {D3D12_FENCE_FLAG_NON_MONITORED, EFenceF::kNonMonitored        },
+      {D3D12_FENCE_FLAG_SHARED_CROSS_ADAPTER, EFenceF::kSharedCrossAdapter  },
+    };
+
+    EFenceF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline EResourceUsageF
+  ConvertEResourceUsage(DXGI_USAGE flag)
+  {
+    static std::unordered_map<DXGI_USAGE, EResourceUsageF> map =
+    {
+      {DXGI_USAGE_SHARED, EResourceUsageF::kSHARED},
+      {DXGI_USAGE_READ_ONLY, EResourceUsageF::kREAD_ONLY},
+      {DXGI_USAGE_SHADER_INPUT, EResourceUsageF::kSHADER_INPUT},
+      {DXGI_USAGE_BACK_BUFFER, EResourceUsageF::kBACK_BUFFER},
+      {DXGI_USAGE_UNORDERED_ACCESS, EResourceUsageF::kUNORDERED_ACCESS},
+      {DXGI_USAGE_RENDER_TARGET_OUTPUT, EResourceUsageF::kRENDER_TARGET_OUTPUT},
+      {DXGI_USAGE_DISCARD_ON_PRESENT, EResourceUsageF::kDISCARD_ON_PRESENT},
+      {DXGI_CPU_ACCESS_NONE, EResourceUsageF::kCPU_ACCESS_NONE},
+      {DXGI_CPU_ACCESS_FIELD, EResourceUsageF::kCPU_ACCESS_FIELD},
+      {DXGI_CPU_ACCESS_DYNAMIC, EResourceUsageF::kCPU_ACCESS_DYNAMIC},
+      {DXGI_CPU_ACCESS_SCRATCH, EResourceUsageF::kCPU_ACCESS_SCRATCH},
+      {DXGI_CPU_ACCESS_READ_WRITE, EResourceUsageF::kCPU_ACCESS_READ_WRITE},
+    };
+
+    EResourceUsageF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, flag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline EResourceFormat
+  ConvertEResourceFormat(DXGI_FORMAT format)
+  {
+    static std::unordered_map<DXGI_FORMAT, EResourceFormat> map =
+    {
+      { DXGI_FORMAT_UNKNOWN, EResourceFormat::kUNKNOWN },
+      { DXGI_FORMAT_R32G32B32A32_TYPELESS, EResourceFormat::kR32G32B32A32_TYPELESS },
+      { DXGI_FORMAT_R32G32B32A32_FLOAT, EResourceFormat::kR32G32B32A32_FLOAT },
+      { DXGI_FORMAT_R32G32B32A32_UINT, EResourceFormat::kR32G32B32A32_UINT },
+      { DXGI_FORMAT_R32G32B32A32_SINT, EResourceFormat::kR32G32B32A32_SINT },
+      { DXGI_FORMAT_R32G32B32_TYPELESS, EResourceFormat::kR32G32B32_TYPELESS },
+      { DXGI_FORMAT_R32G32B32_FLOAT, EResourceFormat::kR32G32B32_FLOAT },
+      { DXGI_FORMAT_R32G32B32_UINT, EResourceFormat::kR32G32B32_UINT },
+      { DXGI_FORMAT_R32G32B32_SINT, EResourceFormat::kR32G32B32_SINT },
+      { DXGI_FORMAT_R16G16B16A16_TYPELESS, EResourceFormat::kR16G16B16A16_TYPELESS },
+      { DXGI_FORMAT_R16G16B16A16_FLOAT, EResourceFormat::kR16G16B16A16_FLOAT },
+      { DXGI_FORMAT_R16G16B16A16_UNORM, EResourceFormat::kR16G16B16A16_UNORM },
+      { DXGI_FORMAT_R16G16B16A16_UINT, EResourceFormat::kR16G16B16A16_UINT },
+      { DXGI_FORMAT_R16G16B16A16_SNORM, EResourceFormat::kR16G16B16A16_SNORM },
+      { DXGI_FORMAT_R16G16B16A16_SINT, EResourceFormat::kR16G16B16A16_SINT },
+      { DXGI_FORMAT_R32G32_TYPELESS, EResourceFormat::kR32G32_TYPELESS },
+      { DXGI_FORMAT_R32G32_FLOAT, EResourceFormat::kR32G32_FLOAT },
+      { DXGI_FORMAT_R32G32_UINT, EResourceFormat::kR32G32_UINT },
+      { DXGI_FORMAT_R32G32_SINT, EResourceFormat::kR32G32_SINT },
+      { DXGI_FORMAT_R32G8X24_TYPELESS, EResourceFormat::kR32G8X24_TYPELESS },
+      { DXGI_FORMAT_D32_FLOAT_S8X24_UINT, EResourceFormat::kD32_FLOAT_S8X24_UINT },
+      { DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, EResourceFormat::kR32_FLOAT_X8X24_TYPELESS },
+      { DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, EResourceFormat::kX32_TYPELESS_G8X24_UINT },
+      { DXGI_FORMAT_R10G10B10A2_TYPELESS, EResourceFormat::kR10G10B10A2_TYPELESS },
+      { DXGI_FORMAT_R10G10B10A2_UNORM, EResourceFormat::kR10G10B10A2_UNORM },
+      { DXGI_FORMAT_R10G10B10A2_UINT, EResourceFormat::kR10G10B10A2_UINT },
+      { DXGI_FORMAT_R11G11B10_FLOAT, EResourceFormat::kR11G11B10_FLOAT },
+      { DXGI_FORMAT_R8G8B8A8_TYPELESS, EResourceFormat::kR8G8B8A8_TYPELESS },
+      { DXGI_FORMAT_R8G8B8A8_UNORM, EResourceFormat::kR8G8B8A8_UNORM },
+      { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, EResourceFormat::kR8G8B8A8_UNORM_SRGB },
+      { DXGI_FORMAT_R8G8B8A8_UINT, EResourceFormat::kR8G8B8A8_UINT },
+      { DXGI_FORMAT_R8G8B8A8_SNORM, EResourceFormat::kR8G8B8A8_SNORM },
+      { DXGI_FORMAT_R8G8B8A8_SINT, EResourceFormat::kR8G8B8A8_SINT },
+      { DXGI_FORMAT_R16G16_TYPELESS, EResourceFormat::kR16G16_TYPELESS },
+      { DXGI_FORMAT_R16G16_FLOAT, EResourceFormat::kR16G16_FLOAT },
+      { DXGI_FORMAT_R16G16_UNORM, EResourceFormat::kR16G16_UNORM },
+      { DXGI_FORMAT_R16G16_UINT, EResourceFormat::kR16G16_UINT },
+      { DXGI_FORMAT_R16G16_SNORM, EResourceFormat::kR16G16_SNORM },
+      { DXGI_FORMAT_R16G16_SINT, EResourceFormat::kR16G16_SINT },
+      { DXGI_FORMAT_R32_TYPELESS, EResourceFormat::kR32_TYPELESS },
+      { DXGI_FORMAT_D32_FLOAT, EResourceFormat::kD32_FLOAT },
+      { DXGI_FORMAT_R32_FLOAT, EResourceFormat::kR32_FLOAT },
+      { DXGI_FORMAT_R32_UINT, EResourceFormat::kR32_UINT },
+      { DXGI_FORMAT_R32_SINT, EResourceFormat::kR32_SINT },
+      { DXGI_FORMAT_R24G8_TYPELESS, EResourceFormat::kR24G8_TYPELESS },
+      { DXGI_FORMAT_D24_UNORM_S8_UINT, EResourceFormat::kD24_UNORM_S8_UINT },
+      { DXGI_FORMAT_R24_UNORM_X8_TYPELESS, EResourceFormat::kR24_UNORM_X8_TYPELESS },
+      { DXGI_FORMAT_X24_TYPELESS_G8_UINT, EResourceFormat::kX24_TYPELESS_G8_UINT },
+      { DXGI_FORMAT_R8G8_TYPELESS, EResourceFormat::kR8G8_TYPELESS },
+      { DXGI_FORMAT_R8G8_UNORM, EResourceFormat::kR8G8_UNORM },
+      { DXGI_FORMAT_R8G8_UINT, EResourceFormat::kR8G8_UINT },
+      { DXGI_FORMAT_R8G8_SNORM, EResourceFormat::kR8G8_SNORM },
+      { DXGI_FORMAT_R8G8_SINT, EResourceFormat::kR8G8_SINT },
+      { DXGI_FORMAT_R16_TYPELESS, EResourceFormat::kR16_TYPELESS },
+      { DXGI_FORMAT_R16_FLOAT, EResourceFormat::kR16_FLOAT },
+      { DXGI_FORMAT_D16_UNORM, EResourceFormat::kD16_UNORM },
+      { DXGI_FORMAT_R16_UNORM, EResourceFormat::kR16_UNORM },
+      { DXGI_FORMAT_R16_UINT, EResourceFormat::kR16_UINT },
+      { DXGI_FORMAT_R16_SNORM, EResourceFormat::kR16_SNORM },
+      { DXGI_FORMAT_R16_SINT, EResourceFormat::kR16_SINT },
+      { DXGI_FORMAT_R8_TYPELESS, EResourceFormat::kR8_TYPELESS },
+      { DXGI_FORMAT_R8_UNORM, EResourceFormat::kR8_UNORM },
+      { DXGI_FORMAT_R8_UINT, EResourceFormat::kR8_UINT },
+      { DXGI_FORMAT_R8_SNORM, EResourceFormat::kR8_SNORM },
+      { DXGI_FORMAT_R8_SINT, EResourceFormat::kR8_SINT },
+      { DXGI_FORMAT_A8_UNORM, EResourceFormat::kA8_UNORM },
+      { DXGI_FORMAT_R1_UNORM, EResourceFormat::kR1_UNORM },
+      { DXGI_FORMAT_R9G9B9E5_SHAREDEXP, EResourceFormat::kR9G9B9E5_SHAREDEXP },
+      { DXGI_FORMAT_R8G8_B8G8_UNORM, EResourceFormat::kR8G8_B8G8_UNORM },
+      { DXGI_FORMAT_G8R8_G8B8_UNORM, EResourceFormat::kG8R8_G8B8_UNORM },
+      { DXGI_FORMAT_BC1_TYPELESS, EResourceFormat::kBC1_TYPELESS },
+      { DXGI_FORMAT_BC1_UNORM, EResourceFormat::kBC1_UNORM },
+      { DXGI_FORMAT_BC1_UNORM_SRGB, EResourceFormat::kBC1_UNORM_SRGB },
+      { DXGI_FORMAT_BC2_TYPELESS, EResourceFormat::kBC2_TYPELESS },
+      { DXGI_FORMAT_BC2_UNORM, EResourceFormat::kBC2_UNORM },
+      { DXGI_FORMAT_BC2_UNORM_SRGB, EResourceFormat::kBC2_UNORM_SRGB },
+      { DXGI_FORMAT_BC3_TYPELESS, EResourceFormat::kBC3_TYPELESS },
+      { DXGI_FORMAT_BC3_UNORM, EResourceFormat::kBC3_UNORM },
+      { DXGI_FORMAT_BC3_UNORM_SRGB, EResourceFormat::kBC3_UNORM_SRGB },
+      { DXGI_FORMAT_BC4_TYPELESS, EResourceFormat::kBC4_TYPELESS },
+      { DXGI_FORMAT_BC4_UNORM, EResourceFormat::kBC4_UNORM },
+      { DXGI_FORMAT_BC4_SNORM, EResourceFormat::kBC4_SNORM },
+      { DXGI_FORMAT_BC5_TYPELESS, EResourceFormat::kBC5_TYPELESS },
+      { DXGI_FORMAT_BC5_UNORM, EResourceFormat::kBC5_UNORM },
+      { DXGI_FORMAT_BC5_SNORM, EResourceFormat::kBC5_SNORM },
+      { DXGI_FORMAT_B5G6R5_UNORM, EResourceFormat::kB5G6R5_UNORM },
+      { DXGI_FORMAT_B5G5R5A1_UNORM, EResourceFormat::kB5G5R5A1_UNORM },
+      { DXGI_FORMAT_B8G8R8A8_UNORM, EResourceFormat::kB8G8R8A8_UNORM },
+      { DXGI_FORMAT_B8G8R8X8_UNORM, EResourceFormat::kB8G8R8X8_UNORM },
+      { DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM, EResourceFormat::kR10G10B10_XR_BIAS_A2_UNORM },
+      { DXGI_FORMAT_B8G8R8A8_TYPELESS, EResourceFormat::kB8G8R8A8_TYPELESS },
+      { DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, EResourceFormat::kB8G8R8A8_UNORM_SRGB },
+      { DXGI_FORMAT_B8G8R8X8_TYPELESS, EResourceFormat::kB8G8R8X8_TYPELESS },
+      { DXGI_FORMAT_B8G8R8X8_UNORM_SRGB, EResourceFormat::kB8G8R8X8_UNORM_SRGB },
+      { DXGI_FORMAT_BC6H_TYPELESS, EResourceFormat::kBC6H_TYPELESS },
+      { DXGI_FORMAT_BC6H_UF16, EResourceFormat::kBC6H_UF16 },
+      { DXGI_FORMAT_BC6H_SF16, EResourceFormat::kBC6H_SF16 },
+      { DXGI_FORMAT_BC7_TYPELESS, EResourceFormat::kBC7_TYPELESS },
+      { DXGI_FORMAT_BC7_UNORM, EResourceFormat::kBC7_UNORM },
+      { DXGI_FORMAT_BC7_UNORM_SRGB, EResourceFormat::kBC7_UNORM_SRGB },
+      { DXGI_FORMAT_AYUV, EResourceFormat::kAYUV },
+      { DXGI_FORMAT_Y410, EResourceFormat::kY410 },
+      { DXGI_FORMAT_Y416, EResourceFormat::kY416 },
+      { DXGI_FORMAT_NV12, EResourceFormat::kNV12 },
+      { DXGI_FORMAT_P010, EResourceFormat::kP010 },
+      { DXGI_FORMAT_P016, EResourceFormat::kP016 },
+      { DXGI_FORMAT_YUY2, EResourceFormat::kYUY2 },
+      { DXGI_FORMAT_Y210, EResourceFormat::kY210 },
+      { DXGI_FORMAT_Y216, EResourceFormat::kY216 },
+      { DXGI_FORMAT_NV11, EResourceFormat::kNV11 },
+      { DXGI_FORMAT_AI44, EResourceFormat::kAI44 },
+      { DXGI_FORMAT_IA44, EResourceFormat::kIA44 },
+      { DXGI_FORMAT_P8, EResourceFormat::kP8 },
+      { DXGI_FORMAT_A8P8, EResourceFormat::kA8P8 },
+      { DXGI_FORMAT_B4G4R4A4_UNORM, EResourceFormat::kB4G4R4A4_UNORM },
+      { DXGI_FORMAT_P208, EResourceFormat::kP208 },
+      { DXGI_FORMAT_V208, EResourceFormat::kV208 },
+      { DXGI_FORMAT_V408, EResourceFormat::kV408 },
+      { DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE, EResourceFormat::kSAMPLER_FEEDBACK_MIN_MIP_OPAQUE },
+      { DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE, EResourceFormat::kSAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE },
+      { DXGI_FORMAT_FORCE_UINT, EResourceFormat::kFORCE_UINT },
+    };
+
+    return map[format];
+  }
+
+  static inline EScaling
+  ConvertEScaling(DXGI_MODE_SCALING scaling)
+  {
+    static std::unordered_map<DXGI_MODE_SCALING, EScaling> map =
+    {
+      { DXGI_MODE_SCALING_CENTERED, EScaling::kCentered },
+      { DXGI_MODE_SCALING_STRETCHED, EScaling::kStretched },
+      { DXGI_MODE_SCALING_UNSPECIFIED, EScaling::kUnspecified },
+    };
+
+    return map[scaling];
+  }
+
+  static inline EScanlineOrder
+  ConvertEScanlineOrder(DXGI_MODE_SCANLINE_ORDER scanlineOrder)
+  {
+    static std::unordered_map<DXGI_MODE_SCANLINE_ORDER, EScanlineOrder> map =
+    {
+      { DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED, EScanlineOrder::kUnspecified },
+      { DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE, EScanlineOrder::kProgressive },
+      { DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST, EScanlineOrder::kLowerFieldFirst },
+      { DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST, EScanlineOrder::kUpperFieldFirst },
+    };
+
+    return map[scanlineOrder];
+  }
+
+  static inline ESwapChainEffect
+  ConvertESwapChainEffect(DXGI_SWAP_EFFECT swapChainEffect)
+  {
+    static std::unordered_map<DXGI_SWAP_EFFECT, ESwapChainEffect> map =
+    {
+      { DXGI_SWAP_EFFECT_DISCARD, ESwapChainEffect::kDiscard },
+      { DXGI_SWAP_EFFECT_SEQUENTIAL, ESwapChainEffect::kSequential },
+      { DXGI_SWAP_EFFECT_FLIP_DISCARD, ESwapChainEffect::kFlipDiscard },
+      { DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL, ESwapChainEffect::kFlipSequential },
+    };
+
+    return map[swapChainEffect];
+  }
+
+  static inline EDescriptorHeapType
+  ConvertEDescriptorHeapType(D3D12_DESCRIPTOR_HEAP_TYPE descriptorHeapType)
+  {
+    static std::unordered_map<D3D12_DESCRIPTOR_HEAP_TYPE, EDescriptorHeapType> map =
+    {
+      { D3D12_DESCRIPTOR_HEAP_TYPE_DSV, EDescriptorHeapType::kDSV },
+      { D3D12_DESCRIPTOR_HEAP_TYPE_RTV, EDescriptorHeapType::kRTV },
+      { D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, EDescriptorHeapType::kSampler },
+      { D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, EDescriptorHeapType::kCBV_SRV_UAV },
+      { D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES, EDescriptorHeapType::kNumTypes },
+    };
+
+    return map[descriptorHeapType];
+  }
+
+  static inline EDescriptorHeapF
+  ConvertEDescriptorHeapF(D3D12_DESCRIPTOR_HEAP_FLAGS descriptorHeapFlag)
+  {
+    static std::unordered_map<D3D12_DESCRIPTOR_HEAP_FLAGS, EDescriptorHeapF> map =
+    {
+      { D3D12_DESCRIPTOR_HEAP_FLAG_NONE, EDescriptorHeapF::kNone },
+      { D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, EDescriptorHeapF::kShaderVisable },
+    };
+
+    EDescriptorHeapF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, descriptorHeapFlag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline FSample
+  ConvertFSampleDesc(DXGI_SAMPLE_DESC& desc)
+  {
+    FSample ret = {
+      .Count = desc.Count,
+      .Quality = desc.Quality,
+    };
+
+    return ret;
+  }
+
+  static inline EResourceStateF
+  ConvertEResourceState(D3D12_RESOURCE_STATES resourceState)
+  {
+    static std::unordered_map<D3D12_RESOURCE_STATES, EResourceStateF> map =
+    {
+      { D3D12_RESOURCE_STATE_COMMON, EResourceStateF::kCommon                           },
+      { D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, EResourceStateF::kVertexAndConstantBuffer          },
+      { D3D12_RESOURCE_STATE_INDEX_BUFFER, EResourceStateF::kIndexBuffer                      },
+      { D3D12_RESOURCE_STATE_RENDER_TARGET, EResourceStateF::kRenderTarget                     },
+      { D3D12_RESOURCE_STATE_UNORDERED_ACCESS, EResourceStateF::kUnorederedAccess                 },
+      { D3D12_RESOURCE_STATE_DEPTH_WRITE, EResourceStateF::kDepthWrite                       },
+      { D3D12_RESOURCE_STATE_DEPTH_READ, EResourceStateF::kDepthRead                        },
+      { D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, EResourceStateF::kNonPixelShaderResource           },
+      { D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, EResourceStateF::kPixelShaderResource              },
+      { D3D12_RESOURCE_STATE_STREAM_OUT, EResourceStateF::kStreamOut                        },
+      { D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT, EResourceStateF::kIndirectArgument                 },
+      { D3D12_RESOURCE_STATE_COPY_DEST, EResourceStateF::kCopyDest                         },
+      { D3D12_RESOURCE_STATE_COPY_SOURCE, EResourceStateF::kCopySource                       },
+      { D3D12_RESOURCE_STATE_RESOLVE_DEST, EResourceStateF::kResolveDest                      },
+      { D3D12_RESOURCE_STATE_RESOLVE_SOURCE, EResourceStateF::kResolveSource                    },
+      { D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, EResourceStateF::kRaytracingAccelerationStructure  },
+      { D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE, EResourceStateF::kShadingRateSource                },
+      { D3D12_RESOURCE_STATE_RESERVED_INTERNAL_8000, EResourceStateF::kReservedInternal8000             },
+      { D3D12_RESOURCE_STATE_RESERVED_INTERNAL_4000, EResourceStateF::kReservedInternal4000             },
+      { D3D12_RESOURCE_STATE_RESERVED_INTERNAL_100000, EResourceStateF::kReservedInternal100000           },
+      { D3D12_RESOURCE_STATE_RESERVED_INTERNAL_40000000, EResourceStateF::kReservedInternal40000000         },
+      { D3D12_RESOURCE_STATE_RESERVED_INTERNAL_80000000, EResourceStateF::kReservedInternal80000000         },
+      { D3D12_RESOURCE_STATE_GENERIC_READ, EResourceStateF::kGenericRead                      },
+      { D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, EResourceStateF::kAllShaderResource                },
+      { D3D12_RESOURCE_STATE_PRESENT, EResourceStateF::kPresent                          },
+      { D3D12_RESOURCE_STATE_PREDICATION, EResourceStateF::kPredication                      },
+      { D3D12_RESOURCE_STATE_VIDEO_DECODE_READ, EResourceStateF::kVideoDecodeRead                  },
+      { D3D12_RESOURCE_STATE_VIDEO_DECODE_WRITE, EResourceStateF::kVideoDecodeWrite                 },
+      { D3D12_RESOURCE_STATE_VIDEO_PROCESS_READ, EResourceStateF::kVideoProcessRead                 },
+      { D3D12_RESOURCE_STATE_VIDEO_PROCESS_WRITE, EResourceStateF::kVideoProcessWrite                },
+      { D3D12_RESOURCE_STATE_VIDEO_ENCODE_READ, EResourceStateF::kVideoEncodeRead                  },
+      { D3D12_RESOURCE_STATE_VIDEO_ENCODE_WRITE, EResourceStateF::kVideoEncodeWrite                 },
+    };
+
+    EResourceStateF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, resourceState))
+        ret |= map[iter.first];
+
+
+    return map[resourceState];
+  }
+
+  static inline mem::TScope<FClearValue>
+  ConvertFClearValue(D3D12_CLEAR_VALUE* clearValue)
+  {
+    if(clearValue == nullptr) return nullptr;
+
+    FClearValue* ret = new FClearValue();
+
+    ret->Format = ConvertEResourceFormat(clearValue->Format);
+    ret->Depth = clearValue->DepthStencil.Depth;
+    ret->Stencil = clearValue->DepthStencil.Stencil;
+
+    return ret;
+  }
+
+  static inline EResourceDimension
+  ConvertEResourceDimension(D3D12_RESOURCE_DIMENSION resourceDimension)
+  {
+    static std::unordered_map<D3D12_RESOURCE_DIMENSION, EResourceDimension> map =
+    {
+      { D3D12_RESOURCE_DIMENSION_UNKNOWN, EResourceDimension::kUnknown    },
+      { D3D12_RESOURCE_DIMENSION_BUFFER, EResourceDimension::kBuffer     },
+      { D3D12_RESOURCE_DIMENSION_TEXTURE1D, EResourceDimension::kTexture1D  },
+      { D3D12_RESOURCE_DIMENSION_TEXTURE2D, EResourceDimension::kTexture2D  },
+      { D3D12_RESOURCE_DIMENSION_TEXTURE3D, EResourceDimension::kTexture3D  },
+    };
+
+    return map[resourceDimension];
+  }
+
+  static inline EResourceLayout
+  ConvertEResourceLayout(D3D12_TEXTURE_LAYOUT resourceLayout)
+  {
+    static std::unordered_map<D3D12_TEXTURE_LAYOUT, EResourceLayout> map =
+    {
+      { D3D12_TEXTURE_LAYOUT_UNKNOWN, EResourceLayout::kUnknown               },
+      { D3D12_TEXTURE_LAYOUT_ROW_MAJOR, EResourceLayout::kRowMajor              },
+      { D3D12_TEXTURE_LAYOUT_64KB_STANDARD_SWIZZLE, EResourceLayout::kStandardSwizzle64KB   },
+      { D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE, EResourceLayout::kUndefinedSwizzle64KB   },
+    };
+
+    return map[resourceLayout];
+  }
+
+  static inline EResourceF
+  ConvertEResourceF(D3D12_RESOURCE_FLAGS resourceFlag)
+  {
+    static std::unordered_map<D3D12_RESOURCE_FLAGS, EResourceF> map =
+    {
+      { D3D12_RESOURCE_FLAG_NONE, EResourceF::kNone },
+      { D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER, EResourceF::kAllowCrossAdapter },
+      { D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL, EResourceF::kAllowDepthStencil },
+      { D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, EResourceF::kAllowRenderTarget },
+      { D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE, EResourceF::kDenyShaderResource },
+      { D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS, EResourceF::kAllowUnorderedAccess },
+      { D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS, EResourceF::kAllowSimultaneousAccess },
+      { D3D12_RESOURCE_FLAG_VIDEO_DECODE_REFERENCE_ONLY, EResourceF::kVideoDecodeReferenceOnly },
+      { D3D12_RESOURCE_FLAG_VIDEO_ENCODE_REFERENCE_ONLY, EResourceF::kVideoEncodeReferenceOnly },
+      { D3D12_RESOURCE_FLAG_RAYTRACING_ACCELERATION_STRUCTURE, EResourceF::kRaytracingAccelerationStructure },
+    };
+
+    EResourceF ret = {};
+
+    for(auto iter : map)
+      if(HAS_FLAG(iter.first, resourceFlag))
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline FResource
+  ConvertFResource(D3D12_RESOURCE_DESC& desc)
+  {
+    FResource ret = {
+      .Alignment = desc.Alignment,
+      .Width = desc.Width,
+      .Height = desc.Height,
+      .DepthOrArraySize = desc.DepthOrArraySize,
+      .MipLevels = desc.MipLevels,
+      .Sample = ConvertFSampleDesc(desc.SampleDesc),
+      .Format = ConvertEResourceFormat(desc.Format),
+      .Flag = ConvertEResourceF(desc.Flags),
+      .Layout = ConvertEResourceLayout(desc.Layout),
+      .Dimension = ConvertEResourceDimension(desc.Dimension),
+    };
+
+    return ret;
+  }
+
+  static inline EHeapType
+  ConvertEHeapType(D3D12_HEAP_TYPE heapType)
+  {
+    static std::unordered_map<D3D12_HEAP_TYPE, EHeapType> map =
+    {
+      { D3D12_HEAP_TYPE_DEFAULT, EHeapType::kDefault },
+      { D3D12_HEAP_TYPE_CUSTOM, EHeapType::kCustom },
+      { D3D12_HEAP_TYPE_UPLOAD, EHeapType::kUpload },
+      { D3D12_HEAP_TYPE_READBACK, EHeapType::kReadback },
+      { D3D12_HEAP_TYPE_GPU_UPLOAD, EHeapType::kGPUUpload },
+    };
+
+    return map[heapType];
+  }
+
+  static inline ECPUPageProperty
+  ConvertECPUPageProperty(D3D12_CPU_PAGE_PROPERTY cpuPageProperty)
+  {
+    static std::unordered_map<D3D12_CPU_PAGE_PROPERTY, ECPUPageProperty> map =
+    {
+      { D3D12_CPU_PAGE_PROPERTY_UNKNOWN, ECPUPageProperty::kUnknown },
+      { D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, ECPUPageProperty::kWriteBack },
+      { D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE, ECPUPageProperty::kWriteCombine },
+      { D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE, ECPUPageProperty::kNotAvailable },
+    };
+
+    return map[cpuPageProperty];
+  }
+
+  static inline EMemoryPool
+  ConvertEMemoryPool(D3D12_MEMORY_POOL memoryPool)
+  {
+    static std::unordered_map<D3D12_MEMORY_POOL, EMemoryPool> map =
+    {
+      { D3D12_MEMORY_POOL_UNKNOWN, EMemoryPool::kUnknown },
+      { D3D12_MEMORY_POOL_L0, EMemoryPool::kL0 },
+      { D3D12_MEMORY_POOL_L1, EMemoryPool::kL1 },
+    };
+
+    return map[memoryPool];
+  }
+
+  static inline EHeapF
+  ConvertEHeapF(D3D12_HEAP_FLAGS heapFlag)
+  {
+    static std::unordered_map<D3D12_HEAP_FLAGS, EHeapF> map =
+    {
+      { D3D12_HEAP_FLAG_NONE, EHeapF::kNone },
+      { D3D12_HEAP_FLAG_SHARED, EHeapF::kShared },
+      { D3D12_HEAP_FLAG_DENY_BUFFERS, EHeapF::kDenyBuffers },
+      { D3D12_HEAP_FLAG_ALLOW_DISPLAY, EHeapF::kAllowDisplay },
+      { D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH, EHeapF::kAllowWriteWatch },
+      { D3D12_HEAP_FLAG_CREATE_NOT_ZEROED, EHeapF::kCreateNotZeroed },
+      { D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS, EHeapF::kAllowOnlyBuffers },
+      { D3D12_HEAP_FLAG_CREATE_NOT_RESIDENT, EHeapF::kCreateNotResident },
+      { D3D12_HEAP_FLAG_HARDWARE_PROTECTED, EHeapF::kHardwareProtected },
+      { D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS, EHeapF::kAllowShaderAtomics },
+      { D3D12_HEAP_FLAG_DENY_RT_DS_TEXTURES, EHeapF::kDenyRT_DS_Textures },
+      { D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER, EHeapF::kSharedCrossAdapter },
+      { D3D12_HEAP_FLAG_DENY_NON_RT_DS_TEXTURES, EHeapF::kDenyNonRT_DS_Textures },
+      { D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, EHeapF::kAllowOnlyRT_DS_Textures },
+      { D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES, EHeapF::kAllowOnlyNonRT_DS_Textures },
+      { D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES, EHeapF::kAllowAllBuffersAndTextures },
+      { D3D12_HEAP_FLAG_TOOLS_USE_MANUAL_WRITE_TRACKING, EHeapF::kToolsUseManualWriteTracking },
+    };
+
+    EHeapF ret = {};
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, heapFlag) )
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline FHeapDesc
+  ConvertFHeapDesc(D3D12_HEAP_PROPERTIES& desc)
+  {
+    FHeapDesc ret = {
+      .Type = ConvertEHeapType(desc.Type),
+      .MemoryPool = ConvertEMemoryPool(desc.MemoryPoolPreference),
+      .CpuPageProperty = ConvertECPUPageProperty(desc.CPUPageProperty),
+    };
+
+    return ret;
+  }
+
+}
+
 }

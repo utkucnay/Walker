@@ -16,8 +16,8 @@ enum class EScaling {
 };
 
 struct FRational {
-  u32 m_numerator;
-  u32 m_denominator;
+  u32 Numerator = 1;
+  u32 Denominator = 0;
 };
 
 enum class EFenceF {
@@ -29,7 +29,13 @@ enum class EFenceF {
 
 WALKER_ENUM_CLASS_BITWISE_DECLARATION(EFenceF)
 
-enum class ERootSignatureType { DescriptorTable = 0, Constants, CBV, SRV, UAV };
+enum class ERootSignatureType {
+  kDescriptorTable = 0,
+  kConstants,
+  kCBV,
+  kSRV,
+  kUAV
+};
 
 enum class ERootSignatureVisibilty {
   kAll = 0,
@@ -97,13 +103,13 @@ struct FColor32 {
 };
 
 struct FSample {
-  u32 count = 1;
-  u32 quality = 0;
+  u32 Count = 1;
+  u32 Quality = 0;
 };
 
 struct FLuid {
-  u64 lowPart;
-  i64 highPart;
+  u64 LowPart = 0;
+  i64 HighPart = 0;
 };
 
 }  // namespace wkr::graphics

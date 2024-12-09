@@ -25,7 +25,13 @@
 
 #define SUBS_ABSTRACT_FACTORY(Type, SubType, ...)                 \
  public:                                                          \
-  mem::TScope<IFactory<Type, __VA_ARGS__>> Get##Type() override { \
+  wkr::mem::TScope<IFactory<Type, __VA_ARGS__>> Get##Type() override { \
+    return wkr::mem::TScope<SubType##Factory>::Create();               \
+  }
+
+#define SUBS_ABSTRACT_FACTORY_NAMESPACE(Namespace, Type, SubType, ...)                 \
+ public:                                                          \
+  wkr::mem::TScope<IFactory<Namespace::Type, __VA_ARGS__>> Get##Type() override { \
     return wkr::mem::TScope<SubType##Factory>::Create();               \
   }
 

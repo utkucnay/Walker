@@ -3,15 +3,16 @@
 #include "Platforms/DirectX12/Core/DX12Fence.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 UCommandQueue::UCommandQueue(FCommandQueueDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
-  D3D12_COMMAND_QUEUE_DESC nDesc = {};
-  nDesc.Type = ConvertECommandType(desc.m_commandType);
-  nDesc.Priority = static_cast<INT>(desc.m_commandQueuePriority);
-  nDesc.Flags = ConvertECommandQueueFlags(desc.m_commandQueueFlags);
+  D3D12_COMMAND_QUEUE_DESC nDesc = {
+      .Type = wkrtodx12::ConvertECommandType(desc.CommandType),
+      .Priority = static_cast<INT>(desc.CommandQueuePriority),
+      .Flags = wkrtodx12::ConvertECommandQueueF(desc.CommandQueueFlag),
+  };
 
   HRESULT hr =
       nDevice->CreateCommandQueue(&nDesc, IID_PPV_ARGS(&m_commandQueue));
@@ -34,13 +35,13 @@ void UCommandQueue::ExecuteCommandList(
   m_commandQueue->ExecuteCommandLists(nCommandLists.size(), &nCommandLists[0]);
 }
 
-void UCommandQueue::Signal(IFence& fence, i32 frameIndex) {
+void UCommandQueue::Signal(AFence& fence, i32 frameIndex) {
   auto dxFence = static_cast<UFence*>(&fence);
 
   HRESULT hr = m_commandQueue->Signal(fence.GetNativeObject(frameIndex),
-                                      dxFence->m_fenceValue[frameIndex]);
+                                      dxFence->GetFenceValue(frameIndex));
 
   WKR_CORE_ERROR_COND(FAILED(hr), "Fence Signal Error in Command Queue");
 }
 
-}  // namespace wkr::render::dx12
+}  // namespace wkr::graphics::rhi::dx12

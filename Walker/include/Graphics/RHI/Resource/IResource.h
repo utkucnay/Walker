@@ -6,20 +6,20 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FResourceDesc {
-  EResourceDescType descType = EResourceDescType::kCommitted;
+  EResourceDescType DescType = EResourceDescType::kCommitted;
 
   union {
-    FHeapDesc heapDesc;
+    FHeapDesc HeapDesc;
 
     struct {
-      IHeap* heap = nullptr;
-      u64 heapOffset = 0;
+      IHeap* Heap = nullptr;
+      u64 HeapOffset = 0;
     };
   };
 
-  FResource resource = {};
-  EResourceStateF initialState = EResourceStateF::kCommon;
-  FClearValue* clearValue = nullptr;
+  FResource Resource = {};
+  EResourceStateF InitialState = EResourceStateF::kCommon;
+  FClearValue* ClearValue = nullptr;
 };
 
 class WALKER_API IResource {

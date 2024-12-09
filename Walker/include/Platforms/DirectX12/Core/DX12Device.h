@@ -1,19 +1,21 @@
 #pragma once
 
-#include "Graphics/Core/IDevice.h"
+#include "Graphics/RHI/Core/IDevice.h"
 
-namespace wkr::render::dx12
-{
-  class UDevice : public IDevice
-  {
-  public:
-    UDevice(FDeviceDesc& db);
-    ~UDevice() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override { return m_device; }
+class UDevice : public IDevice {
+ public:
+  UDevice(FDeviceDesc& db);
+  ~UDevice() override;
 
-  private:
-    ID3D12Device* m_device;
-  };
-}
+ public:
+  FDeviceDesc GetDesc() override;
+  NativeObject GetNativeObject() override { return m_Device; }
+
+ private:
+  ID3D12Device* m_Device;
+  IAdapter* m_Adapter;
+};
+
+}  // namespace wkr::graphics::rhi

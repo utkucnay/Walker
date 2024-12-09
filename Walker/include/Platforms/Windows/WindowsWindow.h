@@ -1,42 +1,21 @@
 #pragma once
 
-#include "Core/AWindow.h"
+#include "Os/Window/AWindow.h"
 
 LRESULT WindowProcNative(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 namespace wkr::os::windows {
 
-class UWindow : public wkr::AWindow {
+class UWindow : public wkr::os::AWindow {
  public:
   UWindow(FWindowDesc& desc);
   ~UWindow() override;
 
  public:
-  void OnUpdate() override;
-  b32 IsShouldClose() override;
-  void PoolEvents() override;
-
-  u32 GetWidth() override {
-    RECT rect;
-    if (GetWindowRect(window, &rect)) {
-      return rect.right - rect.left;
-    }
-    return 0;
-  }
-
-  u32 GetHeight() override {
-    RECT rect;
-    if (GetWindowRect(window, &rect)) {
-      return rect.bottom - rect.top;
-    }
-    return 0;
-  }
-
-  b32 GetWindowed() override {
-    LONG wLong = GetWindowLong(window, 0);
-
-    return (wLong & WS_POPUP) == 0;
-  }
+  void        OnUpdate()      override;
+  b32         IsShouldClose() override;
+  void        PoolEvents()    override;
+  FWindowDesc GetDesc()       override;
 
   NativeObject GetNativeObject() override { return &window; }
 
@@ -50,7 +29,7 @@ class UWindow : public wkr::AWindow {
  public:
   HWND window{};
   MSG message{};
-  WNDCLASS wc = {};
+  WNDCLASS wc{};
 
  private:
   bool m_isRunning;

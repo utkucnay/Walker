@@ -10,8 +10,9 @@ struct WALKER_API FVertexShaderDesc{
 
 class WALKER_API UVertexShader{
 
-};
 
-using UVertexShaderHandle = mem::TRef<UVertexShader>;
+private:
+  rhi::IShaderHandle m_Shader;
+};
 
 }  // namespace wkr::graphics

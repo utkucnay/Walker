@@ -40,9 +40,11 @@
 #define HAS_FLAG(flag1, flag2) \
   (static_cast<u64>(flag1) & static_cast<u64>(flag2)) != 0
 
-#define WALKER_ENUM_CLASS_BITWISE_DECLARATION(E) \
-  E operator|(E a, E b);                         \
-  E operator&(E a, E b);
+#define WALKER_ENUM_CLASS_BITWISE_DECLARATION(E)  \
+  E operator|(E a, E b);                          \
+  E operator&(E a, E b);                          \
+  E operator|=(E a, E b);                         \
+  E operator&=(E a, E b);
 
 #define WALKER_ENUM_CLASS_BITWISE_DEFINATION(E)      \
   E operator|(E a, E b) {                            \
@@ -53,14 +55,23 @@
   E operator&(E a, E b) {                            \
     return static_cast<E>(static_cast<unsigned>(a) & \
                           static_cast<unsigned>(b)); \
+  }                                                  \
+  E operator|=(E a, E b) {                            \
+    return static_cast<E>(static_cast<unsigned>(a) | \
+                          static_cast<unsigned>(b)); \
+  }                                                  \
+                                                     \
+  E operator&=(E a, E b) {                            \
+    return static_cast<E>(static_cast<unsigned>(a) & \
+                          static_cast<unsigned>(b)); \
   }
 
 #ifdef WKR_PLATFORM_WINDOWS
 #define WKR_BUILD_DLL
 #ifdef WKR_BUILD_DLL // TODO: Will Add CMAKE
-#define WALKER_API __declspec(dllexport)
+#define WALKER_API /*__declspec(dllexport)*/
 #else
-#define WALKER_API __declspec(dllimport)
+#define WALKER_API /*__declspec(dllimport)*/
 #endif
 
 #define WALKER_DEBUG_BREAK() __debugbreak()  // MSVC

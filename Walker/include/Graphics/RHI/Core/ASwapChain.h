@@ -10,12 +10,12 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FSwapChainDesc {
-  u32 m_bufferCount = 0;
-  FSample m_sampleDesc = {0, 0};
-  ESwapChainF m_flag = ESwapChainF::kNone;
-  ESwapChainEffect m_swapEffect = ESwapChainEffect::kDiscard;
-  os::AWindowHandle m_window = {};
-  FModeDesc m_bufferDesc = {};
+  u32 BufferCount = 0;
+  FSample SampleDesc = {0, 0};
+  ESwapChainF Flag = ESwapChainF::kNone;
+  ESwapChainEffect SwapEffect = ESwapChainEffect::kDiscard;
+  os::AWindowHandle Window = {};
+  FModeDesc BufferDesc = {};
   EResourceUsageF m_bufferUsage = EResourceUsageF::kCPU_ACCESS_NONE;
   ICommandQueueHandle m_commandQueue = nullptr;
 };
@@ -25,27 +25,25 @@ class WALKER_API ASwapChain {
   virtual ~ASwapChain() = default;
 
  public:
-  virtual void WindowSizeEvent(u32 width, u32 height) = 0;
-  virtual void FullscreenEvent(b64 isTrue) = 0;
   virtual void SwapBuffers() = 0;
 
   virtual NativeObject GetNativeObject() = 0;
-  virtual FSwapChainDesc GetDesc() const = 0;
-
-  [[nodiscard]] virtual IFence& GetCurrentFence() { return m_fence.Get(); }
+  virtual FSwapChainDesc GetDesc() = 0;
 
   virtual void Present(u8 syncInterval, u8 flags) = 0;
 
  public:
-  virtual u32 GetFrameIndex() { return m_frameIndex; }
+  u32 GetFrameIndex() const { return m_FrameIndex; }
 
-  [[nodiscard]] ARenderTargetViewHandle GetCurrentRenderTarget() {
-    return m_descripHeap->Get<ARenderTargetView>(GetFrameIndex());
+  u32 GetBufferCount() const { return m_BufferCount; }
+
+  [[nodiscard]] URenderTargetView GetCurrentRenderTarget() {
+    return m_DescripHeap->Get<URenderTargetView>(m_FrameIndex);
   }
 
  protected:
-  u32 m_frameIndex;
-  wkr::mem::TScope<IFence> m_Fence;
+  u32 m_FrameIndex;
+  u32 m_BufferCount;
   IDescriptorHeapHandle m_DescripHeap;
 
  private:

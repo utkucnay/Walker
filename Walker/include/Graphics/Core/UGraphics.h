@@ -4,14 +4,21 @@
 #include "Graphics/RHI/Command/ICommandList.h"
 #include "Graphics/RHI/Core/ASwapChain.h"
 #include "Graphics/RHI/Core/IDevice.h"
-#include "Graphics/RHI/Shader/IShader.h"
+#include "Graphics/RHI/Core/IFence.h"
 #include "Graphics/Resource/UBuffer.h"
+#include "Graphics/Shader/UVertexShader.h"
 #include "OS/Window/AWindow.h"
 
 namespace wkr::graphics {
 
+struct FCommand {
+  std::vector<rhi::ICommandAllocatorHandle> CommandAllocator;
+  rhi::ICommandListHandle CommandList;
+  rhi::ICommandQueueHandle CommandQueue;
+};
+
 struct WALKER_API FGraphicsDesc {
-  os::AWindowHandle window = {};
+  os::AWindowHandle Window = {};
 };
 
 class WALKER_API UGraphics {
@@ -23,18 +30,16 @@ class WALKER_API UGraphics {
   void Render();
   void CreateResource();
   void LoadResources();
+  void Fence();
 
  private:
-  rhi::IDeviceHandle m_device;
+  rhi::IDeviceHandle m_Device;
+  rhi::ASwapChainHandle m_SwapChain;
+  rhi::AFenceHandle m_FenceHandle;
+  FCommand m_DirectCommand;
 
-  std::vector<rhi::ICommandAllocatorHandle> m_commandDirectAllocator;
-  rhi::ICommandListHandle m_commandDirectList;
-  rhi::ICommandQueueHandle m_commandDirectQueue;
-
-  rhi::ASwapChainHandle m_swapChain;
-
-  mem::TScope<rsc::UBuffer> vertexBuffer;
-  mem::TScope<rhi::IShader> vertexShader;
+  UBuffer m_VertexBuffer;
+  UVertexShader m_VertexShader;
 
  public:
   [[nodiscard]] static rhi::IDevice& GetDefaultDevice() {

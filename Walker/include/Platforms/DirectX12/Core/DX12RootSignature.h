@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Graphics/Core/IRootSignature.h"
+#include "Graphics/RHI/Core/IRootSignature.h"
 
-namespace wkr::render::dx12
+namespace wkr::graphics::rhi::dx12
 {
   class URootSignature : public IRootSignature
   {

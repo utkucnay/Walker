@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Core/AWindow.h"
-#include "Memory/Allocator/PageAllocator.h"
+#include "OS/Window/AWindow.h"
+#include "OS/Memory/IPageAllocator.h"
 
 namespace wkr::os {
 
 CREATE_FACTORY(OS)
 SUBS_FACTORY(AWindow, FWindowDesc&)
-SUBS_FACTORY_NAMESPACE(mem, IPageAllocator, mem::FPageAllocatorDesc&)
+SUBS_FACTORY(IPageAllocator, FPageAllocatorDesc&)
 END_FACTORY()
 
 }  // namespace wkr::os

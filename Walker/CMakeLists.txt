@@ -5,7 +5,7 @@ set(header_files
 
 set(source_files
   ./src/Core/UApplication.cc
-  ./src/Core/AWindow.cc
+  ./src/OS/Window/AWindow.cc
   ./src/Core/UGraphicsAPI.cc
 
   ./src/Platforms/Windows/WindowsWindow.cc

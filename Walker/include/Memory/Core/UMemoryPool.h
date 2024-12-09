@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Memory/Allocator/PageAllocator.h>
+#include "OS/Memory/IPageAllocator.h"
 
 namespace wkr::mem
 {
@@ -12,7 +12,7 @@ namespace wkr::mem
   public:
 
   private:
-    PageAllocatorHandle m_pageAllocator;
+    os::mem::PageAllocatorHandle m_pageAllocator;
   };
 }
 

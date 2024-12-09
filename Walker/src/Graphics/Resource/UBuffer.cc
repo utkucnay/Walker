@@ -1,44 +1,61 @@
-#include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/Resource/UBuffer.h"
+#include "Graphics/Core/UGraphicsAPI.h"
 
-namespace wkr::render {
+namespace wkr::graphics {
 
-UBuffer::UBuffer(FBufferDesc& desc) {
+UBuffer::UBuffer(const FBufferDesc& desc) {
   auto resourceFactory = UGraphicsAPI::GetAbstractFactory().GetIResource();
 
-  FResourceDesc resourceDesc = {};
+  rhi::FResourceDesc resourceDesc = {
+      .DescType = EResourceDescType::kCommitted,
+      .HeapDesc =
+          {
+              .Type = desc.HeapType,
+              .MemoryPool = EMemoryPool::kUnknown,
+              .CpuPageProperty = ECPUPageProperty::kUnknown,
+              .Flag = EHeapF::kNone,
+          },
+      .Resource =
+          {
+              .Alignment = 0,
+              .Width = desc.BufferSize,
+              .Height = 1,
+              .DepthOrArraySize = 1,
+              .MipLevels = 1,
+              .Sample = {.Count = 1, .Quality = 0},
+              .Format = EResourceFormat::kUNKNOWN,
+              .Flag = desc.ResourceFlag,
+              .Layout = EResourceLayout::kUnknown,
+              .Dimension = EResourceDimension::kBuffer,
+          },
+      .InitialState = desc.InitState,
+      .ClearValue = desc.ClearValue,
+  };
 
-  resourceDesc.descType = EResourceDescType::Committed;
-  resourceDesc.heapDesc.m_type = desc.heapType;
-  resourceDesc.heapDesc.m_flag = EHeapF::None;
-  resourceDesc.heapDesc.m_memoryPool = EMemoryPool::Unknown;
-  resourceDesc.heapDesc.m_cpuPageProperty = ECPUPageProperty::Unknown;
+  m_Resource = resourceFactory->Create(resourceDesc);
+}
 
-  resourceDesc.initialState = desc.initState;
+UBuffer::UBuffer(rhi::IResourceHandle resource) {
+  rhi::FResourceDesc resourceDesc = resource->GetDesc();
+  WKR_CORE_ERROR_COND(
+      resourceDesc.Resource.Dimension != EResourceDimension::kBuffer,
+      "Resource isn't a Buffer");
 
-  resourceDesc.resource.dimension = EResourceDimension::Buffer;
-  resourceDesc.resource.width = desc.bufferSize;
-  resourceDesc.resource.height = 1;
-  resourceDesc.resource.alignment = 0;
-  resourceDesc.resource.depthOrArraySize = 1;
-  resourceDesc.resource.mipLevels = 1;
-  resourceDesc.resource.format = EResourceFormat::UNKNOWN;
-  resourceDesc.resource.sample.count = 1;
-  resourceDesc.resource.sample.quality = 0;
-  resourceDesc.resource.layout = EResourceLayout::RowMajor;
-  resourceDesc.resource.flag = desc.resourceFlag;
-
-  resourceDesc.clearValue = desc.clearValue;
-
-  m_resource = resourceFactory->Create(resourceDesc);
+  m_Resource = resource;
 }
 
 UBuffer::~UBuffer() {}
 
 FBufferDesc UBuffer::GetDesc() const {
-  FBufferDesc ret;
+  rhi::FResourceDesc resourceDesc = m_Resource->GetDesc();
 
-  return ret;
+  FBufferDesc bufferDesc = {.HeapType = resourceDesc.HeapDesc.Type,
+                            .BufferSize = resourceDesc.Resource.Width,
+                            .InitState = resourceDesc.InitialState,
+                            .ClearValue = resourceDesc.ClearValue,
+                            .ResourceFlag = resourceDesc.Resource.Flag};
+
+  return bufferDesc;
 }
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics

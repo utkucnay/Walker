@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Graphics/Command/ICommandQueue.h"
+#include "Graphics/RHI/Command/ICommandQueue.h"
 
-namespace wkr::render::dx12
+namespace wkr::graphics::rhi::dx12
 {
   class UCommandQueue : public ICommandQueue
   {
@@ -16,7 +16,7 @@ namespace wkr::render::dx12
     void ExecuteCommandList(
         const std::vector<ICommandList*>& commandLists) override final;
 
-    void Signal(IFence& fence, i32 frameIndex) override final;
+    void Signal(AFence& fence, i32 frameIndex) override final;
 
   private:
     ID3D12CommandQueue* m_commandQueue;

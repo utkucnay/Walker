@@ -1,33 +1,23 @@
 #pragma once
 
-#include "Graphics/Core/IAdapter.h"
+#include "Graphics/RHI/Core/IAdapter.h"
 
-namespace wkr::render::dx12
-{
-  class UAdapter : public IAdapter
-  {
-  public:
-    UAdapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
-    ~UAdapter() override;
-    UAdapter() = delete;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override { return m_adapter; }
+class UAdapter : public IAdapter {
+ public:
+  UAdapter(IDXGIAdapter1* adapter) : m_adapter(adapter) {}
 
-    std::string GetName() override final;
+  ~UAdapter() override;
+  UAdapter() = delete;
 
-    u32 GetVendorID() override final;
-    u32 GetDeviceID() override final;
-    u32 GetSubSysID() override final;
-    u32 GetRevision() override final;
+ public:
+  NativeObject GetNativeObject() override { return m_adapter; }
 
-    u64 GetDedicatedVideoMemory()  override final;
-    u64 GetDedicatedSystemMemory() override final;
-    u64 GetSharedSystemMemory()    override final;
+  virtual FAdapterDesc GetDesc() override final;
 
-    FLuid GetAdapterLuid() override final;
+ private:
+  IDXGIAdapter1* m_adapter;
+};
 
-  private:
-    IDXGIAdapter1* m_adapter;
-  };
-}
+}  // namespace wkr::graphics::rhi::dx12

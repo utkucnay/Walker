@@ -7,9 +7,9 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FCommandQueueDesc {
-  ECommandType m_commandType = ECommandType::kNone;
-  ECommandQueuePriority m_commandQueuePriority = ECommandQueuePriority::kNormal;
-  ECommandQueueF m_commandQueueFlag = ECommandQueueF::kNone;
+  ECommandType CommandType = ECommandType::kNone;
+  ECommandQueuePriority CommandQueuePriority = ECommandQueuePriority::kNormal;
+  ECommandQueueF CommandQueueFlag = ECommandQueueF::kNone;
 };
 
 class WALKER_API ICommandQueue {
@@ -20,7 +20,7 @@ class WALKER_API ICommandQueue {
   virtual void ExecuteCommandList(
       const std::vector<ICommandList*>& commandLists) = 0;
 
-  virtual void Signal(IFence& fence, i32 frameIndex) = 0;
+  virtual void Signal(AFence& fence, i32 frameIndex) = 0;
 
   virtual NativeObject GetNativeObject() = 0;
 };

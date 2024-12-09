@@ -2,7 +2,7 @@
 
 #include "Graphics/RHI/Resource/IResource.h"
 
-namespace wkr::graphics::rsc {
+namespace wkr::graphics {
 
 struct WALKER_API FTexture2DDesc {
   EHeapType heapType = EHeapType::kDefault;
@@ -19,6 +19,7 @@ struct WALKER_API FTexture2DDesc {
 class WALKER_API UTexture2D {
  public:
   UTexture2D(const FTexture2DDesc& texture2DDesc);
+  UTexture2D(rhi::IResourceHandle resource);
 
  public:
   FTexture2DDesc GetDesc() const;

@@ -12,30 +12,22 @@ struct WALKER_API FDescriptorHeapDesc {
   EDescriptorHeapF Flag = EDescriptorHeapF::kNone;
 };
 
-class WALKER_API IDescriptorHeap {
+class WALKER_API ADescriptorHeap {
  public:
-  virtual ~IDescriptorHeap() = default;
+  virtual ~ADescriptorHeap() = default;
 
  public:
   virtual FDescriptorHeapDesc GetDesc() = 0;
-
   virtual void Bind(const std::vector<IResourceHandle>& resources) = 0;
+  virtual NativeObject GetNativeObject() = 0;
 
   // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
   //     uint32_t offset, uint32_t size);
 
-  template <typename T>
-  [[nodiscard]] wkr::mem::TRef<T> Get(std::size_t index) {
-    return m_resourceViews[index];
-  }
-
- public:
-  virtual NativeObject GetNativeObject() = 0;
-
  protected:
-  std::vector<IResourceViewHandle> m_resourceViews;
+  std::vector<IResourceViewHandle> m_ResourceViews;
 };
 
-using IDescriptorHeapHandle = wkr::mem::TRef<IDescriptorHeap>;
+using IDescriptorHeapHandle = wkr::mem::TRef<ADescriptorHeap>;
 
 }  // namespace wkr::graphics::rhi

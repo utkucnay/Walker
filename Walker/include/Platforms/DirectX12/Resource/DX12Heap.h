@@ -1,26 +1,20 @@
 #pragma once
 
-#include "Graphics/Resource/IHeap.h"
+#include "Graphics/RHI/Memory/IHeap.h"
 
-namespace wkr::render::dx12
-{
-  class UHeap : public IHeap
-  {
-  public:
-    UHeap(FHeapDesc& desc);
-    ~UHeap() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override { return m_heap; };
+class UHeap : public IHeap {
+ public:
+  UHeap(FHeapDesc& desc);
+  ~UHeap() override;
 
-    u64 GetSize() override;
-    u64 GetAlignment() override;
-    EHeapType GetType() override;
-    EHeapF GetFlag() override;
-    EMemoryPool GetMemoryPool() override;
-    ECPUPageProperty GetCPUPageProperty() override;
+ public:
+  NativeObject GetNativeObject() override final { return m_heap; };
+  FHeapDesc GetDesc() override final;
 
-  private:
-    ID3D12Heap* m_heap;
-  };
-}
+ private:
+  ID3D12Heap* m_heap;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

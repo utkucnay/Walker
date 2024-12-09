@@ -5,19 +5,26 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FFenceDesc {
-  u8 m_frameCount = 0;
-  EFenceF m_flag = EFenceF::kNone;
+  u8 FrameCount = 0;
+  EFenceF Flag = EFenceF::kNone;
 };
 
-class WALKER_API IFence {
+class WALKER_API AFence {
  public:
-  virtual ~IFence() = default;
+  virtual ~AFence() = default;
 
  public:
   virtual void FenceEvent(int frameIndex) = 0;
   virtual NativeObject GetNativeObject(int frameIndex) = 0;
+
+  void IncreaseFenceValue(int frameIndex) { m_FenceValue[frameIndex]++; }
+
+  u64 GetFenceValue(int frameIndex) { return m_FenceValue[frameIndex]; }
+
+ protected:
+  std::vector<u64> m_FenceValue;
 };
 
-using IFenceHandle = mem::TRef<IFence>;
+using AFenceHandle = mem::TRef<AFence>;
 
 }  // namespace wkr::graphics::rhi

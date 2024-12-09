@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/ResourceBarrier/IResourceBarrier.h"
 
 namespace wkr::graphics::rhi {
 
@@ -10,11 +10,12 @@ struct FAliasingBarrierDesc {
   IResourceHandle resourceAfter;
 };
 
-class IAliasingBarrier : IResourceBarrier {
+class UAliasingBarrier {
  public:
-  virtual ~IAliasingBarrier() override = default;
-};
+  UAliasingBarrier(FAliasingBarrierDesc& desc);
 
-using IAliasingBarrierHandle = mem::TRef<IAliasingBarrier>;
+ private:
+  rhi::IResourceBarrierHandle m_ResourceView;
+};
 
 }  // namespace wkr::graphics::rhi

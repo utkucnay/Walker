@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OS/IOSAbstractFactory.h"
+#include "OS/Factory/IOSAbstractFactory.h"
 #include "Platforms/Windows/WindowsPageAllocator.h"
 #include "Platforms/Windows/WindowsWindow.h"
 

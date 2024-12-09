@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Memory/Allocator/PageAllocator.h"
-
-using namespace wkr::mem;
+#include "OS/Memory/IPageAllocator.h"
 
 namespace wkr::os::windows {
 
@@ -20,8 +18,8 @@ class UPageAllocator : public IPageAllocator {
  private:
   EPageSize m_pageSize;
   std::unordered_map<EPageSize, DWORD> m_pageSizeMap = {
-      {EPageSize::Default, 0},
-      {EPageSize::LargePage, MEM_LARGE_PAGES}};
+      {EPageSize::kDefault, 0},
+      {EPageSize::kLargePage, MEM_LARGE_PAGES}};
 };
 
 }  // namespace wkr::os::windows

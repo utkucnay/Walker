@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Factory.h"
-#include "Graphics/RHI/RHI.h"
+#include "Graphics/Graphics.h"
 
 namespace wkr::graphics::rhi {
 
@@ -20,14 +20,12 @@ SUBS_FACTORY(ICommandList, FCommandListDesc&)
 SUBS_FACTORY(ICommandAllocator, FCommandAllocatorDesc&)
 
 //Descriptor
-SUBS_FACTORY(ADescriptorHeap, FDescriptorHeapDesc&)
+SUBS_FACTORY(IDescriptorHeap, FDescriptorHeapDesc&)
 
 //Resource
 SUBS_FACTORY(IHeap, FHeapDesc&)
 SUBS_FACTORY(IResource, FResourceDesc&)
 SUBS_FACTORY(IShader, FShaderDesc&)
-
-//Barriers
 SUBS_FACTORY(IResourceBarrier, FResourceBarrierDesc&)
 
 END_FACTORY()
