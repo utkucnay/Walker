@@ -1,7 +1,6 @@
 #include "Platforms/DirectX12/Command/DX12CommandQueue.h"
 #include "Graphics/Core/UGraphics.h"
 #include "Graphics/RHI/Command/ICommandQueue.h"
-#include "Platforms/DirectX12/Core/DX12Fence.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
 namespace wkr::graphics::rhi::dx12 {
@@ -28,7 +27,7 @@ UCommandQueue::~UCommandQueue() {
 }
 
 void UCommandQueue::ExecuteCommandList(
-    const std::vector<ICommandListHandle>& commandLists) {
+    const std::vector<ICommandList*>& commandLists) {
   std::vector<ID3D12CommandList*> nCommandLists;
   std::transform(commandLists.begin(), commandLists.end(),
                  std::back_inserter(nCommandLists), [](auto commandList) {

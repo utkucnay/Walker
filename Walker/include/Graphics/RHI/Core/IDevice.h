@@ -15,6 +15,7 @@ class WALKER_API IDevice {
  public:
   virtual FDeviceDesc GetDesc() = 0;
   virtual NativeObject GetNativeObject() = 0;
+  virtual void CheckDevice() = 0;
 };
 
 using IDeviceHandle = mem::TRef<IDevice>;

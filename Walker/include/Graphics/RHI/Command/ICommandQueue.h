@@ -18,7 +18,7 @@ class WALKER_API ICommandQueue {
 
  public:
   virtual void ExecuteCommandList(
-      const std::vector<ICommandListHandle>& commandLists) = 0;
+      const std::vector<ICommandList*>& commandLists) = 0;
   virtual void Signal(AFence& fence, i32 frameIndex) = 0;
   virtual FCommandQueueDesc GetDesc() = 0;
   virtual NativeObject GetNativeObject() = 0;

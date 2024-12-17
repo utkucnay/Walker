@@ -43,8 +43,6 @@ FFenceDesc UFence::GetDesc() {
 }
 
 void UFence::FenceEvent(int frameIndex) {
-  WKR_CORE_LOG(<< std::to_string(m_Fence[frameIndex]->GetCompletedValue())
-               << " " << std::to_string(m_FenceValue[frameIndex]))
   if (m_Fence[frameIndex]->GetCompletedValue() >= m_FenceValue[frameIndex]) {
     return;
   }

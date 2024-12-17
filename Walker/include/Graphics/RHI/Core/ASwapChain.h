@@ -16,8 +16,8 @@ struct WALKER_API FSwapChainDesc {
   ESwapChainEffect SwapEffect = ESwapChainEffect::kDiscard;
   os::AWindowHandle Window = {};
   FModeDesc BufferDesc = {};
-  EResourceUsageF m_bufferUsage = EResourceUsageF::kCPU_ACCESS_NONE;
-  ICommandQueueHandle m_commandQueue = nullptr;
+  EResourceUsageF BufferUsage = EResourceUsageF::kCPU_ACCESS_NONE;
+  ICommandQueueHandle CommandQueue = nullptr;
 };
 
 class WALKER_API ASwapChain {

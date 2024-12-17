@@ -1,6 +1,6 @@
 #include "Platforms/DirectX12/Core/DX12SwapChain.h"
-#include "Core/Base.h"
 #include "Graphics/Core/GraphicsType.h"
+#include "Graphics/Core/UGraphics.h"
 #include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/RHI/Core/ASwapChain.h"
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
@@ -46,7 +46,7 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
   };
 
   HRESULT hr = UDX12Factory::GetFactory()->CreateSwapChain(
-      desc.m_commandQueue->GetNativeObject(), &swapChainDesc, &swapChain);
+      desc.CommandQueue->GetNativeObject(), &swapChainDesc, &swapChain);
 
   WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 SwapChain")
   WKR_CORE_LOG("Created DX12 SwapChain")
@@ -129,7 +129,7 @@ FSwapChainDesc USwapChain::GetDesc() {
               .Format =
                   dx12towkr::ConvertEResourceFormat(nDesc.BufferDesc.Format),
           },
-      .m_bufferUsage = dx12towkr::ConvertEResourceUsage(nDesc.BufferUsage),
+      .BufferUsage = dx12towkr::ConvertEResourceUsage(nDesc.BufferUsage),
   };
 
   return desc;

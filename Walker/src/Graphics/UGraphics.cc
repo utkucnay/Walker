@@ -40,8 +40,8 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
               .RefreshRate = {.Numerator = 0, .Denominator = 1},
               .Format = EResourceFormat::kR8G8B8A8_UNORM,
           },
-      .m_bufferUsage = EResourceUsageF::kRENDER_TARGET_OUTPUT,
-      .m_commandQueue = m_DirectCommand.CommandQueue,
+      .BufferUsage = EResourceUsageF::kRENDER_TARGET_OUTPUT,
+      .CommandQueue = m_DirectCommand.CommandQueue,
   };
 
   m_SwapChain = renderFactory.GetASwapChain()->Create(swapChainDesc);
@@ -68,6 +68,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
   };
 
   m_FenceHandle = renderFactory.GetAFence()->Create(fenceDesc);
+
 }
 
 void UGraphics::CreateResource() {
@@ -109,24 +110,24 @@ void UGraphics::Render() {
   m_DirectCommand.CommandList->Reset(
       m_DirectCommand.CommandAllocator[frameIndex].Get(), nullptr);
 
-  FTransitionBarrierDesc transitionBarrierDesc = {
-      .Resource = renderTarget.GetTexture2D().GetResource(),
-      .BeforeState = EResourceStateF::kRenderTarget,
-      .AfterState = EResourceStateF::kPresent,
-  };
-
-  UTransitionBarrier rtvTransitionBarrier(transitionBarrierDesc);
-
-  m_DirectCommand.CommandList->ResourceBarriers(
-      {rtvTransitionBarrier.GetResourceBarrier()});
-
-  m_DirectCommand.CommandList->OMSetRenderTargets({renderTarget});
-
-  m_DirectCommand.CommandList->ClearRenderTargetView(renderTarget,
-                                                     FColor32(0, 255, 0, 255));
-
-  m_DirectCommand.CommandList->ResourceBarriers(
-      {rtvTransitionBarrier.Reverse().GetResourceBarrier()});
+//  FTransitionBarrierDesc transitionBarrierDesc = {
+//      .Resource = renderTarget.GetTexture2D().GetResource(),
+//      .BeforeState = EResourceStateF::kRenderTarget,
+//      .AfterState = EResourceStateF::kPresent,
+//  };
+//
+//  UTransitionBarrier rtvTransitionBarrier(transitionBarrierDesc);
+//
+//  m_DirectCommand.CommandList->ResourceBarriers(
+//      {rtvTransitionBarrier.GetResourceBarrier()});
+//
+//  m_DirectCommand.CommandList->OMSetRenderTargets({renderTarget});
+//
+//  m_DirectCommand.CommandList->ClearRenderTargetView(renderTarget,
+//                                                     FColor32(0, 255, 0, 255));
+//
+//  m_DirectCommand.CommandList->ResourceBarriers(
+//      {rtvTransitionBarrier.Reverse().GetResourceBarrier()});
 
   m_DirectCommand.CommandList->Close();
 

@@ -11,7 +11,7 @@ class UCommandQueue : public ICommandQueue {
 
  public:
   void ExecuteCommandList(
-      const std::vector<ICommandListHandle>& commandLists) override final;
+      const std::vector<ICommandList*>& commandLists) override final;
   NativeObject GetNativeObject() override final { return m_commandQueue; }
   FCommandQueueDesc GetDesc() override final;
   void Signal(AFence& fence, i32 frameIndex) override final;

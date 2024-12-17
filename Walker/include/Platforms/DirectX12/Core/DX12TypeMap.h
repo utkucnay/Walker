@@ -2,7 +2,6 @@
 
 #include "Graphics/Core/GraphicsType.h"
 #include "Graphics/RHI/Command/CommandType.h"
-#include "Graphics/RHI/Memory/IHeap.h"
 #include "Graphics/RHI/Resource/Barrier/ResourceBarrierType.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
