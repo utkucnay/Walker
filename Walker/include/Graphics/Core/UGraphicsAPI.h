@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Graphics/Core/GraphicsAbstractFactory.h"
+#include "Graphics/RHI/Factory/IRHIAbstractFactory.h"
 
-namespace wkr::render {
+namespace wkr::graphics {
 
 class UGraphicsAPI {
  public:
@@ -13,10 +13,12 @@ class UGraphicsAPI {
 
  public:
   static void Init(EType apiType);
+
   static inline EType GetAPIType() { return s_Api; }
+
   static inline void Destroy() { s_abstractFactory.Release(); }
 
-  static IGraphicsAbstractFactory& GetAbstractFactory() {
+  static rhi::IRHIAbstractFactory& GetAbstractFactory() {
     return s_abstractFactory.Get();
   }
 
@@ -24,7 +26,7 @@ class UGraphicsAPI {
 
  private:
   static inline EType s_Api;
-  static inline mem::TScope<IGraphicsAbstractFactory> s_abstractFactory;
+  static inline mem::TScope<rhi::IRHIAbstractFactory> s_abstractFactory;
 };
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics

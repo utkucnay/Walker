@@ -1,22 +1,24 @@
-#include "Walker.inc"
+#include "Walker.h"
+
+// clang-format off
 #include "Core/EntryPoint.h"
+// clang-format on
 
-namespace wkr
-{
-  class USandboxApp : public UApplication
-  {
-  public:
-    USandboxApp(const FApplicationSpecs& specs) : UApplication(specs) {}
-    ~USandboxApp() override { }
-  };
+namespace sandbox {
 
-  mem::TScope<UApplication> CreateApplication(const FApplicationCommandLineArgs& args)
-  {
-    FApplicationSpecs specs;
-    specs.name = "Sandbox";
-    specs.showCLI = true;
-    specs.ApplicationCommandLineArgs = args;
+class USandboxApp : public wkr::UApplication {
+ public:
+  USandboxApp(const wkr::FApplicationSpecs& specs) : UApplication(specs) {}
 
-    return mem::TScope<USandboxApp>::Create(specs);
-  }
+  ~USandboxApp() override {}
+};
+
+}  // namespace sandbox
+
+wkr::mem::TScope<wkr::UApplication> CreateApplication(
+    const wkr::FApplicationCommandLineArgs& args) {
+  wkr::FApplicationSpecs specs = {
+      .name = "Sandbox", .showCLI = false, .ApplicationCommandLineArgs = args};
+
+  return wkr::mem::TScope<sandbox::USandboxApp>::Create(specs);
 }

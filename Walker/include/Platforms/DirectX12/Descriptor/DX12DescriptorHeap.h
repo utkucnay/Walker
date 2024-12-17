@@ -1,28 +1,25 @@
 #pragma once
 
-#include "Graphics/Resource/IResource.h"
-#include "Graphics/Descriptor/ADescriptorHeap.h"
+#include "Graphics/RHI/Descriptor/ADescriptorHeap.h"
+#include "Graphics/RHI/Resource/IResource.h"
 
-namespace wkr::render::dx12
-{
-  class UDescriptorHeap : public IDescriptorHeap
-  {
-  public:
-    UDescriptorHeap(FDescriptorHeapDesc& desc);
-    ~UDescriptorHeap() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    u32 GetCount() override final;
+class UDescriptorHeap : public ADescriptorHeap {
+ public:
+  UDescriptorHeap(FDescriptorHeapDesc& desc);
+  ~UDescriptorHeap() override;
 
-    EDescriptorHeapType  GetType()  override final;
-    EDescriptorHeapFlags GetFlags() override final;
-    void Bind(
-        const std::vector<IResourceHandle>& resources) override final;
+ public:
+  FDescriptorHeapDesc GetDesc() override final;
+  void Bind(const std::vector<IResourceHandle>& resources) override final;
+  NativeObject GetNativeObject() override { return m_descriptorHeap; }
 
-  public:
-    NativeObject GetNativeObject() override { return m_descriptorHeap; }
+ private:
+  void BindRTV(const std::vector<IResourceHandle>& resources);
 
-  private:
-    ID3D12DescriptorHeap* m_descriptorHeap;
-  };
-}
+ private:
+  ID3D12DescriptorHeap* m_descriptorHeap;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

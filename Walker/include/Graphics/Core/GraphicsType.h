@@ -1,114 +1,115 @@
 #pragma once
 
-namespace wkr::render {
+namespace wkr::graphics {
 
 enum class EScanlineOrder {
-  Unspecified = 0,
-  Progressive = 1,
-  UpperFieldFirst = 2,
-  LowerFieldFirst = 3,
+  kUnspecified = 0,
+  kProgressive = 1,
+  kUpperFieldFirst = 2,
+  kLowerFieldFirst = 3,
 };
 
 enum class EScaling {
-  Unspecified = 0,
-  Centered = 1,
-  Stretched = 2,
+  kUnspecified = 0,
+  kCentered = 1,
+  kStretched = 2,
 };
 
 struct FRational {
-  u32 m_numerator;
-  u32 m_denominator;
+  u32 Numerator = 1;
+  u32 Denominator = 0;
 };
 
-enum class EFenceFlag {
-  None = 0,
-  Shared = 0x1,
-  SharedCrossAdapter = 0x2,
-  NonMonitored = 0x4
+enum class EFenceF {
+  kNone = 0,
+  kShared = 0x1,
+  kSharedCrossAdapter = 0x2,
+  kNonMonitored = 0x4
 };
 
-enum class ERootSignatureType { DescriptorTable = 0, Constants, CBV, SRV, UAV };
+WALKER_ENUM_CLASS_BITWISE_DECLARATION(EFenceF)
+
+enum class ERootSignatureType {
+  kDescriptorTable = 0,
+  kConstants,
+  kCBV,
+  kSRV,
+  kUAV
+};
 
 enum class ERootSignatureVisibilty {
-  All = 0,
-  Vertex = 1,
-  Hull = 2,
-  Domain = 3,
-  Geometry = 4,
-  Pixel = 5,
-  Amplification = 6,
-  Mesh = 7,
+  kAll = 0,
+  kVertex = 1,
+  kHull = 2,
+  kDomain = 3,
+  kGeometry = 4,
+  kPixel = 5,
+  kAmplification = 6,
+  kMesh = 7,
 };
 
-enum class ERootSignatureFlag {
-  None = 0,
-  AllowInputAssemblerInputLayout = 0x1,
-  DenyVertexShaderRootAccess = 0x2,
-  DenyHullShaderRootAccess = 0x4,
-  DenyDomainShaderRootAccess = 0x8,
-  DenyGeometryShaderRootAccess = 0x10,
-  DenyPixelShaderRootAccess = 0x20,
-  AllowStreamOutput = 0x40,
+enum class ERootSignatureF {
+  kNone = 0,
+  kAllowInputAssemblerInputLayout = 0x1,
+  kDenyVertexShaderRootAccess = 0x2,
+  kDenyHullShaderRootAccess = 0x4,
+  kDenyDomainShaderRootAccess = 0x8,
+  kDenyGeometryShaderRootAccess = 0x10,
+  kDenyPixelShaderRootAccess = 0x20,
+  kAllowStreamOutput = 0x40,
 };
+
+WALKER_ENUM_CLASS_BITWISE_DECLARATION(ERootSignatureF)
 
 enum class ESwapChainEffect {
-  Discard = 0,
-  Sequential = 1,
-  FlipSequential = 3,
-  FlipDiscard = 4,
+  kDiscard = 0,
+  kSequential = 1,
+  kFlipSequential = 3,
+  kFlipDiscard = 4,
 };
 
-enum class ESwapChainFlag : u32 {
-  Nonprerotated = 1,
-  AllowModeSwitch = 2,
-  GDICompatible = 4,
-  RestrictedContent = 8,
-  RestrictSharedResourceDriver = 16,
-  DisplayOnly = 32,
-  FrameLatencyWaitableObject = 64,
-  ForegroundLayer = 128,
-  FullscreenVideo = 256,
-  YuvVideo = 512,
-  HWProtected = 1024,
-  AllowTearing = 2048,
-  RestrictedToAllHolographicDisplays = 4096,
+enum class ESwapChainF : u32 {
+  kNone = 0,
+  kNonprerotated = 1,
+  kAllowModeSwitch = 2,
+  kGDICompatible = 4,
+  kRestrictedContent = 8,
+  kRestrictSharedResourceDriver = 16,
+  kDisplayOnly = 32,
+  kFrameLatencyWaitableObject = 64,
+  kForegroundLayer = 128,
+  kFullscreenVideo = 256,
+  kYuvVideo = 512,
+  kHWProtected = 1024,
+  kAllowTearing = 2048,
+  kRestrictedToAllHolographicDisplays = 4096,
 };
+
+WALKER_ENUM_CLASS_BITWISE_DECLARATION(ESwapChainF)
 
 enum class EVsyncDesc : u8 {
-  None = 0,
-  DoubleBuffering = 1,
-  TripleBuffering = 2,
+  kNone = 0,
+  kDoubleBuffering = 1,
+  kTripleBuffering = 2,
 };
 
 struct FColor32 {
-  FColor32() : m_r(0), m_g(0), m_b(0), m_a(0) {}
+  u8 R = 0;
+  u8 G = 0;
+  u8 B = 0;
+  u8 A = 1;
 
-  FColor32(u8 r, u8 g, u8 b, u8 a) : m_r(r), m_g(g), m_b(b), m_a(a) {}
-
-  u8 m_r;
-  u8 m_g;
-  u8 m_b;
-  u8 m_a;
+  FColor32(u8 r, u8 g, u8 b, u8 a) : R(r), G(g), B(b), A(a) {}
 };
 
 struct FSample {
-  u32 count;
-  u32 quality;
-
-  FSample() {
-    count = 1;
-    quality = 0;
-  }
-
-  FSample(u32 count, u32 quality) {
-    this->count = count;
-    this->quality = quality;
-  }
+  u32 Count = 1;
+  u32 Quality = 0;
 };
 
 struct FLuid {
-  u64 lowPart;
-  i64 highPart;
+  u64 LowPart = 0;
+  i64 HighPart = 0;
 };
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics

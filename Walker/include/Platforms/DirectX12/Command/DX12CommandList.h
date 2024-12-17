@@ -1,41 +1,38 @@
 #pragma once
 
-#include "Graphics/Command/ICommandList.h"
+#include "Graphics/RHI/Command/ICommandList.h"
 
-namespace wkr::render::dx12
-{
-  class UCommandList : public ICommandList
-  {
-  public:
-    UCommandList(FCommandListDesc& desc);
-    ~UCommandList() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    void Reset(
-        ICommandAllocator& commandAllocator,
-        IPipelineState* pipelineState) override final;
+class UCommandList : public ICommandList {
+ public:
+  UCommandList(FCommandListDesc& desc);
+  ~UCommandList() override;
 
-    NativeObject GetNativeObject() override final { return m_commandList; }
+ public:
+  void Reset(ICommandAllocator& commandAllocator,
+             IPipelineState* pipelineState) override final;
 
-    ECommandType GetType() override final;
+  NativeObject GetNativeObject() override final { return m_commandList; }
 
-    void ResourceBarriers(
-        const std::vector<IResourceBarrier*>& barriers) override final;
+  ECommandType GetType() override final;
 
-    void OMSetRenderTargets(
-        const std::vector<wkr::render::ARenderTargetView*>& rtvs) override final;
+  void ResourceBarriers(
+      const std::vector<IResourceBarrier*>& barriers) override final;
 
-    void ClearRenderTargetView(
-        wkr::render::ARenderTargetView& rtv,
-        FColor32 color) override final;
+  void OMSetRenderTargets(
+      const std::vector<URenderTargetView>& rtvs) override final;
 
-    void CopyResource(
-        IResource& dstResource,
-        IResource& srcResource) override final;
+  void ClearRenderTargetView(URenderTargetView& rtv,
+                             FColor32 color) override final;
 
-    void Close() override final;
+  void CopyResource(IResource& dstResource,
+                    IResource& srcResource) override final;
 
-  private:
-    ID3D12GraphicsCommandList* m_commandList;
-  };
-}
+  void Close() override final;
+
+ private:
+  ID3D12GraphicsCommandList* m_commandList;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

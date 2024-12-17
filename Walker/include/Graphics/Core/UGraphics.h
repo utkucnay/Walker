@@ -1,17 +1,27 @@
 #pragma once
 
-#include "Core/AWindow.h"
-#include "Graphics/Core/IDevice.h"
+#include "Graphics/RHI/Command/ICommandAllocator.h"
+#include "Graphics/RHI/Command/ICommandList.h"
+#include "Graphics/RHI/Core/ASwapChain.h"
+#include "Graphics/RHI/Core/IDevice.h"
+#include "Graphics/RHI/Core/IFence.h"
 #include "Graphics/Resource/UBuffer.h"
-#include "Graphics/Shader/IShader.h"
+#include "Graphics/Shader/UVertexShader.h"
+#include "OS/Window/AWindow.h"
 
-namespace wkr::render {
+namespace wkr::graphics {
 
-struct FGraphicsDesc {
-  AWindowHandle window;
+struct FCommand {
+  std::vector<rhi::ICommandAllocatorHandle> CommandAllocator;
+  rhi::ICommandListHandle CommandList;
+  rhi::ICommandQueueHandle CommandQueue;
 };
 
-class UGraphics {
+struct WALKER_API FGraphicsDesc {
+  os::AWindowHandle Window = {};
+};
+
+class WALKER_API UGraphics {
  public:
   UGraphics(FGraphicsDesc& rendererDesc);
   ~UGraphics();
@@ -20,26 +30,25 @@ class UGraphics {
   void Render();
   void CreateResource();
   void LoadResources();
+  void SwapBuffers();
+  void Fence();
 
  private:
-  IDeviceHandle m_device;
+  rhi::IDeviceHandle m_Device;
+  rhi::ASwapChainHandle m_SwapChain;
+  rhi::AFenceHandle m_FenceHandle;
+  FCommand m_DirectCommand;
 
-  std::vector<ICommandAllocatorHandle> m_commandDirectAllocator;
-  ICommandListHandle m_commandDirectList;
-  ICommandQueueHandle m_commandDirectQueue;
-
-  ASwapChainHandle m_swapChain;
-
-  mem::TScope<UBuffer> vertexBuffer;
-  mem::TScope<IShader> vertexShader;
+  UBuffer m_VertexBuffer;
+  UVertexShader m_VertexShader;
 
  public:
-  [[nodiscard]] static IDevice& GetDefaultDevice() {
+  [[nodiscard]] static rhi::IDevice& GetDefaultDevice() {
     return s_defaultDevice.Get();
   }
 
  private:
-  static inline IDeviceHandle s_defaultDevice;
+  static inline rhi::IDeviceHandle s_defaultDevice;
 };
 
-}  // namespace wkr::render
+}  // namespace wkr::graphics

@@ -2,15 +2,13 @@
 
 #include "Core/UApplication.h"
 
-extern wkr::mem::TScope<wkr::UApplication> wkr::CreateApplication(
-    const FApplicationCommandLineArgs& args);
+extern wkr::mem::TScope<wkr::UApplication> CreateApplication(
+    const wkr::FApplicationCommandLineArgs& args);
 
 int main(int argc, char** argv) {
-  auto app = wkr::CreateApplication({argv, argc});
+  wkr::mem::TScope<wkr::UApplication> app = CreateApplication({argv, argc});
 
   app->Run();
-
-  app.Release();
 
   return 0;
 };

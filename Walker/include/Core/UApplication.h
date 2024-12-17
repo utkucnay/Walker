@@ -1,24 +1,24 @@
 #pragma once
 
-#include "Core/AWindow.h"
+#include "OS/Window/AWindow.h"
 #include "Graphics/Core/UGraphics.h"
 
 int main(int argc, char** argv);
 
 namespace wkr {
 
-struct FApplicationCommandLineArgs {
-  char** argv;
-  int argc;
+struct WALKER_API FApplicationCommandLineArgs {
+  char** argv = nullptr;
+  i32 argc = 0;
 };
 
-struct FApplicationSpecs {
-  std::string name;
-  FApplicationCommandLineArgs ApplicationCommandLineArgs;
-  b32 showCLI;
+struct WALKER_API FApplicationSpecs {
+  std::string name = {};
+  b32 showCLI = false;
+  FApplicationCommandLineArgs ApplicationCommandLineArgs = {};
 };
 
-class UApplication {
+class WALKER_API UApplication {
  public:
   UApplication(const FApplicationSpecs& applicationSpecs);
   virtual ~UApplication();
@@ -27,9 +27,9 @@ class UApplication {
   void Run();
 
  private:
-  AWindowHandle m_mainWindow;
-  FApplicationSpecs appSpecs;
-  mem::TScope<render::UGraphics> m_renderer;
+  os::AWindowHandle m_MainWindow;
+  FApplicationSpecs m_AppSpecs;
+  mem::TScope<graphics::UGraphics> m_Graphics;
 
   friend int ::main(int argc, char** argv);
 };

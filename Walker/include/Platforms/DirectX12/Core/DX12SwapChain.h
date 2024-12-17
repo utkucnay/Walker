@@ -1,38 +1,30 @@
 #pragma once
 
-#include "Graphics/Core/ASwapChain.h"
+#include "Graphics/RHI/Core/ASwapChain.h"
 
-namespace wkr::render::dx12
-{
-  class USwapChain : public ASwapChain
-  {
-  public:
-    USwapChain(FSwapChainDesc& desc);
-    ~USwapChain() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    void WindowSizeEvent(u32 width, u32 height) override final;
-    void FullscreenEvent(b64 isTrue) override final;
+class USwapChain : public ASwapChain {
+ public:
+  USwapChain(FSwapChainDesc& desc);
+  ~USwapChain() override;
 
-    void SwapBuffers() override final;
+ public:
+  void SwapBuffers() override final;
+  NativeObject GetNativeObject() override final { return m_SwapChain; }
+  FSwapChainDesc GetDesc() override final;
+  void Present(u8 syncInterval, u8 flags) override final;
 
-    NativeObject GetNativeObject() override final { return m_swapChain; }
+ private:
+  IDXGISwapChain3* m_SwapChain;
+  os::AWindowHandle m_Window;
 
-    u32                   GetBufferCount()  override final;
-    FSample            GetSampleDesc()   override final;
-    ESwapChainFlag      GetFlag()         override final;
-    ESwapChainEffect    GetSwapEffect()   override final;
-    FModeDesc   GetBufferDesc()   override final;
-    EResourceUsageF GetBufferUsage()  override final;
+ private:
+  WindowResizeEvent::FEvent m_ResizeEvent;
+  void WindowSizeEvent(u32 width, u32 height);
 
-    void Present(u8 syncInterval, u8 flags) override final;
+  WindowSetFullscreenEvent::FEvent m_FullscreenEvent;
+  void FullscreenEvent(b64 isTrue);
+};
 
-    void SetupEvents(AWindowHandle window);
-    void DestroyEvents();
-
-  private:
-    IDXGISwapChain3*  m_swapChain;
-
-    std::vector<mem::TRef<UTexture2D>> m_textures;
-  };
-}
+}  // namespace wkr::graphics::rhi::dx12

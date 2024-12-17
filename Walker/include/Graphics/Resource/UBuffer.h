@@ -1,30 +1,31 @@
 #pragma once
 
-#include "Graphics/Resource/IResource.h"
-#include "Graphics/Resource/ResourceType.h"
+#include "Graphics/RHI/Resource/IResource.h"
+#include "Graphics/RHI/Resource/ResourceType.h"
 
-namespace wkr::render
-{
-  struct FBufferDesc
-  {
-    EHeapType heapType;
-    u64 bufferSize;
-    EResourceStateF initState;
-    FClearValue* clearValue;
-    EResourceF resourceFlag;
-  };
+namespace wkr::graphics {
 
-  class UBuffer
-  {
-  public:
-    UBuffer(FBufferDesc& buffersDesc);
-    UBuffer(IResourceHandle resource) : m_resource(resource) {};
-    ~UBuffer();
+struct WALKER_API FBufferDesc {
+  EHeapType HeapType = EHeapType::kDefault;
+  u64 BufferSize = 0;
+  EResourceStateF InitState = EResourceStateF::kCommon;
+  FClearValue* ClearValue = nullptr;
+  EResourceF ResourceFlag = EResourceF::kNone;
+};
 
-  public:
-    FBufferDesc GetDesc() const;
+class WALKER_API UBuffer {
+ public:
+  UBuffer() : m_Resource(nullptr) {}
+  UBuffer(const FBufferDesc& buffersDesc);
+  UBuffer(rhi::IResourceHandle resource);
+  ~UBuffer();
 
-  private:
-    IResourceHandle m_resource;
-  };
-}
+ public:
+  FBufferDesc GetDesc() const;
+  rhi::IResourceHandle GetResource() { return m_Resource; }
+
+ private:
+  rhi::IResourceHandle m_Resource = {};
+};
+
+}  // namespace wkr::graphics
