@@ -20,9 +20,9 @@
 
   #include "Platforms/DirectX12/Shader/DX12Shader.h"
 
-  #include "Platforms/DirectX12/ResourceView/DX12RenderTargetView.h"
+  #include "Platforms/DirectX12/ResourceView/DX12ResourceView.h"
 
   #include "Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h"
 
-  #include "Platforms/DirectX12/ResourceBarrier/DX12TransitionBarrier.h"
+  #include "Platforms/DirectX12/ResourceBarrier/DX12ResourceBarrier.h"
 #endif

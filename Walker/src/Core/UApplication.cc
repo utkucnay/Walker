@@ -35,8 +35,11 @@ void UApplication::Run() {
   while (m_MainWindow->IsShouldClose()) {
     m_MainWindow->PoolEvents();
 
+    //TODO(utku): Game Logic
+
+    m_Graphics->SwapBuffers();
+    m_Graphics->Fence();
     m_Graphics->Render();
-    //m_MainWindow->SwapBuffers();
   }
 }
 

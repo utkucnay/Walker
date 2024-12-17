@@ -16,6 +16,9 @@ class UDescriptorHeap : public ADescriptorHeap {
   NativeObject GetNativeObject() override { return m_descriptorHeap; }
 
  private:
+  void BindRTV(const std::vector<IResourceHandle>& resources);
+
+ private:
   ID3D12DescriptorHeap* m_descriptorHeap;
 };
 

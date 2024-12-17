@@ -2,7 +2,7 @@
 
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/RHI/Resource/View/IResourceView.h"
+#include "Graphics/RHI/Resource/View/AResourceView.h"
 
 namespace wkr::graphics::rhi {
 
@@ -24,10 +24,13 @@ class WALKER_API ADescriptorHeap {
   // virtual mem::Scope<DescriptorTable> CreateDescriptorTable(
   //     uint32_t offset, uint32_t size);
 
+public:
+  AResourceViewHandle GetResourceView(int index) { return m_ResourceViews[index]; }
+
  protected:
-  std::vector<IResourceViewHandle> m_ResourceViews;
+  std::vector<AResourceViewHandle> m_ResourceViews;
 };
 
-using IDescriptorHeapHandle = wkr::mem::TRef<ADescriptorHeap>;
+using ADescriptorHeapHandle = wkr::mem::TRef<ADescriptorHeap>;
 
 }  // namespace wkr::graphics::rhi

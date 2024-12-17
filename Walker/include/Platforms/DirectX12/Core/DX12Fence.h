@@ -16,9 +16,12 @@ class UFence : public AFence {
     return m_Fence[frameIndex];
   }
 
+  FFenceDesc GetDesc() override final;
+
  private:
   HANDLE m_FenceEvent;
   std::vector<ID3D12Fence*> m_Fence;
+  FFenceDesc m_Desc;
 };
 
 }  // namespace wkr::graphics::rhi::dx12

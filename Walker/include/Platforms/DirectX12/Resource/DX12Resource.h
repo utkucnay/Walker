@@ -1,20 +1,21 @@
 #pragma once
 
-#include "Graphics/Resource/IResource.h"
+#include "Graphics/RHI/Resource/IResource.h"
 
-namespace wkr::render::dx12
-{
-  class UResource : public IResource
-  {
-    public:
-      UResource(FResourceDesc& desc);
-      UResource(ID3D12Resource* resource) : m_resource(resource) {};
-      ~UResource() override;
+namespace wkr::graphics::rhi::dx12 {
 
-    public:
-      NativeObject GetNativeObject() override final { return m_resource; }
+class UResource : public IResource {
+ public:
+  UResource(FResourceDesc& desc);
+  UResource(ID3D12Resource* resource) : m_Resource(resource) { m_Resource->AddRef(); };
+  ~UResource() override;
 
-    private:
-      ID3D12Resource* m_resource;
-  };
-}
+ public:
+  FResource GetDesc() override final;
+  NativeObject GetNativeObject() override final { return m_Resource; }
+
+ private:
+  ID3D12Resource* m_Resource;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

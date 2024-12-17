@@ -7,9 +7,7 @@ namespace wkr::graphics::rhi {
 struct WALKER_API FHeapDesc {
   u64 Size = 0;
   u64 Alignment = 0;
-  EHeapType Type = EHeapType::kDefault;
-  EMemoryPool MemoryPool = EMemoryPool::kUnknown;
-  ECPUPageProperty CpuPageProperty = ECPUPageProperty::kUnknown;
+  FHeapProperties HeapProperties = {};
   EHeapF Flag = EHeapF::kNone;
 };
 

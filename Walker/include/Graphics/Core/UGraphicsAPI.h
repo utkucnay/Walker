@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/RHI/Core/IRHIAbstractFactory.h"
+#include "Graphics/RHI/Factory/IRHIAbstractFactory.h"
 
 namespace wkr::graphics {
 

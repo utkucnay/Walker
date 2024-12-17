@@ -9,11 +9,14 @@ struct WALKER_API FResourceDesc {
   EResourceDescType DescType = EResourceDescType::kCommitted;
 
   union {
-    FHeapDesc HeapDesc;
+    struct {
+      FHeapProperties HeapProp;
+      EHeapF HeapFlag;
+    };
 
     struct {
-      IHeap* Heap = nullptr;
-      u64 HeapOffset = 0;
+      IHeap* Heap;
+      u64 HeapOffset;
     };
   };
 
@@ -27,7 +30,7 @@ class WALKER_API IResource {
   virtual ~IResource() = default;
 
  public:
-  virtual FResourceDesc GetDesc() = 0;
+  virtual FResource GetDesc() = 0;
   virtual NativeObject GetNativeObject() = 0;
 };
 

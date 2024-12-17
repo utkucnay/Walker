@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platforms/DirectX12/Core/DX12Fence.h"
+#include <string>
 #include "Graphics/Core/UGraphics.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
@@ -14,9 +15,9 @@ UFence::UFence(FFenceDesc& desc) {
     m_Fence.push_back(nullptr);
     m_FenceValue.push_back(initialFenceValue);
 
-    HRESULT hr =
-        nDevice->CreateFence(initialFenceValue, ConvertEFenceF(desc.Flag),
-                             IID_PPV_ARGS(&m_Fence[i]));
+    HRESULT hr = nDevice->CreateFence(initialFenceValue,
+                                      wkrtodx12::ConvertEFenceF(desc.Flag),
+                                      IID_PPV_ARGS(&m_Fence[i]));
 
     WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Fence");
     WKR_CORE_LOG("Created DX12 Fence");
@@ -24,6 +25,8 @@ UFence::UFence(FFenceDesc& desc) {
 
   m_FenceEvent = nullptr;
   m_FenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+  m_Desc = desc;
 
   WKR_CORE_ERROR_COND(m_FenceEvent == nullptr,
                       "Didn't Create DX12 Fence Event");
@@ -35,7 +38,13 @@ UFence::~UFence() {
     m_Fence[i]->Release();
 }
 
+FFenceDesc UFence::GetDesc() {
+  return m_Desc;
+}
+
 void UFence::FenceEvent(int frameIndex) {
+  WKR_CORE_LOG(<< std::to_string(m_Fence[frameIndex]->GetCompletedValue())
+               << " " << std::to_string(m_FenceValue[frameIndex]))
   if (m_Fence[frameIndex]->GetCompletedValue() >= m_FenceValue[frameIndex]) {
     return;
   }

@@ -17,7 +17,6 @@ class USwapChain : public ASwapChain {
 
  private:
   IDXGISwapChain3* m_SwapChain;
-  std::vector<URenderTargetView> m_Textures;
   os::AWindowHandle m_Window;
 
  private:

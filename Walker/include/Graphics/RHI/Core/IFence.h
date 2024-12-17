@@ -5,7 +5,7 @@
 namespace wkr::graphics::rhi {
 
 struct WALKER_API FFenceDesc {
-  u8 FrameCount = 0;
+  u32 FrameCount = 0;
   EFenceF Flag = EFenceF::kNone;
 };
 
@@ -16,7 +16,9 @@ class WALKER_API AFence {
  public:
   virtual void FenceEvent(int frameIndex) = 0;
   virtual NativeObject GetNativeObject(int frameIndex) = 0;
+  virtual FFenceDesc GetDesc() = 0;
 
+ public:
   void IncreaseFenceValue(int frameIndex) { m_FenceValue[frameIndex]++; }
 
   u64 GetFenceValue(int frameIndex) { return m_FenceValue[frameIndex]; }

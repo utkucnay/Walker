@@ -1,4 +1,4 @@
-#include "Walker.inc"
+#include "Walker.h"
 
 // clang-format off
 #include "Core/EntryPoint.h"
@@ -13,12 +13,12 @@ class USandboxApp : public wkr::UApplication {
   ~USandboxApp() override {}
 };
 
+}  // namespace sandbox
+
 wkr::mem::TScope<wkr::UApplication> CreateApplication(
     const wkr::FApplicationCommandLineArgs& args) {
   wkr::FApplicationSpecs specs = {
-      .name = "Sandbox", .showCLI = true, .ApplicationCommandLineArgs = args};
+      .name = "Sandbox", .showCLI = false, .ApplicationCommandLineArgs = args};
 
-  return wkr::mem::TScope<USandboxApp>::Create(specs);
+  return wkr::mem::TScope<sandbox::USandboxApp>::Create(specs);
 }
-
-}  // namespace sandbox

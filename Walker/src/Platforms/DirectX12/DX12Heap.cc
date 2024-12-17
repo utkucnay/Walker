@@ -1,44 +1,41 @@
 #include "Platforms/DirectX12/Resource/DX12Heap.h"
 #include "Graphics/Core/UGraphics.h"
+#include "Graphics/RHI/Memory/IHeap.h"
+#include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 UHeap::UHeap(FHeapDesc& desc) {
-  auto nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
+  ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
+
+  D3D12_HEAP_DESC nDesc = {
+      .SizeInBytes = desc.Size,
+      .Properties = wkrtodx12::ConvertFHeapProperty(desc.HeapProperties),
+      .Alignment = desc.Alignment,
+      .Flags = wkrtodx12::ConvertEHeapF(desc.Flag),
+  };
+
+  HRESULT hr = nDevice->CreateHeap(&nDesc, IID_PPV_ARGS(&m_heap));
+
+  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create Heap");
+  WKR_CORE_LOG("Created Heap");
 }
 
 UHeap::~UHeap() {
   m_heap->Release();
 }
 
-u64 UHeap::GetSize() {
-  auto desc = m_heap->GetDesc();
-  return desc.SizeInBytes;
+FHeapDesc UHeap::GetDesc() {
+  D3D12_HEAP_DESC desc = m_heap->GetDesc();
+
+  FHeapDesc retDesc = {
+    .Size = desc.SizeInBytes,
+    .Alignment = desc.Alignment,
+    .HeapProperties = dx12towkr::ConvertFHeapDesc(desc.Properties),
+    .Flag = dx12towkr::ConvertEHeapF(desc.Flags),
+  };
+
+  return retDesc;
 }
 
-EHeapType UHeap::GetType() {
-  auto desc = m_heap->GetDesc();
-  return static_cast<EHeapType>(desc.Properties.Type);
-}
-
-ECPUPageProperty UHeap::GetCPUPageProperty() {
-  auto desc = m_heap->GetDesc();
-  return static_cast<ECPUPageProperty>(desc.Properties.CPUPageProperty);
-}
-
-EMemoryPool UHeap::GetMemoryPool() {
-  auto desc = m_heap->GetDesc();
-  return static_cast<EMemoryPool>(desc.Properties.MemoryPoolPreference);
-}
-
-u64 UHeap::GetAlignment() {
-  auto desc = m_heap->GetDesc();
-  return desc.Alignment;
-}
-
-EHeapF UHeap::GetFlag() {
-  auto desc = m_heap->GetDesc();
-  return static_cast<EHeapF>(desc.Flags);
-}
-
-}  // namespace wkr::render::dx12
+}  // namespace wkr::graphics::rhi::dx12

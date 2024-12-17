@@ -2,6 +2,7 @@
 #include "Graphics/Core/GraphicsType.h"
 #include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/RHI/Command/CommandType.h"
+#include "Graphics/RHI/Core/IFence.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
 #include "Graphics/Resource/Barrier/UTransitionBarrier.h"
 #include "OS/Window/AWindow.h"
@@ -14,7 +15,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
 
   auto& renderFactory = UGraphicsAPI::GetAbstractFactory();
 
-  rhi::FDeviceDesc deviceDesc = {.Adapter = nullptr};
+  rhi::FDeviceDesc deviceDesc = {.Adapter = nullptr };
   m_Device = renderFactory.GetIDevice()->Create(deviceDesc);
   s_defaultDevice = m_Device;
 
@@ -60,16 +61,23 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
 
   m_DirectCommand.CommandList =
       renderFactory.GetICommandList()->Create(commandListDesc);
+
+  rhi::FFenceDesc fenceDesc = {
+      .FrameCount = m_SwapChain->GetBufferCount(),
+      .Flag = EFenceF::kNone,
+  };
+
+  m_FenceHandle = renderFactory.GetAFence()->Create(fenceDesc);
 }
 
 void UGraphics::CreateResource() {
 
-  FBufferDesc bufferDesc = {.HeapType = EHeapType::kDefault,
-                            .BufferSize = WKR_KB(20),
-                            .InitState = EResourceStateF::kCommon,
-                            .ResourceFlag = EResourceF::kNone};
-
-  m_VertexBuffer = std::move(UBuffer(bufferDesc));
+  //  FBufferDesc bufferDesc = {.HeapType = EHeapType::kDefault,
+  //                            .BufferSize = WKR_KB(20),
+  //                            .InitState = EResourceStateF::kCommon,
+  //                            .ResourceFlag = EResourceF::kNone};
+  //
+  //  m_VertexBuffer = std::move(UBuffer(bufferDesc));
 }
 
 void UGraphics::LoadResources() {}
@@ -128,6 +136,16 @@ void UGraphics::Render() {
   m_DirectCommand.CommandQueue->Signal(m_FenceHandle.Get(), frameIndex);
 
   m_SwapChain->Present(0, 0);
+}
+
+void UGraphics::SwapBuffers() {
+  m_SwapChain->SwapBuffers();
+}
+
+void UGraphics::Fence() {
+  u32 frameIndex = m_SwapChain->GetFrameIndex();
+  m_FenceHandle->FenceEvent(frameIndex);
+  m_FenceHandle->IncreaseFenceValue(frameIndex);
 }
 
 }  // namespace wkr::graphics

@@ -17,7 +17,7 @@
 #include "Graphics/RHI/Memory/IHeap.h"
 
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/RHI/Resource/View/IResourceView.h"
+#include "Graphics/RHI/Resource/View/AResourceView.h"
 #include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
 
 #include "Graphics/RHI/Shader/IShader.h"

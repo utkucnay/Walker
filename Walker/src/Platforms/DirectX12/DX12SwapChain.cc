@@ -1,9 +1,14 @@
 #include "Platforms/DirectX12/Core/DX12SwapChain.h"
+#include "Core/Base.h"
+#include "Graphics/Core/GraphicsType.h"
 #include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/RHI/Core/ASwapChain.h"
+#include "Graphics/RHI/Descriptor/DescriptorType.h"
+#include "Graphics/RHI/Resource/IResource.h"
 #include "OS/Window/AWindow.h"
 #include "Platforms/DirectX12/Core/DX12Factory.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
+#include "Platforms/DirectX12/Resource/DX12Resource.h"
 
 namespace wkr::graphics::rhi::dx12 {
 
@@ -11,6 +16,8 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
   m_Window = desc.Window;
   IDXGISwapChain* swapChain;
   os::FWindowDesc windowDesc = m_Window->GetDesc();
+
+  m_BufferCount = desc.BufferCount;
 
   DXGI_SWAP_CHAIN_DESC swapChainDesc = {
       .BufferDesc =
@@ -35,8 +42,7 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
       .OutputWindow = *(static_cast<HWND*>(desc.Window->GetNativeObject())),
       .Windowed = (int)windowDesc.Windowed,
       .SwapEffect = wkrtodx12::ConvertESwapChainEffect(desc.SwapEffect),
-      //TODO(utku): Change this
-      .Flags = (UINT)desc.Flag,
+      .Flags = wkrtodx12::ConvertESwapChainF(desc.Flag),
   };
 
   HRESULT hr = UDX12Factory::GetFactory()->CreateSwapChain(
@@ -48,29 +54,26 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
   m_SwapChain = static_cast<IDXGISwapChain3*>(swapChain);
   m_FrameIndex = m_SwapChain->GetCurrentBackBufferIndex();
 
+  std::vector<IResourceHandle> resources;
+
   for (u32 i = 0; i < GetBufferCount(); i++) {
     ID3D12Resource* res;
     m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&res));
-    //TODO(utku): Change This!
-    //m_Textures.push_back(mem::TRef<UTexture2D>::Create(new UResource(res)));
+    resources.push_back(new UResource(res));
     WKR_CORE_LOG("Binding Each Resource in Swap Chain");
   }
 
   auto& factory = UGraphicsAPI::GetAbstractFactory();
 
-  FDescriptorHeapDesc descriptorHeapDesc;
-  // descriptorHeapDesc.m_count = GetBufferCount();
-  // descriptorHeapDesc.m_type = EDescriptorHeapType::RTV;
-  // descriptorHeapDesc.m_flags = EDescriptorHeapFlags::None;
+  FDescriptorHeapDesc descriptorHeapDesc = {
+    .Count = GetBufferCount(),
+    .Type = EDescriptorHeapType::kRTV,
+    .Flag = EDescriptorHeapF::kNone,
+  };
 
-  // m_DescripHeap = factory.GetIDescriptorHeap()->Create(descriptorHeapDesc);
+  m_DescripHeap = factory.GetADescriptorHeap()->Create(descriptorHeapDesc);
 
-  // std::vector<IResourceHandle> m_resources;
-  // std::transform(
-  //     m_Textures.begin(), m_Textures.end(), std::back_inserter(m_resources),
-  //     [](mem::TRef<UTexture2D> texture) { return texture->GetResource(); });
-
-  // m_DescripHeap->Bind(m_resources);
+  m_DescripHeap->Bind(resources);
 
   m_ResizeEvent = BIND_EVENT_2(USwapChain::WindowSizeEvent);
   m_FullscreenEvent = BIND_EVENT_1(USwapChain::FullscreenEvent);
@@ -82,8 +85,8 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
 USwapChain::~USwapChain() {
   m_SwapChain->Release();
 
-  m_Window->ResizeEvent -= m_ResizeEvent;
-  m_Window->SetFullscreenEvent -= m_FullscreenEvent;
+  //m_Window->ResizeEvent -= m_ResizeEvent;
+  //m_Window->SetFullscreenEvent -= m_FullscreenEvent;
 }
 
 void USwapChain::WindowSizeEvent(u32 width, u32 height) {
@@ -109,7 +112,7 @@ FSwapChainDesc USwapChain::GetDesc() {
               .Count = nDesc.SampleDesc.Count,
               .Quality = nDesc.SampleDesc.Quality,
           },
-      .Flag = {},
+      .Flag = ESwapChainF::kNone, //dx12towkr::ConvertESwapChainF(nDesc.Flags),
       .SwapEffect = dx12towkr::ConvertESwapChainEffect(nDesc.SwapEffect),
       .Window = m_Window,
       .BufferDesc =
@@ -133,7 +136,9 @@ FSwapChainDesc USwapChain::GetDesc() {
 }
 
 void USwapChain::Present(u8 syncInterval, u8 flags) {
-  m_SwapChain->Present(syncInterval, flags);
+  HRESULT hr = m_SwapChain->Present(syncInterval, flags);
+
+  WKR_CORE_ERROR_COND(FAILED(hr), "Swapchain Present Not Work")
 }
 
 }  // namespace wkr::graphics::rhi::dx12

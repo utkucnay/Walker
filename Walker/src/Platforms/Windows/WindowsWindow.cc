@@ -1,5 +1,7 @@
-#include "Platforms/Windows/WindowProc.h"
-#include "Platforms/Windows/WindowsWindow.h"
+#include "Platforms/Windows/Window/WindowsWindow.h"
+// clang-format off
+#include "Platforms/Windows/Core/WindowsProc.h"
+// clang-format on
 
 namespace wkr::os::windows {
 
@@ -47,11 +49,13 @@ void UWindow::PoolEvents() {
 FWindowDesc UWindow::GetDesc() {
   RECT rect;
   if (!GetWindowRect(window, &rect)) {}
-  FWindowDesc desc = {.Name = "sa",
-                      .Width = (u32)(rect.right - rect.left),
-                      .Height = (u32)(rect.bottom - rect.top),
-                      .ShowCLI = false,
-                      .Windowed = (GetWindowLong(window, 0) & WS_POPUP) == 0};
+  FWindowDesc desc = {
+      .Width = (u32)(rect.right - rect.left),
+      .Height = (u32)(rect.bottom - rect.top),
+      .ShowCLI = false,
+      .Windowed = (GetWindowLong(window, 0) & WS_POPUP) == 0,
+      .Name = "sa",
+  };
 
   return desc;
 }

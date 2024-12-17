@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core/Factory.h"
-#include "Graphics/Graphics.h"
+#include "Graphics/RHI/RHI.h"
 
 namespace wkr::graphics::rhi {
 
@@ -20,7 +19,7 @@ SUBS_FACTORY(ICommandList, FCommandListDesc&)
 SUBS_FACTORY(ICommandAllocator, FCommandAllocatorDesc&)
 
 //Descriptor
-SUBS_FACTORY(IDescriptorHeap, FDescriptorHeapDesc&)
+SUBS_FACTORY(ADescriptorHeap, FDescriptorHeapDesc&)
 
 //Resource
 SUBS_FACTORY(IHeap, FHeapDesc&)
@@ -29,5 +28,7 @@ SUBS_FACTORY(IShader, FShaderDesc&)
 SUBS_FACTORY(IResourceBarrier, FResourceBarrierDesc&)
 
 END_FACTORY()
+
+using IRHIAbstractFactoryHandle = mem::TRef<IRHIAbstractFactory>;
 
 }  // namespace wkr::graphics::rhi

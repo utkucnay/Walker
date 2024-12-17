@@ -2,9 +2,9 @@
 
 #include "Graphics/Core/GraphicsType.h"
 #include "Graphics/RHI/Command/ICommandQueue.h"
-#include "Graphics/RHI/Core/IFence.h"
 #include "Graphics/RHI/Descriptor/ADescriptorHeap.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
+#include "Graphics/Resource/View/URenderTargetView.h"
 #include "OS/Window/AWindow.h"
 
 namespace wkr::graphics::rhi {
@@ -33,22 +33,17 @@ class WALKER_API ASwapChain {
   virtual void Present(u8 syncInterval, u8 flags) = 0;
 
  public:
-  u32 GetFrameIndex() const { return m_FrameIndex; }
-
+  u32 GetFrameIndex() { return m_FrameIndex; }
   u32 GetBufferCount() const { return m_BufferCount; }
 
   [[nodiscard]] URenderTargetView GetCurrentRenderTarget() {
-    return m_DescripHeap->Get<URenderTargetView>(m_FrameIndex);
+    return URenderTargetView(m_DescripHeap->GetResourceView(m_FrameIndex));
   }
 
  protected:
   u32 m_FrameIndex;
   u32 m_BufferCount;
-  IDescriptorHeapHandle m_DescripHeap;
-
- private:
-  WindowResizeEvent::FEvent m_ResizeEvent;
-  WindowSetFullscreenEvent::FEvent m_FullscreenEvent;
+  ADescriptorHeapHandle m_DescripHeap;
 };
 
 using ASwapChainHandle = wkr::mem::TRef<ASwapChain>;

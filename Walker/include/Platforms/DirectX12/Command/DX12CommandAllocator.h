@@ -2,21 +2,22 @@
 
 #include "Graphics/RHI/Command/ICommandAllocator.h"
 
-namespace wkr::graphics::rhi::dx12
-{
-  class UCommandAllocator : public ICommandAllocator
-  {
-  public:
-    UCommandAllocator(FCommandAllocatorDesc& desc);
-    ~UCommandAllocator() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override final { return m_commandAllocator; }
-    FCommandAllocatorDesc GetDesc() const override final;
-    void Reset() override final;
+class UCommandAllocator : public ICommandAllocator {
+ public:
+  UCommandAllocator(FCommandAllocatorDesc& desc);
+  ~UCommandAllocator() override;
 
-  private:
-    ID3D12CommandAllocator* m_commandAllocator;
-    ECommandType  m_CommandType;
-  };
-}
+ public:
+  NativeObject GetNativeObject() override final { return m_commandAllocator; }
+
+  FCommandAllocatorDesc GetDesc() const override final;
+  void Reset() override final;
+
+ private:
+  ID3D12CommandAllocator* m_commandAllocator;
+  ECommandType m_CommandType;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

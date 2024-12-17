@@ -1,5 +1,6 @@
 #include "Platforms/DirectX12/Command/DX12CommandQueue.h"
 #include "Graphics/Core/UGraphics.h"
+#include "Graphics/RHI/Command/ICommandQueue.h"
 #include "Platforms/DirectX12/Core/DX12Fence.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
@@ -10,7 +11,8 @@ UCommandQueue::UCommandQueue(FCommandQueueDesc& desc) {
 
   D3D12_COMMAND_QUEUE_DESC nDesc = {
       .Type = wkrtodx12::ConvertECommandType(desc.CommandType),
-      .Priority = static_cast<INT>(desc.CommandQueuePriority),
+      .Priority =
+          wkrtodx12::ConvertECommandQueuePriority(desc.CommandQueuePriority),
       .Flags = wkrtodx12::ConvertECommandQueueF(desc.CommandQueueFlag),
   };
 
@@ -26,7 +28,7 @@ UCommandQueue::~UCommandQueue() {
 }
 
 void UCommandQueue::ExecuteCommandList(
-    const std::vector<ICommandList*>& commandLists) {
+    const std::vector<ICommandListHandle>& commandLists) {
   std::vector<ID3D12CommandList*> nCommandLists;
   std::transform(commandLists.begin(), commandLists.end(),
                  std::back_inserter(nCommandLists), [](auto commandList) {
@@ -36,12 +38,22 @@ void UCommandQueue::ExecuteCommandList(
 }
 
 void UCommandQueue::Signal(AFence& fence, i32 frameIndex) {
-  auto dxFence = static_cast<UFence*>(&fence);
-
   HRESULT hr = m_commandQueue->Signal(fence.GetNativeObject(frameIndex),
-                                      dxFence->GetFenceValue(frameIndex));
+                                      fence.GetFenceValue(frameIndex));
 
   WKR_CORE_ERROR_COND(FAILED(hr), "Fence Signal Error in Command Queue");
+}
+
+FCommandQueueDesc UCommandQueue::GetDesc() {
+  D3D12_COMMAND_QUEUE_DESC commandQueueDesc = m_commandQueue->GetDesc();
+  FCommandQueueDesc retDesc = {
+      .CommandType = dx12towkr::ConvertECommandType(commandQueueDesc.Type),
+      .CommandQueuePriority =
+          dx12towkr::ConvertECommandQueuePriority(commandQueueDesc.Priority),
+      .CommandQueueFlag =
+          dx12towkr::ConvertECommandQueueF(commandQueueDesc.Flags),
+  };
+  return retDesc;
 }
 
 }  // namespace wkr::graphics::rhi::dx12

@@ -1,8 +1,8 @@
-#include "OS/UOSFactory.h"
+#include "OS/Core/UOSFactory.h"
 #include "Core/PlatformDetection.h"
 
 #if defined(WKR_PLATFORM_WINDOWS)
-#include "Platforms/Windows/OSWindowsAbstractFactory.h"
+#include "Platforms/Windows/Factory/OSWindowsAbstractFactory.h"
 #endif
 
 namespace wkr::os {

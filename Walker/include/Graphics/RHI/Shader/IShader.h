@@ -17,7 +17,7 @@ class IShader {
   virtual ~IShader() = default;
 
  public:
-  virtual const std::string& GetCompiledCode() const = 0;
+  virtual std::string_view GetCompiledCode() const = 0;
 };
 
 using IShaderHandle = mem::TRef<IShader>;

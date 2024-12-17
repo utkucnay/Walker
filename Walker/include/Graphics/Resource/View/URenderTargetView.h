@@ -1,19 +1,23 @@
 #pragma once
 
-#include "Graphics/RHI/Resource/View/IResourceView.h"
+#include "Graphics/RHI/Resource/View/AResourceView.h"
 #include "Graphics/Resource/UTexture2D.h"
 
 namespace wkr::graphics {
 
 class WALKER_API URenderTargetView {
  public:
+  URenderTargetView(rhi::AResourceViewHandle resourceHandle)
+      : m_ResourceView(std::move(resourceHandle)),
+        m_Texture2D(m_ResourceView->GetResource()) {}
+
  public:
-  rhi::IResourceViewHandle& GetResourceViewHandle() { return m_ResourceView; }
+  rhi::AResourceViewHandle& GetResourceViewHandle() { return m_ResourceView; }
 
   UTexture2D& GetTexture2D() { return m_Texture2D; }
 
  private:
-  rhi::IResourceViewHandle m_ResourceView;
+  rhi::AResourceViewHandle m_ResourceView;
   UTexture2D m_Texture2D;
 };
 

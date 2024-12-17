@@ -3,8 +3,10 @@
 #include "Graphics/Core/GraphicsType.h"
 #include "Graphics/RHI/Command/CommandType.h"
 #include "Graphics/RHI/Memory/IHeap.h"
+#include "Graphics/RHI/Resource/Barrier/ResourceBarrierType.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
+#include "d3d12.h"
 
 namespace wkr::graphics::rhi
 {
@@ -313,7 +315,7 @@ namespace wkrtodx12
   }
 
   static inline D3D12_RESOURCE_STATES
-  ConvertEResourceState(EResourceStateF resourceState)
+  ConvertEResourceStateF(EResourceStateF resourceState)
   {
     static std::unordered_map<EResourceStateF, D3D12_RESOURCE_STATES> map =
     {
@@ -430,21 +432,21 @@ namespace wkrtodx12
     return ret;
   }
 
-  static inline mem::TScope<D3D12_RESOURCE_DESC>
+  static inline D3D12_RESOURCE_DESC
   ConvertFResource(FResource& desc)
   {
-    D3D12_RESOURCE_DESC* ret = new D3D12_RESOURCE_DESC();
+    D3D12_RESOURCE_DESC ret = {};
 
-    ret->Dimension = ConvertEResourceDimension(desc.Dimension);
-    ret->Alignment = desc.Alignment;
-    ret->Width = desc.Width;
-    ret->Height = desc.Height;
-    ret->DepthOrArraySize = desc.DepthOrArraySize;
-    ret->MipLevels = desc.MipLevels;
-    ret->Format = ConvertEResourceFormat(desc.Format);
-    ret->SampleDesc = ConvertFSampleDesc(desc.Sample);
-    ret->Layout = ConvertEResourceLayout(desc.Layout);
-    ret->Flags = ConvertEResourceF(desc.Flag);
+    ret.Dimension = ConvertEResourceDimension(desc.Dimension);
+    ret.Alignment = desc.Alignment;
+    ret.Width = desc.Width;
+    ret.Height = desc.Height;
+    ret.DepthOrArraySize = desc.DepthOrArraySize;
+    ret.MipLevels = desc.MipLevels;
+    ret.Format = ConvertEResourceFormat(desc.Format);
+    ret.SampleDesc = ConvertFSampleDesc(desc.Sample);
+    ret.Layout = ConvertEResourceLayout(desc.Layout);
+    ret.Flags = ConvertEResourceF(desc.Flag);
 
     return ret;
   }
@@ -525,13 +527,90 @@ namespace wkrtodx12
   }
 
   static inline D3D12_HEAP_PROPERTIES
-  ConvertFHeapDesc(FHeapDesc& desc)
+  ConvertFHeapProperty(FHeapProperties& desc)
   {
     D3D12_HEAP_PROPERTIES ret = {
       .Type = ConvertEHeapType(desc.Type),
       .CPUPageProperty = ConvertECPUPageProperty(desc.CpuPageProperty),
       .MemoryPoolPreference = ConvertEMemoryPool(desc.MemoryPool),
+      .CreationNodeMask = 0,
+      .VisibleNodeMask = 0,
     };
+
+    return ret;
+  }
+
+  static inline INT
+  ConvertECommandQueuePriority(ECommandQueuePriority commandQueuePriority)
+  {
+    static std::unordered_map<ECommandQueuePriority, INT> map =
+    {
+      {ECommandQueuePriority::kNormal, D3D12_COMMAND_QUEUE_PRIORITY_NORMAL},
+      {ECommandQueuePriority::kHigh, D3D12_COMMAND_QUEUE_PRIORITY_HIGH},
+      {ECommandQueuePriority::kRealtime, D3D12_COMMAND_QUEUE_PRIORITY_GLOBAL_REALTIME},
+    };
+
+    return map[commandQueuePriority];
+  }
+
+  static inline D3D12_RESOURCE_BARRIER_TYPE
+  ConvertEResourceBarrierType(EResourceBarrierType barrierType)
+  {
+    static std::unordered_map<EResourceBarrierType, D3D12_RESOURCE_BARRIER_TYPE> map =
+    {
+      {EResourceBarrierType::kTransition, D3D12_RESOURCE_BARRIER_TYPE_TRANSITION },
+      {EResourceBarrierType::kUAV, D3D12_RESOURCE_BARRIER_TYPE_UAV },
+      {EResourceBarrierType::kAliasing, D3D12_RESOURCE_BARRIER_TYPE_ALIASING },
+    };
+
+    return map[barrierType];
+  }
+
+  static inline D3D12_RESOURCE_BARRIER_FLAGS
+  ConvertEResourceBarrierF(EResourceBarrierF barrierFlag)
+  {
+    static std::unordered_map<EResourceBarrierF, D3D12_RESOURCE_BARRIER_FLAGS> map =
+    {
+      {EResourceBarrierF::kNone, D3D12_RESOURCE_BARRIER_FLAG_NONE },
+      {EResourceBarrierF::kEndOnly, D3D12_RESOURCE_BARRIER_FLAG_END_ONLY },
+      {EResourceBarrierF::kBeginOnly, D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY },
+    };
+
+    D3D12_RESOURCE_BARRIER_FLAGS ret = {};
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, barrierFlag) )
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline UINT
+  ConvertESwapChainF(ESwapChainF flag)
+  {
+    static std::unordered_map<ESwapChainF, UINT> map =
+    {
+      {ESwapChainF::kNone, 0},
+      {ESwapChainF::kYuvVideo, DXGI_SWAP_CHAIN_FLAG_YUV_VIDEO },
+      {ESwapChainF::kDisplayOnly, DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY },
+      {ESwapChainF::kHWProtected, DXGI_SWAP_CHAIN_FLAG_HW_PROTECTED },
+      {ESwapChainF::kAllowTearing, DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING },
+      {ESwapChainF::kGDICompatible, DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE },
+      {ESwapChainF::kNonprerotated, DXGI_SWAP_CHAIN_FLAG_NONPREROTATED },
+      {ESwapChainF::kAllowModeSwitch, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH },
+      {ESwapChainF::kForegroundLayer, DXGI_SWAP_CHAIN_FLAG_FOREGROUND_LAYER},
+      {ESwapChainF::kFullscreenVideo, DXGI_SWAP_CHAIN_FLAG_FULLSCREEN_VIDEO},
+      {ESwapChainF::kRestrictedContent, DXGI_SWAP_CHAIN_FLAG_RESTRICTED_CONTENT },
+      {ESwapChainF::kFrameLatencyWaitableObject, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT },
+      {ESwapChainF::kRestrictSharedResourceDriver, DXGI_SWAP_CHAIN_FLAG_RESTRICT_SHARED_RESOURCE_DRIVER },
+      {ESwapChainF::kRestrictedToAllHolographicDisplays, DXGI_SWAP_CHAIN_FLAG_RESTRICTED_TO_ALL_HOLOGRAPHIC_DISPLAYS },
+    };
+
+    UINT ret = 0;
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, flag) )
+        ret |= map[iter.first];
 
     return ret;
   }
@@ -842,7 +921,7 @@ namespace dx12towkr
   }
 
   static inline EResourceStateF
-  ConvertEResourceState(D3D12_RESOURCE_STATES resourceState)
+  ConvertEResourceStateF(D3D12_RESOURCE_STATES resourceState)
   {
     static std::unordered_map<D3D12_RESOURCE_STATES, EResourceStateF> map =
     {
@@ -1053,10 +1132,10 @@ namespace dx12towkr
     return ret;
   }
 
-  static inline FHeapDesc
+  static inline FHeapProperties
   ConvertFHeapDesc(D3D12_HEAP_PROPERTIES& desc)
   {
-    FHeapDesc ret = {
+    FHeapProperties ret = {
       .Type = ConvertEHeapType(desc.Type),
       .MemoryPool = ConvertEMemoryPool(desc.MemoryPoolPreference),
       .CpuPageProperty = ConvertECPUPageProperty(desc.CPUPageProperty),
@@ -1065,6 +1144,80 @@ namespace dx12towkr
     return ret;
   }
 
+  static inline ECommandQueuePriority
+  ConvertECommandQueuePriority(INT commandQueuePriority)
+  {
+    static std::unordered_map<INT, ECommandQueuePriority> map =
+    {
+      {D3D12_COMMAND_QUEUE_PRIORITY_NORMAL,           ECommandQueuePriority::kNormal },
+      {D3D12_COMMAND_QUEUE_PRIORITY_HIGH,             ECommandQueuePriority::kHigh },
+      {D3D12_COMMAND_QUEUE_PRIORITY_GLOBAL_REALTIME,  ECommandQueuePriority::kRealtime },
+    };
+
+    return map[commandQueuePriority];
+  }
+
+  static inline EResourceBarrierType
+  ConvertEResourceBarrierType(D3D12_RESOURCE_BARRIER_TYPE barrierType)
+  {
+    static std::unordered_map<D3D12_RESOURCE_BARRIER_TYPE, EResourceBarrierType> map =
+    {
+      {D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,EResourceBarrierType::kTransition  },
+      {D3D12_RESOURCE_BARRIER_TYPE_UAV,EResourceBarrierType::kUAV  },
+      {D3D12_RESOURCE_BARRIER_TYPE_ALIASING,EResourceBarrierType::kAliasing  },
+    };
+
+    return map[barrierType];
+  }
+
+  static inline EResourceBarrierF
+  ConvertEResourceBarrierF(D3D12_RESOURCE_BARRIER_FLAGS barrierFlag)
+  {
+    static std::unordered_map<D3D12_RESOURCE_BARRIER_FLAGS, EResourceBarrierF> map =
+    {
+      {D3D12_RESOURCE_BARRIER_FLAG_NONE,EResourceBarrierF::kNone  },
+      {D3D12_RESOURCE_BARRIER_FLAG_END_ONLY,EResourceBarrierF::kEndOnly  },
+      {D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY,EResourceBarrierF::kBeginOnly  },
+    };
+
+    EResourceBarrierF ret = {};
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, barrierFlag) )
+        ret |= map[iter.first];
+
+    return ret;
+  }
+
+  static inline ESwapChainF
+  ConvertESwapChainF(UINT flag)
+  {
+    static std::unordered_map<UINT, ESwapChainF> map =
+    {
+      {0, ESwapChainF::kNone},
+      {DXGI_SWAP_CHAIN_FLAG_YUV_VIDEO,ESwapChainF::kYuvVideo  },
+      {DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY,ESwapChainF::kDisplayOnly  },
+      {DXGI_SWAP_CHAIN_FLAG_HW_PROTECTED,ESwapChainF::kHWProtected  },
+      {DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING,ESwapChainF::kAllowTearing  },
+      {DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE,ESwapChainF::kGDICompatible  },
+      {DXGI_SWAP_CHAIN_FLAG_NONPREROTATED,ESwapChainF::kNonprerotated  },
+      {DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH,ESwapChainF::kAllowModeSwitch  },
+      {DXGI_SWAP_CHAIN_FLAG_FOREGROUND_LAYER,ESwapChainF::kForegroundLayer },
+      {DXGI_SWAP_CHAIN_FLAG_FULLSCREEN_VIDEO,ESwapChainF::kFullscreenVideo },
+      {DXGI_SWAP_CHAIN_FLAG_RESTRICTED_CONTENT,ESwapChainF::kRestrictedContent  },
+      {DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT,ESwapChainF::kFrameLatencyWaitableObject  },
+      {DXGI_SWAP_CHAIN_FLAG_RESTRICT_SHARED_RESOURCE_DRIVER,ESwapChainF::kRestrictSharedResourceDriver  },
+      {DXGI_SWAP_CHAIN_FLAG_RESTRICTED_TO_ALL_HOLOGRAPHIC_DISPLAYS,ESwapChainF::kRestrictedToAllHolographicDisplays  },
+    };
+
+    ESwapChainF ret = ESwapChainF::kNone;
+
+    for ( auto iter : map )
+      if ( HAS_FLAG(iter.first, flag) )
+        ret |= map[iter.first];
+
+    return ret;
+  }
 }
 
 }

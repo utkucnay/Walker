@@ -17,6 +17,8 @@ enum class WALKER_API EResourceBarrierF {
   kEndOnly = 0x2,
 };
 
+WALKER_ENUM_CLASS_BITWISE_DECLARATION(EResourceBarrierF);
+
 struct WALKER_API FResourceTransitionBarrier {
   IResourceHandle Resource;
   u32 Subresource;

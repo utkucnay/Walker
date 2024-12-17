@@ -21,24 +21,8 @@ class UTransitionBarrier {
     return m_ResourceBarrier;
   }
 
-  FTransitionBarrierDesc GetDesc() {
-    rhi::FResourceBarrierDesc barrierDesc = m_ResourceBarrier->GetDesc();
-    FTransitionBarrierDesc desc = {
-        .Resource = barrierDesc.Transition.Resource,
-        .BeforeState = barrierDesc.Transition.StateBefore,
-        .AfterState = barrierDesc.Transition.StateAfter,
-    };
-
-    return desc;
-  }
-
-  UTransitionBarrier Reverse() {
-    FTransitionBarrierDesc desc = GetDesc();
-    EResourceStateF tmpSwap = desc.BeforeState;
-    desc.BeforeState = desc.AfterState;
-    desc.AfterState = tmpSwap;
-    return UTransitionBarrier(desc);
-  }
+  FTransitionBarrierDesc GetDesc();
+  UTransitionBarrier Reverse();
 
  private:
   rhi::IResourceBarrierHandle m_ResourceBarrier;

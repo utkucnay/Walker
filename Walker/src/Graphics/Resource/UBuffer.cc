@@ -8,13 +8,13 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
 
   rhi::FResourceDesc resourceDesc = {
       .DescType = EResourceDescType::kCommitted,
-      .HeapDesc =
+      .HeapProp =
           {
               .Type = desc.HeapType,
               .MemoryPool = EMemoryPool::kUnknown,
               .CpuPageProperty = ECPUPageProperty::kUnknown,
-              .Flag = EHeapF::kNone,
           },
+      .HeapFlag = EHeapF::kNone,
       .Resource =
           {
               .Alignment = 0,
@@ -36,24 +36,21 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
 }
 
 UBuffer::UBuffer(rhi::IResourceHandle resource) {
-  rhi::FResourceDesc resourceDesc = resource->GetDesc();
+  FResource resourceDesc = resource->GetDesc();
   WKR_CORE_ERROR_COND(
-      resourceDesc.Resource.Dimension != EResourceDimension::kBuffer,
+      resourceDesc.Dimension != EResourceDimension::kBuffer,
       "Resource isn't a Buffer");
 
-  m_Resource = resource;
+  m_Resource = std::move(resource);
 }
 
 UBuffer::~UBuffer() {}
 
 FBufferDesc UBuffer::GetDesc() const {
-  rhi::FResourceDesc resourceDesc = m_Resource->GetDesc();
+  FResource resourceDesc = m_Resource->GetDesc();
 
-  FBufferDesc bufferDesc = {.HeapType = resourceDesc.HeapDesc.Type,
-                            .BufferSize = resourceDesc.Resource.Width,
-                            .InitState = resourceDesc.InitialState,
-                            .ClearValue = resourceDesc.ClearValue,
-                            .ResourceFlag = resourceDesc.Resource.Flag};
+  //TODO(utku): Added Heap
+  FBufferDesc bufferDesc = {};
 
   return bufferDesc;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/RHI/Resource/View/IResourceView.h"
+#include "Graphics/RHI/Resource/View/AResourceView.h"
 #include "Graphics/Resource/UBuffer.h"
 
 namespace wkr::graphics {
@@ -8,7 +8,7 @@ namespace wkr::graphics {
 class UVertexBufferView {
 
  private:
-  rhi::IResourceViewHandle m_ResourceView;
+  rhi::AResourceViewHandle m_ResourceView;
   UBuffer m_VertexBuffer;
 };
 

@@ -1,6 +1,11 @@
 #include "Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h"
+#include "Core/Base.h"
 #include "Graphics/Core/UGraphics.h"
+#include "Graphics/RHI/Descriptor/ADescriptorHeap.h"
+#include "Graphics/RHI/Descriptor/DescriptorType.h"
+#include "Graphics/RHI/Resource/View/AResourceView.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
+#include "Platforms/DirectX12/ResourceView/DX12ResourceView.h"
 
 namespace wkr::graphics::rhi::dx12 {
 
@@ -8,9 +13,9 @@ UDescriptorHeap::UDescriptorHeap(FDescriptorHeapDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{
-    .Type = ConvertEDescriptorHeapType(desc.Type),
-    .NumDescriptors = desc.Count,
-    .Flags = ConvertEDescriptorHeapF(desc.Flag),
+      .Type = wkrtodx12::ConvertEDescriptorHeapType(desc.Type),
+      .NumDescriptors = desc.Count,
+      .Flags = wkrtodx12::ConvertEDescriptorHeapF(desc.Flag),
   };
 
   HRESULT hr = nDevice->CreateDescriptorHeap(&nDHeapDesc,
@@ -24,53 +29,49 @@ UDescriptorHeap::~UDescriptorHeap() {
   m_descriptorHeap->Release();
 }
 
-u32 UDescriptorHeap::GetCount() {
-  D3D12_DESCRIPTOR_HEAP_DESC desc;
-
-  desc = m_descriptorHeap->GetDesc();
-  return desc.NumDescriptors;
-}
-
-EDescriptorHeapType UDescriptorHeap::GetType() {
-  D3D12_DESCRIPTOR_HEAP_DESC desc;
-
-  desc = m_descriptorHeap->GetDesc();
-  return static_cast<EDescriptorHeapType>(desc.Type);
-}
-
-EDescriptorHeapFlags UDescriptorHeap::GetFlags() {
-  D3D12_DESCRIPTOR_HEAP_DESC desc;
-
-  desc = m_descriptorHeap->GetDesc();
-  return static_cast<EDescriptorHeapFlags>(desc.Flags);
+FDescriptorHeapDesc UDescriptorHeap::GetDesc() {
+  D3D12_DESCRIPTOR_HEAP_DESC desc = m_descriptorHeap->GetDesc();
+  FDescriptorHeapDesc retDesc = {
+      .Count = desc.NumDescriptors,
+      .Type = dx12towkr::ConvertEDescriptorHeapType(desc.Type),
+      .Flag = dx12towkr::ConvertEDescriptorHeapF(desc.Flags),
+  };
+  return retDesc;
 }
 
 void UDescriptorHeap::Bind(const std::vector<IResourceHandle>& resources) {
-  ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
+  FDescriptorHeapDesc desc = GetDesc();
 
-  auto rtvSize =
-      nDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+  switch (desc.Type) {
+    case EDescriptorHeapType::kRTV: {
+      BindRTV(resources);
+    } break;
+
+    default: {
+      WKR_CORE_ERROR("Descriptor Heap Not Implemented");
+    } break;
+  }
+}
+
+void UDescriptorHeap::BindRTV(const std::vector<IResourceHandle>& resources) {
+  ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
       m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
+
+  u32 rtvSize =
+      nDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
   for (int i = 0; i < resources.size(); i++) {
     ID3D12Resource* resource = resources[i]->GetNativeObject();
 
     nDevice->CreateRenderTargetView(resource, nullptr, rtvHandle);
-    WKR_CORE_LOG("Binding Render Texture on Descriptor Heap")
-    switch (GetType()) {
-      case EDescriptorHeapType::RTV: {
-        m_resourceViews.push_back(mem::TRef<dx12::URenderTargetView>::Create(
-            rtvHandle, new UTexture2D(resources[i])));
-      } break;
+    WKR_CORE_LOG("Binding Render Texture on Descriptor Heap");
+    AResourceViewHandle resourceView = new UResourceView(rtvHandle, resources[i]);
+    m_ResourceViews.push_back(resourceView);
 
-      default: {
-        WKR_CORE_WARNING("Not Implemented Heap Type");
-      } break;
-    }
     rtvHandle.Offset(1, rtvSize);
   }
 }
 
-}  // namespace wkr::render::dx12
+}  // namespace wkr::graphics::rhi::dx12

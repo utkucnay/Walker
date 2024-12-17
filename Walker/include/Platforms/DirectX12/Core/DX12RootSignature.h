@@ -2,18 +2,18 @@
 
 #include "Graphics/RHI/Core/IRootSignature.h"
 
-namespace wkr::graphics::rhi::dx12
-{
-  class URootSignature : public IRootSignature
-  {
-  public:
-    URootSignature(FRootSignatureDesc& desc);
-    ~URootSignature() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override final { return m_rootSignature; }
+class URootSignature : public IRootSignature {
+ public:
+  URootSignature(FRootSignatureDesc& desc);
+  ~URootSignature() override;
 
-  private:
-    ID3D12RootSignature* m_rootSignature;
-  };
-}
+ public:
+  NativeObject GetNativeObject() override final { return m_rootSignature; }
+
+ private:
+  ID3D12RootSignature* m_rootSignature;
+};
+
+}  // namespace wkr::graphics::rhi::dx12

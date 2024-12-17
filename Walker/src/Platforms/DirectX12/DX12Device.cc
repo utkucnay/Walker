@@ -20,4 +20,4 @@ UDevice::~UDevice() {
   m_Device->Release();
 }
 
-}  // namespace wkr::graphics::rhi
+}  // namespace wkr::graphics::rhi::dx12

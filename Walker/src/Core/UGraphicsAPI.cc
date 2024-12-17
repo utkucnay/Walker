@@ -1,10 +1,10 @@
 #include "Graphics/Core/UGraphicsAPI.h"
 
 #if defined(WKR_PLATFORM_DIRECTX12)
-#include "Platforms/DirectX12/Core/DX12AbstractFactory.h"
+#include "Platforms/DirectX12/Factory/DX12AbstractFactory.h"
 #endif
 
-namespace wkr::render {
+namespace wkr::graphics {
 
 void UGraphicsAPI::Init(EType apiType) {
   switch (apiType) {
@@ -14,7 +14,7 @@ void UGraphicsAPI::Init(EType apiType) {
 
 #if defined(WKR_PLATFORM_DIRECTX12)
     case UGraphicsAPI::EType::DirectX12: {
-      s_abstractFactory = mem::TScope<dx12::UGraphicsAbstractFactory>::Create();
+      s_abstractFactory = mem::TScope<rhi::dx12::URHIAbstractFactory>::Create();
     } break;
 #endif
     default: {

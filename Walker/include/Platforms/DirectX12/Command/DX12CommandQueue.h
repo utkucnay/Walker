@@ -2,23 +2,22 @@
 
 #include "Graphics/RHI/Command/ICommandQueue.h"
 
-namespace wkr::graphics::rhi::dx12
-{
-  class UCommandQueue : public ICommandQueue
-  {
-  public:
-    UCommandQueue(FCommandQueueDesc& desc);
-    ~UCommandQueue() override;
+namespace wkr::graphics::rhi::dx12 {
 
-  public:
-    NativeObject GetNativeObject() override { return m_commandQueue; }
+class UCommandQueue : public ICommandQueue {
+ public:
+  UCommandQueue(FCommandQueueDesc& desc);
+  ~UCommandQueue() override;
 
-    void ExecuteCommandList(
-        const std::vector<ICommandList*>& commandLists) override final;
+ public:
+  void ExecuteCommandList(
+      const std::vector<ICommandListHandle>& commandLists) override final;
+  NativeObject GetNativeObject() override final { return m_commandQueue; }
+  FCommandQueueDesc GetDesc() override final;
+  void Signal(AFence& fence, i32 frameIndex) override final;
 
-    void Signal(AFence& fence, i32 frameIndex) override final;
+ private:
+  ID3D12CommandQueue* m_commandQueue;
+};
 
-  private:
-    ID3D12CommandQueue* m_commandQueue;
-  };
-}
+}  // namespace wkr::graphics::rhi::dx12

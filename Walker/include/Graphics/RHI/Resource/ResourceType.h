@@ -301,4 +301,10 @@ struct WALKER_API FResource {
   EResourceDimension Dimension = EResourceDimension::kUnknown;
 };
 
+struct FHeapProperties {
+  EHeapType Type = EHeapType::kDefault;
+  EMemoryPool MemoryPool = EMemoryPool::kUnknown;
+  ECPUPageProperty CpuPageProperty = ECPUPageProperty::kUnknown;
+};
+
 }  // namespace wkr::graphics

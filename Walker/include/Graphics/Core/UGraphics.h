@@ -30,6 +30,7 @@ class WALKER_API UGraphics {
   void Render();
   void CreateResource();
   void LoadResources();
+  void SwapBuffers();
   void Fence();
 
  private:

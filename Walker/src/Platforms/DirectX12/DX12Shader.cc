@@ -1,19 +1,19 @@
 #include "Platforms/DirectX12/Shader/DX12Shader.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 UShader::UShader(FShaderDesc& desc) {
   static std::unordered_map<EShaderType, std::string> vsMap = {
-      {EShaderType::Vertex, "vs_5_0"},
-      {EShaderType::Pixel, "ps_5_0"},
+      {EShaderType::kVertex, "vs_5_0"},
+      {EShaderType::kPixel, "ps_5_0"},
   };
 
   ID3DBlob* code;
   ID3DBlob* error;
 
   HRESULT hr =
-      D3DCompile(desc.sourceCode.c_str(), desc.sourceCode.size(),
-                 desc.name.c_str(), nullptr, nullptr, desc.entryPoint.c_str(),
+      D3DCompile(desc.sourceCode.data(), desc.sourceCode.size(),
+                 desc.name.data(), nullptr, nullptr, desc.entryPoint.data(),
                  vsMap[desc.type].c_str(), 0, 0, &code, &error);
 
   if (FAILED(hr)) {

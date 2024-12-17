@@ -1,37 +1,40 @@
-#include "Platforms/DirectX12/Core/DX12TypeMap.h"
 #include "Platforms/DirectX12/Resource/DX12Resource.h"
+#include "Core/Base.h"
 #include "Graphics/Core/UGraphics.h"
+#include "Graphics/RHI/Resource/IResource.h"
+#include "Graphics/RHI/Resource/ResourceType.h"
+#include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
-namespace wkr::render::dx12 {
+namespace wkr::graphics::rhi::dx12 {
 
 UResource::UResource(FResourceDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
+  D3D12_RESOURCE_DESC resourceDesc = wkrtodx12::ConvertFResource(desc.Resource);
+
   HRESULT hr;
-  switch (desc.descType) {
+  switch (desc.DescType) {
     case EResourceDescType::kCommitted: {
+      D3D12_HEAP_PROPERTIES heapProp =
+          wkrtodx12::ConvertFHeapProperty(desc.HeapProp);
       hr = nDevice->CreateCommittedResource(
-          ConvertFHeapDesc(desc.heapDesc).GetPtr(),
-          ConvertEHeapF(desc.heapDesc.m_flag),
-          ConvertFResource(desc.resource).GetPtr(),
-          ConvertEResourceState(desc.initialState),
-          ConvertFClearValue(desc.clearValue).GetPtr(),
-          IID_PPV_ARGS(&m_resource));
+          &heapProp, D3D12_HEAP_FLAG_NONE, &resourceDesc,
+          D3D12_RESOURCE_STATE_COMMON,
+          nullptr,
+          IID_PPV_ARGS(&m_Resource));
     } break;
     case EResourceDescType::kReserved: {
       hr = nDevice->CreateReservedResource(
-          ConvertFResource(desc.resource).GetPtr(),
-          ConvertEResourceState(desc.initialState),
-          ConvertFClearValue(desc.clearValue).GetPtr(),
-          IID_PPV_ARGS(&m_resource));
+          &resourceDesc, wkrtodx12::ConvertEResourceStateF(desc.InitialState),
+          wkrtodx12::ConvertFClearValue(desc.ClearValue).GetPtr(),
+          IID_PPV_ARGS(&m_Resource));
     } break;
     case EResourceDescType::kPlaced: {
       hr = nDevice->CreatePlacedResource(
-          desc.heap->GetNativeObject(), desc.heapOffset,
-          ConvertFResource(desc.resource).GetPtr(),
-          ConvertEResourceState(desc.initialState),
-          ConvertFClearValue(desc.clearValue).GetPtr(),
-          IID_PPV_ARGS(&m_resource));
+          desc.Heap->GetNativeObject(), desc.HeapOffset, &resourceDesc,
+          wkrtodx12::ConvertEResourceStateF(desc.InitialState),
+          wkrtodx12::ConvertFClearValue(desc.ClearValue).GetPtr(),
+          IID_PPV_ARGS(&m_Resource));
     } break;
   }
 
@@ -40,7 +43,13 @@ UResource::UResource(FResourceDesc& desc) {
 }
 
 UResource::~UResource() {
-  m_resource->Release();
+  m_Resource->Release();
 }
 
-}  // namespace wkr::render::dx12
+FResource UResource::GetDesc() {
+  D3D12_RESOURCE_DESC desc = m_Resource->GetDesc();
+  FResource retDesc = dx12towkr::ConvertFResource(desc);
+  return retDesc;
+}
+
+}  // namespace wkr::graphics::rhi::dx12
