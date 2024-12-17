@@ -18,6 +18,7 @@ UResourceBarrier::UResourceBarrier(FResourceBarrierDesc& desc) {
           wkrtodx12::ConvertEResourceStateF(desc.Transition.StateBefore);
       m_ResourceBarrier.Transition.StateAfter =
           wkrtodx12::ConvertEResourceStateF(desc.Transition.StateAfter);
+      m_ResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
     } break;
     case EResourceBarrierType::kUAV: {
       m_ResourceBarrier.UAV.pResource = desc.UAV.Resource->GetNativeObject();

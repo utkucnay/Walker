@@ -18,7 +18,7 @@ class UCommandList : public ICommandList {
   ECommandType GetType() override final;
 
   void ResourceBarriers(
-      const std::vector<IResourceBarrierHandle>& barriers) override final;
+      const std::vector<IResourceBarrier*>& barriers) override final;
 
   void OMSetRenderTargets(
       const std::vector<URenderTargetView>& rtvs) override final;

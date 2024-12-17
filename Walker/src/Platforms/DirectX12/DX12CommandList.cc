@@ -31,7 +31,7 @@ void UCommandList::Reset(ICommandAllocator& commandAllocator,
 }
 
 void UCommandList::ResourceBarriers(
-    const std::vector<IResourceBarrierHandle>& barriers) {
+    const std::vector<IResourceBarrier*>& barriers) {
   std::vector<D3D12_RESOURCE_BARRIER> nBarriers;
   std::transform(barriers.begin(), barriers.end(),
                  std::back_inserter(nBarriers), [](auto barrier) {

@@ -28,7 +28,7 @@ class WALKER_API ICommandList {
                      IPipelineState* pipelineState) = 0;
 
   virtual void ResourceBarriers(
-      const std::vector<IResourceBarrierHandle>& barriers) = 0;
+      const std::vector<IResourceBarrier*>& barriers) = 0;
 
   virtual void OMSetRenderTargets(
       const std::vector<URenderTargetView>& rtvs) = 0;

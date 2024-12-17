@@ -73,12 +73,12 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
 
 void UGraphics::CreateResource() {
 
-  //  FBufferDesc bufferDesc = {.HeapType = EHeapType::kDefault,
-  //                            .BufferSize = WKR_KB(20),
-  //                            .InitState = EResourceStateF::kCommon,
-  //                            .ResourceFlag = EResourceF::kNone};
-  //
-  //  m_VertexBuffer = std::move(UBuffer(bufferDesc));
+    FBufferDesc bufferDesc = {.HeapType = EHeapType::kDefault,
+                              .BufferSize = WKR_KB(20),
+                              .InitState = EResourceStateF::kCommon,
+                              .ResourceFlag = EResourceF::kNone};
+
+    m_VertexBuffer = std::move(UBuffer(bufferDesc));
 }
 
 void UGraphics::LoadResources() {}
@@ -110,24 +110,32 @@ void UGraphics::Render() {
   m_DirectCommand.CommandList->Reset(
       m_DirectCommand.CommandAllocator[frameIndex].Get(), nullptr);
 
-//  FTransitionBarrierDesc transitionBarrierDesc = {
-//      .Resource = renderTarget.GetTexture2D().GetResource(),
-//      .BeforeState = EResourceStateF::kRenderTarget,
-//      .AfterState = EResourceStateF::kPresent,
-//  };
-//
-//  UTransitionBarrier rtvTransitionBarrier(transitionBarrierDesc);
-//
-//  m_DirectCommand.CommandList->ResourceBarriers(
-//      {rtvTransitionBarrier.GetResourceBarrier()});
-//
-//  m_DirectCommand.CommandList->OMSetRenderTargets({renderTarget});
-//
-//  m_DirectCommand.CommandList->ClearRenderTargetView(renderTarget,
-//                                                     FColor32(0, 255, 0, 255));
-//
-//  m_DirectCommand.CommandList->ResourceBarriers(
-//      {rtvTransitionBarrier.Reverse().GetResourceBarrier()});
+  FTransitionBarrierDesc transitionBarrierDesc = {
+      .Resource = renderTarget.GetTexture2D().GetResource(),
+      .BeforeState = EResourceStateF::kRenderTarget,
+      .AfterState = EResourceStateF::kPresent,
+  };
+
+  UTransitionBarrier rtvTransitionBarrier(transitionBarrierDesc);
+
+  m_DirectCommand.CommandList->ResourceBarriers(
+      {rtvTransitionBarrier.GetResourceBarrier().GetPtr()});
+
+  m_DirectCommand.CommandList->OMSetRenderTargets({renderTarget});
+
+  m_DirectCommand.CommandList->ClearRenderTargetView(renderTarget,
+                                                     FColor32(0, 255, 0, 255));
+
+  FTransitionBarrierDesc revTransitionBarrierDesc = {
+      .Resource = renderTarget.GetTexture2D().GetResource(),
+      .BeforeState = EResourceStateF::kPresent,
+      .AfterState = EResourceStateF::kRenderTarget,
+  };
+
+  UTransitionBarrier revRtvTransitionBarrier(revTransitionBarrierDesc);
+
+  m_DirectCommand.CommandList->ResourceBarriers(
+      {revRtvTransitionBarrier.GetResourceBarrier().GetPtr()});
 
   m_DirectCommand.CommandList->Close();
 

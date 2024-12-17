@@ -1,5 +1,4 @@
 #include "Platforms/DirectX12/Resource/DX12Resource.h"
-#include "Core/Base.h"
 #include "Graphics/Core/UGraphics.h"
 #include "Graphics/RHI/Resource/IResource.h"
 #include "Graphics/RHI/Resource/ResourceType.h"
@@ -18,9 +17,9 @@ UResource::UResource(FResourceDesc& desc) {
       D3D12_HEAP_PROPERTIES heapProp =
           wkrtodx12::ConvertFHeapProperty(desc.HeapProp);
       hr = nDevice->CreateCommittedResource(
-          &heapProp, D3D12_HEAP_FLAG_NONE, &resourceDesc,
-          D3D12_RESOURCE_STATE_COMMON,
-          nullptr,
+          &heapProp, wkrtodx12::ConvertEHeapF(desc.HeapFlag), &resourceDesc,
+          wkrtodx12::ConvertEResourceStateF(desc.InitialState),
+          wkrtodx12::ConvertFClearValue(desc.ClearValue).GetPtr(),
           IID_PPV_ARGS(&m_Resource));
     } break;
     case EResourceDescType::kReserved: {

@@ -25,7 +25,7 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
               .Sample = {.Count = 1, .Quality = 0},
               .Format = EResourceFormat::kUNKNOWN,
               .Flag = desc.ResourceFlag,
-              .Layout = EResourceLayout::kUnknown,
+              .Layout = EResourceLayout::kRowMajor,
               .Dimension = EResourceDimension::kBuffer,
           },
       .InitialState = desc.InitState,

@@ -9,7 +9,7 @@ struct WALKER_API FTexture2DDesc {
   EResourceFormat ResourceFormat = EResourceFormat::kUNKNOWN;
   u64 Width = 0;
   u32 Height = 0;
-  FSample Sample = {0, 0};
+  FSample Sample = {1, 0};
   EResourceF ResourceFlag = EResourceF::kNone;
   EResourceLayout ResourceLayout = EResourceLayout::kUnknown;
   EResourceStateF InitialState = EResourceStateF::kCommon;
