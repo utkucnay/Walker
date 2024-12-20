@@ -1,11 +1,10 @@
-#include "Graphics/Resource/UTexture2D.h"
+#include "Graphics/Resource/UTexture3D.h"
 #include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/RHI/Resource/IResource.h"
-#include "Graphics/RHI/Resource/ResourceType.h"
 
 namespace wkr::graphics {
 
-UTexture2D::UTexture2D(const FTexture2DDesc& desc) {
+UTexture3D::UTexture3D(const FTexture3DDesc& desc) {
   auto resourceFactory = UGraphicsAPI::GetAbstractFactory().GetIResource();
 
   rhi::FResourceDesc resourceDesc = {
@@ -22,13 +21,17 @@ UTexture2D::UTexture2D(const FTexture2DDesc& desc) {
               .Alignment = desc.Alignment,
               .Width = desc.Width,
               .Height = desc.Height,
-              .DepthOrArraySize = desc.ArraySize,
+              .DepthOrArraySize = desc.DepthSize,
               .MipLevels = desc.MipLevels,
-              .Sample = desc.Sample,
+              .Sample =
+                  {
+                      .Count = 1,
+                      .Quality = 0,
+                  },
               .Format = desc.ResourceFormat,
               .Flag = desc.ResourceFlag,
               .Layout = desc.ResourceLayout,
-              .Dimension = EResourceDimension::kTexture2D,
+              .Dimension = EResourceDimension::kTexture3D,
           },
       .InitialState = desc.InitialState,
       .ClearValue = desc.ClearValue,
@@ -37,25 +40,26 @@ UTexture2D::UTexture2D(const FTexture2DDesc& desc) {
   m_Resource = rhi::IResourceHandle(resourceFactory->Create(resourceDesc));
 }
 
-UTexture2D::UTexture2D(rhi::IResourceHandle resourceHandle) {
-  WKR_CORE_ERROR_COND(resourceHandle->GetResourceDesc().Dimension !=
-                          EResourceDimension::kTexture2D,
-                      "Not Match Dimension");
+UTexture3D::UTexture3D(rhi::IResourceHandle resource) {
+  WKR_CORE_ERROR_COND(
+      resource->GetResourceDesc().Dimension != EResourceDimension::kTexture3D,
+      "Not Match Dimension");
 
-  m_Resource = std::move(resourceHandle);
+  m_Resource = std::move(resource);
 }
 
-FTexture2DDesc UTexture2D::GetDesc() {
+FTexture3DDesc UTexture3D::GetDesc() {
   FResource resourceDesc = m_Resource->GetResourceDesc();
   FHeapProperties heapProp = m_Resource->GetHeapProperties();
 
-  FTexture2DDesc retDesc = {
+  FTexture3DDesc retDesc = {
       .HeapType = heapProp.Type,
       .ResourceFormat = resourceDesc.Format,
       .Width = resourceDesc.Width,
       .Height = resourceDesc.Height,
       .Alignment = resourceDesc.Alignment,
       .MipLevels = resourceDesc.MipLevels,
+      .DepthSize = resourceDesc.DepthOrArraySize,
       .ResourceFlag = resourceDesc.Flag,
       .ResourceLayout = resourceDesc.Layout,
       .InitialState = {},
@@ -63,16 +67,6 @@ FTexture2DDesc UTexture2D::GetDesc() {
   };
 
   return retDesc;
-}
-
-b64 UTexture2D::HasMSAA() {
-  FResource resource = m_Resource->GetResourceDesc();
-  return resource.Sample.Count != 1 && resource.Sample.Quality != 0;
-}
-
-b64 UTexture2D::IsArray() {
-  FResource resource = m_Resource->GetResourceDesc();
-  return resource.DepthOrArraySize > 1;
 }
 
 }  // namespace wkr::graphics

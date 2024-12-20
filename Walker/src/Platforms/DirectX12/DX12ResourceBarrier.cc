@@ -41,20 +41,20 @@ FResourceBarrierDesc UResourceBarrier::GetDesc() {
   switch (desc.Type) {
     case EResourceBarrierType::kTransition: {
       desc.Transition.Resource =
-          new UResource(m_ResourceBarrier.Transition.pResource);
+          rhi::IResourceHandle(new UResource(m_ResourceBarrier.Transition.pResource));
       desc.Transition.StateBefore = dx12towkr::ConvertEResourceStateF(
           m_ResourceBarrier.Transition.StateBefore);
       desc.Transition.StateAfter = dx12towkr::ConvertEResourceStateF(
           m_ResourceBarrier.Transition.StateAfter);
     } break;
     case EResourceBarrierType::kUAV: {
-      desc.UAV.Resource = new UResource(m_ResourceBarrier.UAV.pResource);
+      desc.UAV.Resource = rhi::IResourceHandle(new UResource(m_ResourceBarrier.UAV.pResource));
     } break;
     case EResourceBarrierType::kAliasing: {
       desc.Aliasing.ResourceAfter =
-          new UResource(m_ResourceBarrier.Aliasing.pResourceAfter);
+          rhi::IResourceHandle(new UResource(m_ResourceBarrier.Aliasing.pResourceAfter));
       desc.Aliasing.ResourceBefore =
-          new UResource(m_ResourceBarrier.Aliasing.pResourceBefore);
+          rhi::IResourceHandle(new UResource(m_ResourceBarrier.Aliasing.pResourceBefore));
     } break;
   }
   return desc;

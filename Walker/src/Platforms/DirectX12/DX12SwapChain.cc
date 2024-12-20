@@ -1,6 +1,5 @@
 #include "Platforms/DirectX12/Core/DX12SwapChain.h"
 #include "Graphics/Core/GraphicsType.h"
-#include "Graphics/Core/UGraphics.h"
 #include "Graphics/Core/UGraphicsAPI.h"
 #include "Graphics/RHI/Core/ASwapChain.h"
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
@@ -59,7 +58,7 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
   for (u32 i = 0; i < GetBufferCount(); i++) {
     ID3D12Resource* res;
     m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&res));
-    resources.push_back(new UResource(res));
+    resources.push_back(rhi::IResourceHandle(new UResource(res)));
     WKR_CORE_LOG("Binding Each Resource in Swap Chain");
   }
 
@@ -71,7 +70,7 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
     .Flag = EDescriptorHeapF::kNone,
   };
 
-  m_DescripHeap = factory.GetADescriptorHeap()->Create(descriptorHeapDesc);
+  m_DescripHeap = rhi::ADescriptorHeapHandle(factory.GetADescriptorHeap()->Create(descriptorHeapDesc));
 
   m_DescripHeap->Bind(resources);
 

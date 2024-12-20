@@ -82,3 +82,5 @@
 
 #define WKR_KB(x) x * 1024
 #define WKR_MB(x) x * 1024 * 1024
+
+#define WKR_OFFSET(Type, Member) offsetof(Type, Member)

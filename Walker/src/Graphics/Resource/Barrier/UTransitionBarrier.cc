@@ -20,7 +20,8 @@ UTransitionBarrier::UTransitionBarrier(FTransitionBarrierDesc& desc) {
           },
   };
 
-  m_ResourceBarrier = factory.GetIResourceBarrier()->Create(nDesc);
+  m_ResourceBarrier =
+      rhi::IResourceBarrierHandle(factory.GetIResourceBarrier()->Create(nDesc));
 }
 
 FTransitionBarrierDesc UTransitionBarrier::GetDesc() {

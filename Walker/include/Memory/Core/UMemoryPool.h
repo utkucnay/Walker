@@ -2,17 +2,15 @@
 
 #include "OS/Memory/IPageAllocator.h"
 
-namespace wkr::mem
-{
-  class UMemoryPool
-  {
-  public:
-    UMemoryPool(u32 initialSize);
+namespace wkr::mem {
 
-  public:
+class UMemoryPool {
+ public:
+  explicit UMemoryPool(u32 initialSize);
 
-  private:
-    os::mem::PageAllocatorHandle m_pageAllocator;
-  };
-}
+ public:
+ private:
+  os::PageAllocatorHandle m_pageAllocator;
+};
 
+}  // namespace wkr::mem

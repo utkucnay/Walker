@@ -31,7 +31,7 @@ FHeapDesc UHeap::GetDesc() {
   FHeapDesc retDesc = {
     .Size = desc.SizeInBytes,
     .Alignment = desc.Alignment,
-    .HeapProperties = dx12towkr::ConvertFHeapDesc(desc.Properties),
+    .HeapProperties = dx12towkr::ConvertFHeapProperty(desc.Properties),
     .Flag = dx12towkr::ConvertEHeapF(desc.Flags),
   };
 

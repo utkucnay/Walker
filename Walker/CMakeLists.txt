@@ -24,12 +24,14 @@ set(source_files
   ./src/Platforms/DirectX12/DX12Resource.cc
   ./src/Platforms/DirectX12/DX12Shader.cc
   ./src/Platforms/DirectX12/DX12ResourceView.cc
-  ./src/Platforms/DirectX12/DX12ResourceBarier.cc
+  ./src/Platforms/DirectX12/DX12ResourceBarrier.cc
 
   ./src/Graphics/UGraphics.cc
   ./src/Graphics/GraphicsType.cc
   ./src/Graphics/Resource/UBuffer.cc
+  ./src/Graphics/Resource/UTexture1D.cc
   ./src/Graphics/Resource/UTexture2D.cc
+  ./src/Graphics/Resource/UTexture3D.cc
   ./src/Graphics/Resource/Barrier/UTransitionBarrier.cc
   ./src/Graphics/GraphicsType.cc
 

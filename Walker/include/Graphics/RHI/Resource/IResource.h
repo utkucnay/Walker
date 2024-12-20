@@ -8,17 +8,11 @@ namespace wkr::graphics::rhi {
 struct WALKER_API FResourceDesc {
   EResourceDescType DescType = EResourceDescType::kCommitted;
 
-  union {
-    struct {
-      FHeapProperties HeapProp;
-      EHeapF HeapFlag;
-    };
+  FHeapProperties HeapProp;
+  EHeapF HeapFlag;
 
-    struct {
-      IHeap* Heap;
-      u64 HeapOffset;
-    };
-  };
+  IHeap* Heap;
+  u64 HeapOffset;
 
   FResource Resource = {};
   EResourceStateF InitialState = EResourceStateF::kCommon;
@@ -30,7 +24,8 @@ class WALKER_API IResource {
   virtual ~IResource() = default;
 
  public:
-  virtual FResource GetDesc() = 0;
+  virtual FResource GetResourceDesc() = 0;
+  virtual FHeapProperties GetHeapProperties() = 0;
   virtual NativeObject GetNativeObject() = 0;
 };
 

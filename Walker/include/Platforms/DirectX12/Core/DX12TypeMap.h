@@ -1132,7 +1132,7 @@ namespace dx12towkr
   }
 
   static inline FHeapProperties
-  ConvertFHeapDesc(D3D12_HEAP_PROPERTIES& desc)
+  ConvertFHeapProperty(D3D12_HEAP_PROPERTIES& desc)
   {
     FHeapProperties ret = {
       .Type = ConvertEHeapType(desc.Type),

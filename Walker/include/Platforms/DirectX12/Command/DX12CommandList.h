@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UCommandList : public ICommandList {
  public:
-  UCommandList(FCommandListDesc& desc);
+  explicit UCommandList(FCommandListDesc& desc);
   ~UCommandList() override;
 
  public:

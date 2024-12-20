@@ -67,7 +67,8 @@ void UDescriptorHeap::BindRTV(const std::vector<IResourceHandle>& resources) {
 
     nDevice->CreateRenderTargetView(resource, nullptr, rtvHandle);
     WKR_CORE_LOG("Binding Render Texture on Descriptor Heap");
-    AResourceViewHandle resourceView = new UResourceView(rtvHandle, resources[i]);
+    AResourceViewHandle resourceView =
+        AResourceViewHandle(new UResourceView(rtvHandle, resources[i]));
     m_ResourceViews.push_back(resourceView);
 
     rtvHandle.Offset(1, rtvSize);

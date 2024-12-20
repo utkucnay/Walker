@@ -9,7 +9,13 @@ struct WALKER_API FTexture2DDesc {
   EResourceFormat ResourceFormat = EResourceFormat::kUNKNOWN;
   u64 Width = 0;
   u32 Height = 0;
-  FSample Sample = {1, 0};
+  u64 Alignment = 0;
+  u16 MipLevels = 0;
+  u16 ArraySize = 1;
+  FSample Sample = {
+      .Count = 1,
+      .Quality = 0,
+  };
   EResourceF ResourceFlag = EResourceF::kNone;
   EResourceLayout ResourceLayout = EResourceLayout::kUnknown;
   EResourceStateF InitialState = EResourceStateF::kCommon;
@@ -20,11 +26,13 @@ class WALKER_API UTexture2D {
  public:
   UTexture2D() : m_Resource(nullptr) {}
 
-  UTexture2D(const FTexture2DDesc& texture2DDesc);
+  explicit UTexture2D(const FTexture2DDesc& desc);
   UTexture2D(rhi::IResourceHandle resource);
 
  public:
   FTexture2DDesc GetDesc();
+  b64 HasMSAA();
+  b64 IsArray();
 
   rhi::IResourceHandle GetResource() { return m_Resource; }
 

@@ -16,12 +16,13 @@ struct WALKER_API FBufferDesc {
 class WALKER_API UBuffer {
  public:
   UBuffer() : m_Resource(nullptr) {}
-  UBuffer(const FBufferDesc& buffersDesc);
+
+  explicit UBuffer(const FBufferDesc& desc);
   UBuffer(rhi::IResourceHandle resource);
-  ~UBuffer();
 
  public:
   FBufferDesc GetDesc() const;
+
   rhi::IResourceHandle GetResource() { return m_Resource; }
 
  private:

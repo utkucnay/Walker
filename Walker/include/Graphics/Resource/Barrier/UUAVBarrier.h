@@ -11,7 +11,7 @@ struct FUAVBarrierDesc {
 
 class UUAVBarrier {
  public:
-  UUAVBarrier(FUAVBarrierDesc& desc);
+  explicit UUAVBarrier(FUAVBarrierDesc& desc);
 
  private:
   rhi::IResourceBarrierHandle m_ResourceBarrier;

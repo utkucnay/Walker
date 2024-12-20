@@ -12,9 +12,9 @@ class WALKER_API URenderTargetView {
         m_Texture2D(m_ResourceView->GetResource()) {}
 
  public:
-  rhi::AResourceViewHandle& GetResourceViewHandle() { return m_ResourceView; }
+  rhi::AResourceViewHandle GetResourceViewHandle() { return m_ResourceView; }
 
-  UTexture2D& GetTexture2D() { return m_Texture2D; }
+  UTexture2D GetTexture2D() { return m_Texture2D; }
 
  private:
   rhi::AResourceViewHandle m_ResourceView;

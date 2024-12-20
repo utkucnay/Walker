@@ -23,7 +23,7 @@ struct WALKER_API FGraphicsDesc {
 
 class WALKER_API UGraphics {
  public:
-  UGraphics(FGraphicsDesc& rendererDesc);
+  explicit UGraphics(FGraphicsDesc& rendererDesc);
   ~UGraphics();
 
  public:

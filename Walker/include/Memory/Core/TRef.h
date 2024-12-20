@@ -12,7 +12,7 @@ class TRef {
  public:
   TRef<T>() {}
 
-  TRef<T>(T* obj) { ptr = std::shared_ptr<T>(obj); }
+  explicit TRef<T>(T* obj) { ptr = std::shared_ptr<T>(obj); }
 
   TRef<T>(std::nullptr_t) { ptr = nullptr; }
 

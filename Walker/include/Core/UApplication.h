@@ -20,7 +20,7 @@ struct WALKER_API FApplicationSpecs {
 
 class WALKER_API UApplication {
  public:
-  UApplication(const FApplicationSpecs& applicationSpecs);
+  explicit UApplication(const FApplicationSpecs& applicationSpecs);
   virtual ~UApplication();
 
  private:

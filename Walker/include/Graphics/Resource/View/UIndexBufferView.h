@@ -5,20 +5,20 @@
 
 namespace wkr::graphics {
 
-class WALKER_API UVertexBufferView {
+class UIndexBufferView {
  public:
-  UVertexBufferView(rhi::AResourceViewHandle resourceHandle)
+  UIndexBufferView(rhi::AResourceViewHandle resourceHandle)
       : m_ResourceView(std::move(resourceHandle)),
-        m_VertexBuffer(resourceHandle->GetResource()) {}
+        m_IndexBuffer(resourceHandle->GetResource()) {}
 
  public:
   rhi::AResourceViewHandle GetResourceViewHandle() { return m_ResourceView; }
 
-  UBuffer GetBuffer() { return m_VertexBuffer; }
+  UBuffer GetBuffer() { return m_IndexBuffer; }
 
  private:
   rhi::AResourceViewHandle m_ResourceView;
-  UBuffer m_VertexBuffer;
+  UBuffer m_IndexBuffer;
 };
 
 }  // namespace wkr::graphics

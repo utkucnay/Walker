@@ -11,7 +11,8 @@ class UResource : public IResource {
   ~UResource() override;
 
  public:
-  FResource GetDesc() override final;
+  FResource GetResourceDesc() override final;
+  FHeapProperties GetHeapProperties() override final;
   NativeObject GetNativeObject() override final { return m_Resource; }
 
  private:

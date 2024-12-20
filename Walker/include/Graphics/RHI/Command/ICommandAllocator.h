@@ -14,7 +14,6 @@ class WALKER_API ICommandAllocator {
 
  public:
   virtual NativeObject GetNativeObject() = 0;
-  virtual FCommandAllocatorDesc GetDesc() const = 0;
   virtual void Reset() = 0;
 };
 

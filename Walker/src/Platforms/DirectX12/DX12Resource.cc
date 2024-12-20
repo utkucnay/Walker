@@ -45,10 +45,21 @@ UResource::~UResource() {
   m_Resource->Release();
 }
 
-FResource UResource::GetDesc() {
+FResource UResource::GetResourceDesc() {
   D3D12_RESOURCE_DESC desc = m_Resource->GetDesc();
   FResource retDesc = dx12towkr::ConvertFResource(desc);
   return retDesc;
+}
+
+FHeapProperties UResource::GetHeapProperties() {
+  D3D12_HEAP_PROPERTIES nHeapProp;
+  D3D12_HEAP_FLAGS nHeapFlag;
+  HRESULT hr = m_Resource->GetHeapProperties(&nHeapProp, &nHeapFlag);
+
+  WKR_CORE_ERROR_COND(FAILED(hr), "Dont Get Heap Prop");
+
+  FHeapProperties retHeapProp = dx12towkr::ConvertFHeapProperty(nHeapProp);
+  return retHeapProp;
 }
 
 }  // namespace wkr::graphics::rhi::dx12

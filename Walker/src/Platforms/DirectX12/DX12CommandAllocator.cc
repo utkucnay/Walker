@@ -9,27 +9,18 @@ UCommandAllocator::UCommandAllocator(FCommandAllocatorDesc& desc) {
 
   HRESULT hr = nDevice->CreateCommandAllocator(
       wkrtodx12::ConvertECommandType(desc.CommandType),
-      IID_PPV_ARGS(&m_commandAllocator));
-
-  m_CommandType = desc.CommandType;
+      IID_PPV_ARGS(&m_CommandAllocator));
 
   WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command Allocator");
   WKR_CORE_LOG("Created DX12 Command Allocator");
 }
 
 UCommandAllocator::~UCommandAllocator() {
-  m_commandAllocator->Release();
-}
-
-FCommandAllocatorDesc UCommandAllocator::GetDesc() const {
-  FCommandAllocatorDesc desc = {
-      .CommandType = m_CommandType,
-  };
-  return desc;
+  m_CommandAllocator->Release();
 }
 
 void UCommandAllocator::Reset() {
-  m_commandAllocator->Reset();
+  m_CommandAllocator->Reset();
 }
 
 }  // namespace wkr::graphics::rhi::dx12

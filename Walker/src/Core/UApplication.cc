@@ -14,7 +14,7 @@ UApplication::UApplication(const FApplicationSpecs& applicationSpecs) {
     .Height = 720,
     .Name = "Walker Engine",
   };
-  m_MainWindow = os::UOSFactory::Get().GetAWindow()->Create(windowDesc);
+  m_MainWindow = os::AWindowHandle(os::UOSFactory::Get().GetAWindow()->Create(windowDesc));
 
   graphics::FGraphicsDesc graphicsDesc = {
     .Window = m_MainWindow

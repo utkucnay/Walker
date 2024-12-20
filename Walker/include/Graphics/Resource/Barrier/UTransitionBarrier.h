@@ -14,7 +14,7 @@ struct FTransitionBarrierDesc {
 
 class UTransitionBarrier {
  public:
-  UTransitionBarrier(FTransitionBarrierDesc& desc);
+  explicit UTransitionBarrier(FTransitionBarrierDesc& desc);
 
  public:
   rhi::IResourceBarrierHandle& GetResourceBarrier() {

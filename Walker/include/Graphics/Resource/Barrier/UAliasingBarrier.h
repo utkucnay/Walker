@@ -12,7 +12,7 @@ struct FAliasingBarrierDesc {
 
 class UAliasingBarrier {
  public:
-  UAliasingBarrier(FAliasingBarrierDesc& desc);
+  explicit UAliasingBarrier(FAliasingBarrierDesc& desc);
 
  private:
   rhi::IResourceBarrierHandle m_ResourceView;

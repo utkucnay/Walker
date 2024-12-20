@@ -1,5 +1,6 @@
 #include "Graphics/Resource/UBuffer.h"
 #include "Graphics/Core/UGraphicsAPI.h"
+#include "Graphics/RHI/Resource/ResourceType.h"
 
 namespace wkr::graphics {
 
@@ -22,7 +23,11 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
               .Height = 1,
               .DepthOrArraySize = 1,
               .MipLevels = 1,
-              .Sample = {.Count = 1, .Quality = 0},
+              .Sample =
+                  {
+                      .Count = 1,
+                      .Quality = 0,
+                  },
               .Format = EResourceFormat::kUNKNOWN,
               .Flag = desc.ResourceFlag,
               .Layout = EResourceLayout::kRowMajor,
@@ -32,25 +37,28 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
       .ClearValue = desc.ClearValue,
   };
 
-  m_Resource = resourceFactory->Create(resourceDesc);
+  m_Resource = rhi::IResourceHandle(resourceFactory->Create(resourceDesc));
 }
 
 UBuffer::UBuffer(rhi::IResourceHandle resource) {
-  FResource resourceDesc = resource->GetDesc();
-  WKR_CORE_ERROR_COND(
-      resourceDesc.Dimension != EResourceDimension::kBuffer,
-      "Resource isn't a Buffer");
+  FResource resourceDesc = resource->GetResourceDesc();
+  WKR_CORE_ERROR_COND(resourceDesc.Dimension != EResourceDimension::kBuffer,
+                      "Resource isn't a Buffer");
 
   m_Resource = std::move(resource);
 }
 
-UBuffer::~UBuffer() {}
-
 FBufferDesc UBuffer::GetDesc() const {
-  FResource resourceDesc = m_Resource->GetDesc();
+  FResource resourceDesc = m_Resource->GetResourceDesc();
+  FHeapProperties heapProp = m_Resource->GetHeapProperties();
 
-  //TODO(utku): Added Heap
-  FBufferDesc bufferDesc = {};
+  FBufferDesc bufferDesc = {
+      .HeapType = heapProp.Type,
+      .BufferSize = resourceDesc.Width,
+      .InitState = EResourceStateF::kCommon,
+      .ClearValue = nullptr,
+      .ResourceFlag = resourceDesc.Flag,
+  };
 
   return bufferDesc;
 }

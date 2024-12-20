@@ -10,7 +10,7 @@ namespace wkr::mem
   {
   public:
     TWeakRef() {}
-    TWeakRef(const TRef<T>& ref) { m_ptr(ref.ptr()); }
+    TWeakRef(TRef<T>& ref) { m_ptr(ref.ptr()); }
 
     b32 Expired() const
     {
