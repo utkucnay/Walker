@@ -5,7 +5,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UHeap::UHeap(FHeapDesc& desc) {
+UHeap::UHeap(const FHeapDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   D3D12_HEAP_DESC nDesc = {

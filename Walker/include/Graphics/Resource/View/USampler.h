@@ -5,9 +5,9 @@
 
 namespace wkr::graphics {
 
-class WALKER_API UDepthStencilView {
+class WALKER_API USampler {
  public:
-  UDepthStencilView(rhi::AResourceViewHandle resourceHandle)
+  USampler(rhi::AResourceViewHandle resourceHandle)
       : m_ResourceView(std::move(resourceHandle)),
         m_Texture2D(m_ResourceView->GetResource()) {}
 

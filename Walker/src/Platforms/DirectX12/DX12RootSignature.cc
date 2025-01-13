@@ -3,7 +3,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-URootSignature::URootSignature(FRootSignatureDesc& desc) {
+URootSignature::URootSignature(const FRootSignatureDesc& desc) {
   auto nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 }
 

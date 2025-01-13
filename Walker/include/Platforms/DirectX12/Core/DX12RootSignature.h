@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class URootSignature : public IRootSignature {
  public:
-  URootSignature(FRootSignatureDesc& desc);
+  explicit URootSignature(const FRootSignatureDesc& desc);
   ~URootSignature() override;
 
  public:

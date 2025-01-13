@@ -1,3 +1,4 @@
+#include "Core/UApplication.h"
 #include "Walker.h"
 
 // clang-format off
@@ -10,7 +11,7 @@ class USandboxApp : public wkr::UApplication {
  public:
   USandboxApp(const wkr::FApplicationSpecs& specs) : UApplication(specs) {}
 
-  ~USandboxApp() override {}
+  ~USandboxApp() override { wkr::UApplication::~UApplication(); }
 };
 
 }  // namespace sandbox

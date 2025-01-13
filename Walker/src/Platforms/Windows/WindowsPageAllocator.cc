@@ -2,7 +2,7 @@
 
 namespace wkr::os::windows {
 
-UPageAllocator::UPageAllocator(FPageAllocatorDesc& desc) {
+UPageAllocator::UPageAllocator(const FPageAllocatorDesc& desc) {
   m_pageSize = desc.pageSize;
 }
 

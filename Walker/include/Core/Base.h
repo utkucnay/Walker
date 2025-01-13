@@ -3,7 +3,7 @@
 #include "Core/PlatformDetection.h"
 
 #if DEBUG
-#define WKR_CORE_LOG(...) std::cout << "L:" __VA_ARGS__ << std::endl;
+#define WKR_CORE_LOG(...) std::cout << "L:" << __VA_ARGS__ << std::endl;
 #define WKR_CORE_LOG_COND(cond, ...) \
   if (cond)                          \
     std::cout << "L:" __VA_ARGS__ << std::endl;
@@ -82,5 +82,6 @@
 
 #define WKR_KB(x) x * 1024
 #define WKR_MB(x) x * 1024 * 1024
+#define WKR_GB(x) x * 1024 * 1024 * 1024
 
 #define WKR_OFFSET(Type, Member) offsetof(Type, Member)

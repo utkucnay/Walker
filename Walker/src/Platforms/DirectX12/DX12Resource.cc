@@ -6,7 +6,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UResource::UResource(FResourceDesc& desc) {
+UResource::UResource(const FResourceDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   D3D12_RESOURCE_DESC resourceDesc = wkrtodx12::ConvertFResource(desc.Resource);

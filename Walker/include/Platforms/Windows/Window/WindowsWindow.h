@@ -8,7 +8,7 @@ namespace wkr::os::windows {
 
 class UWindow : public wkr::os::AWindow {
  public:
-  UWindow(FWindowDesc& desc);
+  UWindow(const FWindowDesc& desc);
   ~UWindow() override;
 
  public:

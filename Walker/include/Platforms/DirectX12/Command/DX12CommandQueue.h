@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UCommandQueue : public ICommandQueue {
  public:
-  explicit UCommandQueue(FCommandQueueDesc& desc);
+  explicit UCommandQueue(const FCommandQueueDesc& desc);
   ~UCommandQueue() override;
 
  public:

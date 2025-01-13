@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Analytics/Memory/MemoryAnalytics.h"
 #include "Memory/Core/IAllocator.h"
 #include "Memory/Core/UMemoryPool.h"
 
@@ -12,12 +13,15 @@
 #include "Memory/Allocator/USlabAllocater.h"
 
 void* operator new(size_t size) {
-  WKR_CORE_LOG("New operator overloading ");
+  if(wkr::analytics::MemoryAnalytics::HasInstance())
+    wkr::analytics::MemoryAnalytics::GetInstance().AddAlloctedObject(size);
+
   void* p = malloc(size);
   return p;
 }
 
 void operator delete(void* p) {
-  WKR_CORE_LOG("Delete operator overloading ");
+  if(wkr::analytics::MemoryAnalytics::HasInstance())
+    wkr::analytics::MemoryAnalytics::GetInstance().AddDealloctedObject();
   free(p);
 }

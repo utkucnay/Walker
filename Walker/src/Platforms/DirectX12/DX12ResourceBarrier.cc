@@ -6,7 +6,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UResourceBarrier::UResourceBarrier(FResourceBarrierDesc& desc) {
+UResourceBarrier::UResourceBarrier(const FResourceBarrierDesc& desc) {
   m_ResourceBarrier.Type = wkrtodx12::ConvertEResourceBarrierType(desc.Type);
   m_ResourceBarrier.Flags = wkrtodx12::ConvertEResourceBarrierF(desc.Flag);
 

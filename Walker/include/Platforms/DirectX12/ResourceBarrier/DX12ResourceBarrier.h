@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UResourceBarrier : public IResourceBarrier {
  public:
-  UResourceBarrier(FResourceBarrierDesc& desc);
+  explicit UResourceBarrier(const FResourceBarrierDesc& desc);
   ~UResourceBarrier() override {}
 
  public:

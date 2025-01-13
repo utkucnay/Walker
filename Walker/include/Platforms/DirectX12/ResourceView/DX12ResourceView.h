@@ -7,7 +7,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UResourceView : public AResourceView {
  public:
-  UResourceView(CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
+  explicit UResourceView(CD3DX12_CPU_DESCRIPTOR_HANDLE handle,
                   rhi::IResourceHandle resource);
 
   ~UResourceView() override;

@@ -2,7 +2,7 @@
 #include "Core/PlatformDetection.h"
 
 #if defined(WKR_PLATFORM_WINDOWS)
-#include "Platforms/Windows/Factory/OSWindowsAbstractFactory.h"
+#include "Platforms/Windows/Factory/WindowsAbstractFactory.h"
 #endif
 
 namespace wkr::os {

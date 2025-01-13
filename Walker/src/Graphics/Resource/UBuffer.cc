@@ -5,7 +5,7 @@
 namespace wkr::graphics {
 
 UBuffer::UBuffer(const FBufferDesc& desc) {
-  auto resourceFactory = UGraphicsAPI::GetAbstractFactory().GetIResource();
+  auto& factory = UGraphicsAPI::GetAbstractFactory();
 
   rhi::FResourceDesc resourceDesc = {
       .DescType = EResourceDescType::kCommitted,
@@ -37,7 +37,7 @@ UBuffer::UBuffer(const FBufferDesc& desc) {
       .ClearValue = desc.ClearValue,
   };
 
-  m_Resource = rhi::IResourceHandle(resourceFactory->Create(resourceDesc));
+  m_Resource = rhi::IResourceHandle(factory.GetResource(resourceDesc));
 }
 
 UBuffer::UBuffer(rhi::IResourceHandle resource) {

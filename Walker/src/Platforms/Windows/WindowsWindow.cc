@@ -5,7 +5,7 @@
 
 namespace wkr::os::windows {
 
-UWindow::UWindow(FWindowDesc& desc) {
+UWindow::UWindow(const FWindowDesc& desc) {
   HINSTANCE hInstance = GetModuleHandle(NULL);
 
   std::string className = "Window Class";

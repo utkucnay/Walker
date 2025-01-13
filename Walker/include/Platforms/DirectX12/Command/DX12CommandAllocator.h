@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UCommandAllocator : public ICommandAllocator {
  public:
-  explicit UCommandAllocator(FCommandAllocatorDesc& desc);
+  explicit UCommandAllocator(const FCommandAllocatorDesc& desc);
 
   UCommandAllocator(ID3D12CommandAllocator* commandAlloc)
       : m_CommandAllocator(commandAlloc) {}

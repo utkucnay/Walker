@@ -1,13 +1,17 @@
 #pragma once
 
-#include "OS/Window/AWindow.h"
 #include "OS/Memory/IPageAllocator.h"
+#include "OS/Window/AWindow.h"
 
 namespace wkr::os {
 
-CREATE_FACTORY(OS)
-SUBS_FACTORY(AWindow, FWindowDesc&)
-SUBS_FACTORY(IPageAllocator, FPageAllocatorDesc&)
-END_FACTORY()
+class IOSAbstractFactory {
+ public:
+  virtual ~IOSAbstractFactory() = default;
+
+ public:
+  virtual AWindow* GetWindow(const FWindowDesc& desc) = 0;
+  virtual IPageAllocator* GetPageAllocator(const FPageAllocatorDesc& desc) = 0;
+};
 
 }  // namespace wkr::os

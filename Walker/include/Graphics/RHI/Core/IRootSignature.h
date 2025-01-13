@@ -2,7 +2,9 @@
 
 namespace wkr::graphics::rhi {
 
-struct WALKER_API FRootSignatureDesc {};
+struct WALKER_API FRootSignatureDesc {
+
+};
 
 class WALKER_API IRootSignature {
  public:

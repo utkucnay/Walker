@@ -17,6 +17,6 @@ class WALKER_API IPageAllocator : wkr::mem::IAllocator {
   virtual FPageAllocatorDesc GetDesc() const = 0;
 };
 
-using PageAllocatorHandle = wkr::mem::TRef<IPageAllocator>;
+using IPageAllocatorHandle = wkr::mem::TRef<IPageAllocator>;
 
 }  // namespace wkr::os::mem

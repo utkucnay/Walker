@@ -5,7 +5,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UCommandQueue::UCommandQueue(FCommandQueueDesc& desc) {
+UCommandQueue::UCommandQueue(const FCommandQueueDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   D3D12_COMMAND_QUEUE_DESC nDesc = {

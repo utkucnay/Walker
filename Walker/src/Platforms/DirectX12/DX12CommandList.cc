@@ -1,10 +1,11 @@
 #include "Platforms/DirectX12/Command/DX12CommandList.h"
 #include "Graphics/Core/UGraphics.h"
+#include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
 namespace wkr::graphics::rhi::dx12 {
 
-UCommandList::UCommandList(FCommandListDesc& desc) {
+UCommandList::UCommandList(const FCommandListDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   HRESULT hr = nDevice->CreateCommandList(
@@ -30,28 +31,28 @@ void UCommandList::Reset(ICommandAllocator& commandAllocator,
                        SAFE_GET_NATIVE_OBJECT(pipelineState));
 }
 
-void UCommandList::ResourceBarriers(
-    const std::vector<IResourceBarrier*>& barriers) {
-  std::vector<D3D12_RESOURCE_BARRIER> nBarriers;
-  std::transform(barriers.begin(), barriers.end(),
-                 std::back_inserter(nBarriers), [](auto barrier) {
-                   return *static_cast<D3D12_RESOURCE_BARRIER*>(
-                       barrier->GetNativeObject());
-                 });
+void UCommandList::ResourceBarriers(size_t size,
+                                    IResourceBarrier* const* barriers) {
+  std::vector<D3D12_RESOURCE_BARRIER> nBarriers(size);
 
-  m_commandList->ResourceBarrier(nBarriers.size(), &nBarriers[0]);
+  for (size_t i = 0; i < size; i++) {
+    nBarriers[i] =
+        *static_cast<D3D12_RESOURCE_BARRIER*>(barriers[i]->GetNativeObject());
+  }
+
+  m_commandList->ResourceBarrier(nBarriers.size(), nBarriers.data());
 }
 
-void UCommandList::OMSetRenderTargets(
-    const std::vector<URenderTargetView>& rtvs) {
-  std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> nRtvs;
-  std::transform(rtvs.begin(), rtvs.end(), std::back_inserter(nRtvs),
-                 [](auto rtv) {
-                   return *static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(
-                       rtv.GetResourceViewHandle()->GetNativeObject());
-                 });
+void UCommandList::OMSetRenderTargets(size_t size,
+                                      URenderTargetView const* rtvs) {
+  std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> nRtvs(size);
 
-  m_commandList->OMSetRenderTargets(nRtvs.size(), &nRtvs[0], false, nullptr);
+  for (size_t i = 0; i < size; ++i) {
+    nRtvs[i] = *static_cast<D3D12_CPU_DESCRIPTOR_HANDLE*>(
+        rtvs[i].GetResourceViewHandle()->GetNativeObject());
+  }
+
+  m_commandList->OMSetRenderTargets(size, nRtvs.data(), false, nullptr);
 }
 
 void UCommandList::ClearRenderTargetView(URenderTargetView& rtv,

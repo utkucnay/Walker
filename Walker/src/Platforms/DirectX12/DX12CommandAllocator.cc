@@ -4,7 +4,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UCommandAllocator::UCommandAllocator(FCommandAllocatorDesc& desc) {
+UCommandAllocator::UCommandAllocator(const FCommandAllocatorDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   HRESULT hr = nDevice->CreateCommandAllocator(

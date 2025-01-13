@@ -2,12 +2,12 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UShader::UShader(FShaderDesc& desc) {
-  static std::unordered_map<EShaderType, std::string> vsMap = {
-      {EShaderType::kVertex, "vs_5_0"},
-      {EShaderType::kPixel, "ps_5_0"},
-  };
+static std::unordered_map<EShaderType, std::string> vsMap = {
+  {EShaderType::kVertex, "vs_5_0"},
+  {EShaderType::kPixel, "ps_5_0"},
+};
 
+UShader::UShader(const FShaderDesc& desc) {
   ID3DBlob* code;
   ID3DBlob* error;
 

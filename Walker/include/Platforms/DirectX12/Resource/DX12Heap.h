@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UHeap : public IHeap {
  public:
-  UHeap(FHeapDesc& desc);
+  explicit UHeap(const FHeapDesc& desc);
   ~UHeap() override;
 
  public:

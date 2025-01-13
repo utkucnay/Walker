@@ -9,7 +9,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UDescriptorHeap::UDescriptorHeap(FDescriptorHeapDesc& desc) {
+UDescriptorHeap::UDescriptorHeap(const FDescriptorHeapDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   D3D12_DESCRIPTOR_HEAP_DESC nDHeapDesc{

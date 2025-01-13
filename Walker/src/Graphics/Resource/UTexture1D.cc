@@ -39,7 +39,7 @@ UTexture1D::UTexture1D(const FTexture1DDesc& texture1DDesc) {
 
   auto& factory = UGraphicsAPI::GetAbstractFactory();
 
-  m_Resource = rhi::IResourceHandle(factory.GetIResource()->Create(resourceDesc));
+  m_Resource = rhi::IResourceHandle(factory.GetResource(resourceDesc));
 }
 
 UTexture1D::UTexture1D(rhi::IResourceHandle resource) {

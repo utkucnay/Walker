@@ -17,4 +17,13 @@ enum class WALKER_API EDescriptorHeapType {
   kNumTypes,
 };
 
+enum class WALKER_API EDescHeapBindType {
+  kCBV = 0,
+  kSRV,
+  kUAV,
+  kSampler,
+  kRTV,
+  kDSV,
+};
+
 }  // namespace wkr::graphics::rhi

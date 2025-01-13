@@ -20,7 +20,6 @@
 #include "Core/Base.h"
 #include "Core/Event.h"
 #include "Core/TypeDef.h"
-#include "Core/Factory.h"
 
 #include "Memory/Memory_pch.h"
 

@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class USwapChain : public ASwapChain {
  public:
-  USwapChain(FSwapChainDesc& desc);
+  explicit USwapChain(const FSwapChainDesc& desc);
   ~USwapChain() override;
 
  public:

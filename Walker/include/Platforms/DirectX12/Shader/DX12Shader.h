@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UShader : public IShader {
  public:
-  UShader(FShaderDesc& desc);
+  explicit UShader(const FShaderDesc& desc);
   ~UShader() override = default;
 
  public:

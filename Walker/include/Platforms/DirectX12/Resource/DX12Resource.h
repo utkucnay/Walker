@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UResource : public IResource {
  public:
-  UResource(FResourceDesc& desc);
+  explicit UResource(const FResourceDesc& desc);
   UResource(ID3D12Resource* resource) : m_Resource(resource) { m_Resource->AddRef(); };
   ~UResource() override;
 

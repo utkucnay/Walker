@@ -10,7 +10,7 @@ class UMemoryPool {
 
  public:
  private:
-  os::PageAllocatorHandle m_pageAllocator;
+  os::IPageAllocatorHandle m_pageAllocator;
 };
 
 }  // namespace wkr::mem

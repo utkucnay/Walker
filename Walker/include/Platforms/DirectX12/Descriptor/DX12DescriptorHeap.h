@@ -7,7 +7,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UDescriptorHeap : public ADescriptorHeap {
  public:
-  UDescriptorHeap(FDescriptorHeapDesc& desc);
+  explicit UDescriptorHeap(const FDescriptorHeapDesc& desc);
   ~UDescriptorHeap() override;
 
  public:

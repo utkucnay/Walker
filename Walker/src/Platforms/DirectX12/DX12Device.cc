@@ -2,7 +2,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-UDevice::UDevice(FDeviceDesc& desc) {
+UDevice::UDevice(const FDeviceDesc& desc) {
   HRESULT hr =
       D3D12CreateDevice(SAFE_GET_NATIVE_OBJECT(desc.Adapter),
                         D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_Device));

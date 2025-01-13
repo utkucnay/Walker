@@ -17,7 +17,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
   auto& renderFactory = UGraphicsAPI::GetAbstractFactory();
 
   rhi::FDeviceDesc deviceDesc = {.Adapter = nullptr };
-  m_Device = rhi::IDeviceHandle(renderFactory.GetIDevice()->Create(deviceDesc));
+  m_Device = rhi::IDeviceHandle(renderFactory.GetDevice(deviceDesc));
   s_defaultDevice = m_Device;
 
   rhi::FCommandQueueDesc commandQueueDesc = {
@@ -25,7 +25,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
       .CommandQueuePriority = rhi::ECommandQueuePriority::kNormal,
       .CommandQueueFlag = rhi::ECommandQueueF::kNone};
   m_DirectCommand.CommandQueue =
-      rhi::ICommandQueueHandle(renderFactory.GetICommandQueue()->Create(commandQueueDesc));
+      rhi::ICommandQueueHandle(renderFactory.GetCommandQueue(commandQueueDesc));
 
   os::FWindowDesc windowDesc = desc.Window->GetDesc();
 
@@ -45,7 +45,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
       .CommandQueue = m_DirectCommand.CommandQueue,
   };
 
-  m_SwapChain = rhi::ASwapChainHandle(renderFactory.GetASwapChain()->Create(swapChainDesc));
+  m_SwapChain = rhi::ASwapChainHandle(renderFactory.GetSwapChain(swapChainDesc));
 
   rhi::FCommandAllocatorDesc commandAllocatorDesc = {
       .CommandType = rhi::ECommandType::kDirect,
@@ -53,7 +53,7 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
 
   for (u32 i = 0; i < swapChainDesc.BufferCount; i++)
     m_DirectCommand.CommandAllocator.push_back(
-        rhi::ICommandAllocatorHandle(renderFactory.GetICommandAllocator()->Create(commandAllocatorDesc)));
+        rhi::ICommandAllocatorHandle(renderFactory.GetCommandAllocator(commandAllocatorDesc)));
 
   rhi::FCommandListDesc commandListDesc = {
       .CommandType = rhi::ECommandType::kDirect,
@@ -61,14 +61,14 @@ UGraphics::UGraphics(FGraphicsDesc& desc) {
   };
 
   m_DirectCommand.CommandList =
-      rhi::ICommandListHandle(renderFactory.GetICommandList()->Create(commandListDesc));
+      rhi::ICommandListHandle(renderFactory.GetCommandList(commandListDesc));
 
   rhi::FFenceDesc fenceDesc = {
       .FrameCount = m_SwapChain->GetBufferCount(),
       .Flag = EFenceF::kNone,
   };
 
-  m_FenceHandle = rhi::AFenceHandle(renderFactory.GetAFence()->Create(fenceDesc));
+  m_FenceHandle = rhi::AFenceHandle(renderFactory.GetFence(fenceDesc));
 
 }
 
@@ -79,7 +79,7 @@ void UGraphics::CreateResource() {
                               .InitState = EResourceStateF::kCommon,
                               .ResourceFlag = EResourceF::kNone};
 
-    m_VertexBuffer = std::move(UBuffer(bufferDesc));
+    m_VertexBuffer = UBuffer(bufferDesc);
 
     FTexture1DDesc texDesc = {
       .ResourceFormat = EResourceFormat::kR8G8B8A8_UINT,

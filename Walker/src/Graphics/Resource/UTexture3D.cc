@@ -5,7 +5,7 @@
 namespace wkr::graphics {
 
 UTexture3D::UTexture3D(const FTexture3DDesc& desc) {
-  auto resourceFactory = UGraphicsAPI::GetAbstractFactory().GetIResource();
+  auto& factory = UGraphicsAPI::GetAbstractFactory();
 
   rhi::FResourceDesc resourceDesc = {
       .DescType = EResourceDescType::kCommitted,
@@ -37,7 +37,7 @@ UTexture3D::UTexture3D(const FTexture3DDesc& desc) {
       .ClearValue = desc.ClearValue,
   };
 
-  m_Resource = rhi::IResourceHandle(resourceFactory->Create(resourceDesc));
+  m_Resource = rhi::IResourceHandle(factory.GetResource(resourceDesc));
 }
 
 UTexture3D::UTexture3D(rhi::IResourceHandle resource) {

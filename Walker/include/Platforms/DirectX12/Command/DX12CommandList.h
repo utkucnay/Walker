@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Graphics/RHI/Command/ICommandList.h"
+#include "Graphics/RHI/Resource/Barrier/IResourceBarrier.h"
 
 namespace wkr::graphics::rhi::dx12 {
 
 class UCommandList : public ICommandList {
  public:
-  explicit UCommandList(FCommandListDesc& desc);
+  explicit UCommandList(const FCommandListDesc& desc);
   ~UCommandList() override;
 
  public:
@@ -17,11 +18,11 @@ class UCommandList : public ICommandList {
 
   ECommandType GetType() override final;
 
-  void ResourceBarriers(
-      const std::vector<IResourceBarrier*>& barriers) override final;
+  void ResourceBarriers(size_t size,
+                        IResourceBarrier* const* barrier) override final;
 
-  void OMSetRenderTargets(
-      const std::vector<URenderTargetView>& rtvs) override final;
+  void OMSetRenderTargets(size_t size,
+                          URenderTargetView const* rtvs) override final;
 
   void ClearRenderTargetView(URenderTargetView& rtv,
                              FColor32 color) override final;

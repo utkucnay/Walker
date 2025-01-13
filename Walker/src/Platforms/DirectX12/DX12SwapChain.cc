@@ -11,7 +11,7 @@
 
 namespace wkr::graphics::rhi::dx12 {
 
-USwapChain::USwapChain(FSwapChainDesc& desc) {
+USwapChain::USwapChain(const FSwapChainDesc& desc) {
   m_Window = desc.Window;
   IDXGISwapChain* swapChain;
   os::FWindowDesc windowDesc = m_Window->GetDesc();
@@ -70,7 +70,7 @@ USwapChain::USwapChain(FSwapChainDesc& desc) {
     .Flag = EDescriptorHeapF::kNone,
   };
 
-  m_DescripHeap = rhi::ADescriptorHeapHandle(factory.GetADescriptorHeap()->Create(descriptorHeapDesc));
+  m_DescripHeap = rhi::ADescriptorHeapHandle(factory.GetDescriptorHeap(descriptorHeapDesc));
 
   m_DescripHeap->Bind(resources);
 

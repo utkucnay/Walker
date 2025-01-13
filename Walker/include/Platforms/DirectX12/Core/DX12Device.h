@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UDevice : public IDevice {
  public:
-  UDevice(FDeviceDesc& db);
+  explicit UDevice(const FDeviceDesc& db);
   ~UDevice() override;
 
  public:

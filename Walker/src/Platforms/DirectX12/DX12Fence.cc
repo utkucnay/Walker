@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Platforms/DirectX12/Core/DX12Fence.h"
-#include <string>
 #include "Graphics/Core/UGraphics.h"
 #include "Platforms/DirectX12/Core/DX12TypeMap.h"
 
 namespace wkr::graphics::rhi::dx12 {
 
-UFence::UFence(FFenceDesc& desc) {
+UFence::UFence(const FFenceDesc& desc) {
   ID3D12Device* nDevice = UGraphics::GetDefaultDevice().GetNativeObject();
 
   for (int i = 0; i < desc.FrameCount; i++) {

@@ -294,7 +294,7 @@ namespace wkrtodx12
   }
 
   static inline DXGI_SAMPLE_DESC
-  ConvertFSampleDesc(FSample& desc)
+  ConvertFSampleDesc(const FSample& desc)
   {
     DXGI_SAMPLE_DESC ret = {};
 
@@ -418,7 +418,7 @@ namespace wkrtodx12
   }
 
   static inline D3D12_RESOURCE_DESC
-  ConvertFResource(FResource& desc)
+  ConvertFResource(const FResource& desc)
   {
     D3D12_RESOURCE_DESC ret = {};
 
@@ -508,7 +508,7 @@ namespace wkrtodx12
   }
 
   static inline D3D12_HEAP_PROPERTIES
-  ConvertFHeapProperty(FHeapProperties& desc)
+  ConvertFHeapProperty(const FHeapProperties& desc)
   {
     D3D12_HEAP_PROPERTIES ret = {
       .Type = ConvertEHeapType(desc.Type),

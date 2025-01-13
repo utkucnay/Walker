@@ -6,7 +6,7 @@ namespace wkr::graphics::rhi::dx12 {
 
 class UFence : public AFence {
  public:
-  UFence(FFenceDesc& desc);
+  explicit UFence(const FFenceDesc& desc);
   ~UFence() override;
 
  public:
