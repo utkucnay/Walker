@@ -17,8 +17,11 @@ UFence::UFence(const FFenceDesc& desc) {
     HRESULT hr = nDevice->CreateFence(initialFenceValue,
                                       wkrtodx12::ConvertEFenceF(desc.Flag),
                                       IID_PPV_ARGS(&m_Fence[i]));
+    if (FAILED(hr)) {
+      WKR_CORE_WARNING("Didn't Create DX12 Fence");
+      WKR_DX12_ERROR(hr);
+    }
 
-    WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Fence");
     WKR_CORE_LOG("Created DX12 Fence");
   }
 
@@ -27,8 +30,11 @@ UFence::UFence(const FFenceDesc& desc) {
 
   m_Desc = desc;
 
-  WKR_CORE_ERROR_COND(m_FenceEvent == nullptr,
-                      "Didn't Create DX12 Fence Event");
+  if (m_FenceEvent == nullptr) {
+    WKR_CORE_WARNING("Didn't Create DX12 Fence Event");
+    WKR_DX12_ERROR(S_FALSE);
+  }
+
   WKR_CORE_LOG("Created DX12 Fence Event");
 }
 
@@ -49,7 +55,10 @@ void UFence::FenceEvent(int frameIndex) {
   HRESULT hr = m_Fence[frameIndex]->SetEventOnCompletion(
       m_FenceValue[frameIndex], m_FenceEvent);
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Set Fence Event");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Set Fence Event");
+    WKR_DX12_ERROR(hr);
+  }
 
   WaitForSingleObject(m_FenceEvent, INFINITE);
 }

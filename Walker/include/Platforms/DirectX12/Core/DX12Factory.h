@@ -5,16 +5,28 @@ namespace wkr::graphics::rhi::dx12 {
 class UDX12Factory {
  public:
   static void Init() {
-    HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&m_dxgiFactory));
-    WKR_CORE_LOG_COND(FAILED(hr), "Didn't Create DXGIFactory");
+
+    WKR_DX12_DEBUG_INIT();
+    HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&m_DxgiFactory));
+
+    if (FAILED(hr)) {
+      WKR_CORE_WARNING("Didn't Create DXGIFactory");
+    }
+
+    WKR_CORE_LOG("DXGI Factory Created");
+
   }
 
-  static void Destroy() { m_dxgiFactory->Release(); }
+  static void Destroy() {
+    m_DxgiFactory->Release();
+    WKR_DX12_DEBUG_DESTROY();
+    WKR_CORE_LOG("DXGI Factory Destroyed");
+  }
 
-  static IDXGIFactory4* GetFactory() { return m_dxgiFactory; }
+  static IDXGIFactory4* GetFactory() { return m_DxgiFactory; }
 
  private:
-  static inline IDXGIFactory4* m_dxgiFactory = NULL;
+  static inline IDXGIFactory4* m_DxgiFactory = nullptr;
 };
 
 }  // namespace wkr::graphics::rhi::dx12

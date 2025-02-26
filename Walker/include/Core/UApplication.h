@@ -1,5 +1,6 @@
 #pragma once
 
+#include "OS/Memory/IPageAllocator.h"
 #include "OS/Window/AWindow.h"
 #include "Graphics/Core/UGraphics.h"
 
@@ -30,6 +31,7 @@ class WALKER_API UApplication {
   os::AWindowHandle m_MainWindow;
   FApplicationSpecs m_AppSpecs;
   mem::TScope<graphics::UGraphics> m_Graphics;
+  mem::TScope<os::IPageAllocator> m_PageAllocator;
 
   friend int ::main(int argc, char** argv);
 };

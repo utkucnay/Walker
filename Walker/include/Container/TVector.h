@@ -8,9 +8,16 @@ template <typename T>
 class TVector {
  public:
   TVector() {
-    //m_Allocator = WKR_GET_DEFAULT_ALLOCATOR;
+    //m_Allocator = WKR_GET_DEFAULT_ALLOCATOR();
     m_Size = 0;
     m_Reserved = 0;
+    m_Pointer = nullptr;
+  }
+
+  explicit TVector(size_t size) {
+
+    m_Reserved = size;
+    m_Size = size;
     m_Pointer = nullptr;
   }
 

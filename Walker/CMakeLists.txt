@@ -25,6 +25,7 @@ set(source_files
   ./src/Platforms/DirectX12/DX12Shader.cc
   ./src/Platforms/DirectX12/DX12ResourceView.cc
   ./src/Platforms/DirectX12/DX12ResourceBarrier.cc
+  ./src/Platforms/DirectX12/DX12DebugLayer.cc
 
   ./src/Graphics/UGraphics.cc
   ./src/Graphics/GraphicsType.cc
@@ -45,8 +46,8 @@ set(all_files
 add_library(Walker ${all_files})
 target_precompile_headers(Walker PUBLIC ./include/Walker_pch.h)
 target_include_directories(Walker PUBLIC ./include/)
-target_link_libraries(Walker PUBLIC D3D12.lib DXGI.lib d3dcompiler.lib)
+target_link_libraries(Walker PUBLIC D3D12.lib DXGI.lib d3dcompiler.lib dxguid.lib)
 
-target_link_libraries(Walker PUBLIC DirectStorage WinPixEventRuntime DirectX12)
+target_link_libraries(Walker PUBLIC DirectStorage WinPixEventRuntime DirectX12 spdlog)
 
 target_compile_definitions(Walker PUBLIC "DEBUG=$<CONFIG:Debug>")

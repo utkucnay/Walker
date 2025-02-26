@@ -1,16 +1,18 @@
 #pragma once
 
-#include "OS/Memory/IPageAllocator.h"
+#include "Memory/Core/IAllocator.h"
 
 namespace wkr::mem {
 
 class UMemoryPool {
  public:
-  explicit UMemoryPool(u32 initialSize);
+  explicit UMemoryPool(u32 size, IAllocator& allocator);
 
  public:
- private:
-  os::IPageAllocatorHandle m_pageAllocator;
+  void* Allocate(i32 size) { return m_Allocator->Allocate(size); }
+
+ public:
+  mem::TScope<IAllocator> m_Allocator;
 };
 
 }  // namespace wkr::mem

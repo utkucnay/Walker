@@ -17,6 +17,8 @@
 #include <queue>
 #include <list>
 
+#include <spdlog/spdlog.h>
+
 #include "Core/Base.h"
 #include "Core/Event.h"
 #include "Core/TypeDef.h"

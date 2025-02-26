@@ -18,7 +18,11 @@ UCommandQueue::UCommandQueue(const FCommandQueueDesc& desc) {
   HRESULT hr =
       nDevice->CreateCommandQueue(&nDesc, IID_PPV_ARGS(&m_commandQueue));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command Queue");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create DX12 Command Queue");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 Command Queue");
 }
 
@@ -40,7 +44,10 @@ void UCommandQueue::Signal(AFence& fence, i32 frameIndex) {
   HRESULT hr = m_commandQueue->Signal(fence.GetNativeObject(frameIndex),
                                       fence.GetFenceValue(frameIndex));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Fence Signal Error in Command Queue");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Fence Signal Error in Command Queue");
+    WKR_DX12_ERROR(hr)
+  }
 }
 
 FCommandQueueDesc UCommandQueue::GetDesc() {

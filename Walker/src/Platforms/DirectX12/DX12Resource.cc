@@ -37,7 +37,11 @@ UResource::UResource(const FResourceDesc& desc) {
     } break;
   }
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Resource");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create DX12 Resource");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 Resource!");
 }
 
@@ -56,7 +60,10 @@ FHeapProperties UResource::GetHeapProperties() {
   D3D12_HEAP_FLAGS nHeapFlag;
   HRESULT hr = m_Resource->GetHeapProperties(&nHeapProp, &nHeapFlag);
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Dont Get Heap Prop");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Dont Get Heap Prop");
+    WKR_DX12_ERROR(hr);
+  }
 
   FHeapProperties retHeapProp = dx12towkr::ConvertFHeapProperty(nHeapProp);
   return retHeapProp;

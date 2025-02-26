@@ -11,3 +11,6 @@
 [submodule "Walker/vendor/PhysX"]
 	path = Walker/vendor/PhysX
 	url = https://github.com/NVIDIA-Omniverse/PhysX
+[submodule "Walker/vendor/spdlog"]
+	path = Walker/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

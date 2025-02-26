@@ -18,7 +18,7 @@ class UDevice : public IDevice {
 
     if (FAILED(hr))
     {
-        WKR_CORE_WARNING( << std::to_string((u32)hr));
+        WKR_CORE_WARNING(std::to_string((u32)hr));
     }
   }
 

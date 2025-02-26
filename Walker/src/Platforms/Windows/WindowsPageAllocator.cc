@@ -7,8 +7,11 @@ UPageAllocator::UPageAllocator(const FPageAllocatorDesc& desc) {
 }
 
 void* UPageAllocator::Allocate(int size) {
-  return VirtualAlloc(0, size, MEM_RESERVE | MEM_COMMIT,
-                      m_pageSizeMap[m_pageSize]);
+  void* ret = VirtualAlloc(0, size, MEM_RESERVE | MEM_COMMIT |
+                      m_pageSizeMap[m_pageSize], PAGE_READWRITE);
+
+  WKR_CORE_ERROR_COND(ret == NULL, "%d", GetLastError());
+  return ret;
 }
 
 void* UPageAllocator::Reallocate(void* ptr, int newSize) {

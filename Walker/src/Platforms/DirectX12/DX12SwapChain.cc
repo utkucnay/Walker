@@ -47,7 +47,11 @@ USwapChain::USwapChain(const FSwapChainDesc& desc) {
   HRESULT hr = UDX12Factory::GetFactory()->CreateSwapChain(
       desc.CommandQueue->GetNativeObject(), &swapChainDesc, &swapChain);
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 SwapChain")
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create DX12 SwapChain");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 SwapChain")
 
   m_SwapChain = static_cast<IDXGISwapChain3*>(swapChain);
@@ -137,7 +141,10 @@ FSwapChainDesc USwapChain::GetDesc() {
 void USwapChain::Present(u8 syncInterval, u8 flags) {
   HRESULT hr = m_SwapChain->Present(syncInterval, flags);
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Swapchain Present Not Work")
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Swapchain Present Not Work")
+    WKR_DX12_ERROR(hr);
+  }
 }
 
 }  // namespace wkr::graphics::rhi::dx12

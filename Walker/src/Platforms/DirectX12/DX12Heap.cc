@@ -17,7 +17,11 @@ UHeap::UHeap(const FHeapDesc& desc) {
 
   HRESULT hr = nDevice->CreateHeap(&nDesc, IID_PPV_ARGS(&m_heap));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create Heap");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create Heap");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created Heap");
 }
 

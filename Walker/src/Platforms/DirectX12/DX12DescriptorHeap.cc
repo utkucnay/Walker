@@ -1,5 +1,4 @@
 #include "Platforms/DirectX12/Descriptor/DX12DescriptorHeap.h"
-#include "Core/Base.h"
 #include "Graphics/Core/UGraphics.h"
 #include "Graphics/RHI/Descriptor/ADescriptorHeap.h"
 #include "Graphics/RHI/Descriptor/DescriptorType.h"
@@ -21,7 +20,11 @@ UDescriptorHeap::UDescriptorHeap(const FDescriptorHeapDesc& desc) {
   HRESULT hr = nDevice->CreateDescriptorHeap(&nDHeapDesc,
                                              IID_PPV_ARGS(&m_descriptorHeap));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create Descriptor Heap")
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create Descriptor Heap")
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 Descriptor Heap")
 }
 
