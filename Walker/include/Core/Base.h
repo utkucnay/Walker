@@ -3,25 +3,23 @@
 #include "Core/PlatformDetection.h"
 
 #if DEBUG
-#define WKR_CORE_LOG(...) std::cout << "L:" << __VA_ARGS__ << std::endl;
-#define WKR_CORE_LOG_COND(cond, ...) \
-  if (cond)                          \
-    std::cout << "L:" __VA_ARGS__ << std::endl;
+#define WKR_CORE_LOG(...) spdlog::info(__VA_ARGS__);
+#define WKR_CORE_LOG_COND(cond, ...) if (cond) WKR_CORE_LOG(__VA_ARGS__);
 
-#define WKR_CORE_WARNING(...) std::cout << "W:" __VA_ARGS__ << std::endl;
-#define WKR_CORE_WARNING_COND(cond, ...) \
-  if (cond)                              \
-    std::cout << "W:" __VA_ARGS__ << std::endl;
+#define WKR_CORE_WARNING(...) spdlog::warn(__VA_ARGS__);
+#define WKR_CORE_WARNING_COND(cond, ...) if (cond) WKR_CORE_WARNING(__VA_ARGS__)
 
-#define WKR_CORE_ERROR(...)                   \
-  std::cout << "E:" __VA_ARGS__ << std::endl; \
-  assert(0);
+#define WKR_CORE_ERROR(...) {   \
+  spdlog::error(__VA_ARGS__);   \
+  assert(0); }
 
-#define WKR_CORE_ERROR_COND(cond, ...)          \
-  if (cond) {                                   \
-    std::cout << "E:" __VA_ARGS__ << std::endl; \
-    assert(0);                                  \
-  }
+#define WKR_CORE_ERROR_COND(cond, ...) if (cond) WKR_CORE_ERROR(__VA_ARGS__)
+
+#define WKR_CORE_ERROR_WINDOWS_COND(cond, ...) if (cond) WKR_CORE_ERROR(__VA_ARGS__)
+#define WKR_CORE_ERROR_CHECK_DX12(hr)   \
+  if (FAILED(hr)) {               \
+    \
+}
 
 #else
 #define WKR_CORE_LOG(cond, ...)

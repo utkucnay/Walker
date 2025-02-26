@@ -1,5 +1,4 @@
 #include "Core/UApplication.h"
-#include "Analytics/Memory/MemoryAnalytics.h"
 #include "OS/Core/UOSFactory.h"
 
 namespace wkr {
@@ -9,9 +8,6 @@ UApplication::UApplication(const FApplicationSpecs& applicationSpecs) {
   m_AppSpecs = applicationSpecs;
 
   os::UOSFactory::Init();
-
-  auto& memoryAnalytics = analytics::MemoryAnalytics::GetInstance();
-  memoryAnalytics.StartTracking();
 
   os::FWindowDesc windowDesc = {
       .Width = 1280,
@@ -25,9 +21,6 @@ UApplication::UApplication(const FApplicationSpecs& applicationSpecs) {
 
   m_Graphics->CreateResource();
   m_Graphics->LoadResources();
-
-  std::string memoryAnalyticsLog = memoryAnalytics.StopTracking();
-  WKR_CORE_LOG(memoryAnalyticsLog);
 }
 
 UApplication::~UApplication() {
@@ -39,9 +32,6 @@ UApplication::~UApplication() {
 
 void UApplication::Run() {
   while (m_MainWindow->IsShouldClose()) {
-    auto& memoryAnalytics = analytics::MemoryAnalytics::GetInstance();
-    memoryAnalytics.StartTracking();
-
     m_MainWindow->PoolEvents();
 
     //TODO(utku): Game Logic
@@ -49,9 +39,6 @@ void UApplication::Run() {
     m_Graphics->SwapBuffers();
     m_Graphics->Fence();
     m_Graphics->Render();
-
-    std::string memoryAnalyticsLog = memoryAnalytics.StopTracking();
-    //WKR_CORE_LOG(memoryAnalyticsLog);
   }
 }
 

@@ -11,7 +11,11 @@ UCommandAllocator::UCommandAllocator(const FCommandAllocatorDesc& desc) {
       wkrtodx12::ConvertECommandType(desc.CommandType),
       IID_PPV_ARGS(&m_CommandAllocator));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command Allocator");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create DX12 Command Allocator");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 Command Allocator");
 }
 
@@ -20,7 +24,12 @@ UCommandAllocator::~UCommandAllocator() {
 }
 
 void UCommandAllocator::Reset() {
-  m_CommandAllocator->Reset();
+  HRESULT hr = m_CommandAllocator->Reset();
+
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("DX12 Command Allocator Not Reset");
+    WKR_DX12_ERROR(hr);
+  }
 }
 
 }  // namespace wkr::graphics::rhi::dx12

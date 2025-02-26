@@ -1,6 +1,5 @@
 #pragma once
 
-#include <initializer_list>
 #include "Graphics/Core/GraphicsType.h"
 #include "Graphics/RHI/Command/CommandType.h"
 #include "Graphics/RHI/Command/ICommandAllocator.h"
@@ -37,11 +36,11 @@ class WALKER_API ICommandList {
 
   void OMSetRenderTargets(
       const std::initializer_list<URenderTargetView>& rtvs) {
-        OMSetRenderTargets(rtvs.size(), rtvs.begin());
+    OMSetRenderTargets(rtvs.size(), rtvs.begin());
   };
 
   virtual void OMSetRenderTargets(size_t size,
-                                  URenderTargetView const * rtvs) = 0;
+                                  URenderTargetView const* rtvs) = 0;
 
   virtual void ClearRenderTargetView(URenderTargetView& rtv,
                                      FColor32 color) = 0;

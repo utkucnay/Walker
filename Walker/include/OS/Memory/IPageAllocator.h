@@ -8,7 +8,7 @@ struct WALKER_API FPageAllocatorDesc {
   EPageSize pageSize;
 };
 
-class WALKER_API IPageAllocator : wkr::mem::IAllocator {
+class WALKER_API IPageAllocator : public wkr::mem::IAllocator {
  public:
   virtual void* Allocate(int size) = 0;
   virtual void* Reallocate(void* ptr, int newSize) = 0;

@@ -13,7 +13,11 @@ UCommandList::UCommandList(const FCommandListDesc& desc) {
       desc.CommandAllocator->GetNativeObject(),
       SAFE_GET_NATIVE_OBJECT(desc.PipelineState), IID_PPV_ARGS(&m_commandList));
 
-  WKR_CORE_ERROR_COND(FAILED(hr), "Didn't Create DX12 Command List");
+  if (FAILED(hr)) {
+    WKR_CORE_WARNING("Didn't Create DX12 Command List");
+    WKR_DX12_ERROR(hr);
+  }
+
   WKR_CORE_LOG("Created DX12 Command List");
 }
 

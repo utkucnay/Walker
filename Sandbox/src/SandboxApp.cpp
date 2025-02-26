@@ -1,4 +1,6 @@
-#include "Core/UApplication.h"
+#define WKR_ENABLE_ANALYTICS
+#define WKR_ENABLE_ANALYTICS_LOG
+
 #include "Walker.h"
 
 // clang-format off
