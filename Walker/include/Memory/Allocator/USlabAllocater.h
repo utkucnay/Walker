@@ -5,16 +5,40 @@
 
 namespace wkr::mem {
 
+struct FSlabObject {
+  b8 IsUsableAtomic = false;
+  b8 isUsed = false;
+  i8 nextSlabObjectIndex = -1;
+  u64 MemoryAdress = 0;
+};
+
 struct FSlabCache {
-  u16 SlabObjectFlag;
-  u16 SlabObjectCount;
-  void* MemoryAdrress;
+  enum { kObjectSize = 32 };
+
+  u16 ObjectSize;
+  i8 SlabObjectIndex;
+  FSlabObject SlabObjects[kObjectSize];
+
+  FSlabCache* nextSlabCache;
+
+  explicit FSlabCache(void* memoryAdress, u16 objectSize) {
+    u64 memoryAdrressInt = reinterpret_cast<u64>(memoryAdress);
+    ObjectSize = objectSize;
+
+    for (int i = 0; i < kObjectSize; ++i) {
+      FSlabObject& slabObject = SlabObjects[i];
+      slabObject.IsUsableAtomic = (memoryAdrressInt & 64) == 0;
+      slabObject.nextSlabObjectIndex = i + 1 >= kObjectSize ? -1 : i + 1;
+      slabObject.MemoryAdress = memoryAdrressInt;
+
+      memoryAdrressInt += ObjectSize;
+    }
+  }
 };
 
 struct FSlabCacheGroup {
-  std::list<FSlabCache> FullSlabCache;
-  std::list<FSlabCache> PartialSlabCache;
-  std::list<FSlabCache> EmptySlabCache;
+  FSlabCache* FullSlabCache;
+  FSlabCache* AvailableSlabCache;
 };
 
 class WALKER_API USlabAllocator : public IAllocator {
@@ -27,7 +51,7 @@ class WALKER_API USlabAllocator : public IAllocator {
   void Deallocate(void* ptr) override final;
 
  private:
-  std::unordered_map<u8, FSlabCacheGroup> m_SlabSizeMap;
+  std::unordered_map<u16, FSlabCacheGroup> m_SlabSizeMap;
   UMemoryPool& m_MemoryPool;
 };
 

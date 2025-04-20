@@ -10,3 +10,5 @@ project(${ProjectName})
 add_subdirectory(Walker)
 
 add_subdirectory(Sandbox)
+
+add_subdirectory(Test)
